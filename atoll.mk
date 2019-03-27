@@ -253,6 +253,10 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Notch
+PRODUCT_PACKAGES += \
+    NotchBarKiller
+
 # Perf
 PRODUCT_PACKAGES += \
     libqti-perfd-client
