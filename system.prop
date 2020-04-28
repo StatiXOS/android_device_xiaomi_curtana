@@ -31,6 +31,9 @@ media.settings.xml=/vendor/etc/media_profiles_vendor.xml
 # Netflix
 ro.netflix.bsp_rev=Q6250-19132-1
 
+# Pre-Rendering
+ro.vendor.perf.scroll_opt=true
+
 # SSR
 persist.vendor.ssr.restart_level=ALL_ENABLE
 
