@@ -6,8 +6,6 @@
 
 DEVICE_PATH := device/xiaomi/miatoll
 
-BUILD_BROKEN_DUP_RULES := true
-
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a-dotprod
@@ -76,6 +74,10 @@ ODM_MANIFEST_SKUS += \
     nfc
 
 ODM_MANIFEST_NFC_FILES := $(DEVICE_PATH)/configs/nfc/manifest_nfc.xml
+
+# Hacks
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 # Init
 TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):init_xiaomi_miatoll
