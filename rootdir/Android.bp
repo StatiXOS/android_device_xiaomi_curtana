@@ -38,6 +38,13 @@ prebuilt_etc {
 
 // Init configuration files
 prebuilt_etc {
+    name: "init.device.rc",
+    src: "etc/init.device.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
     name: "init.miatoll.perf.rc",
     src: "etc/init.miatoll.perf.rc",
     sub_dir: "init",
