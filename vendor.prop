@@ -109,6 +109,8 @@ ro.crypto.volume.filenames_mode=aes-256-cts
 dalvik.vm.dex2oat64.enabled=true
 
 # Display
+debug.sf.hw=0
+debug.egl.hw=0
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
 ro.surface_flinger.has_wide_color_display=true
 ro.surface_flinger.has_HDR_display=true
