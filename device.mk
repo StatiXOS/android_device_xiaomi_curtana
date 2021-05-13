@@ -384,12 +384,12 @@ PRODUCT_PACKAGES += \
     init.qti.chg_policy.sh
 
 PRODUCT_PACKAGES += \
-    init.curtana.rc \
+    fstab.qcom \
+    init.curtana.perf.rc \
     init.qcom.power.rc \
     init.qcom.rc \
     init.recovery.qcom.rc \
     init.target.rc \
-    fstab.qcom \
     ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
