@@ -428,6 +428,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.vendor.perf.scroll_opt=true
 
+# Project ID Quota
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
 # Qualcomm System Daemon
 PRODUCT_VENDOR_PROPERTIES += \
     persist.vendor.qcomsysd.enabled=1
