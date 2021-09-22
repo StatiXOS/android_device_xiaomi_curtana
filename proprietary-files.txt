@@ -404,10 +404,6 @@ vendor/etc/camera/megviifacepp_0_5_2_model
 vendor/lib64/libmegface.so
 vendor/lib64/libMegviiFacepp-0.5.2.so
 
-# Camera provider
-vendor/lib/android.hardware.camera.provider@2.4-legacy.so
-vendor/lib64/android.hardware.camera.provider@2.4-legacy.so
-
 # Camera sensors (curtana & gram) - from curtana - RKQ1.200826.002/V12.0.4.0.RJWMIXM
 vendor/lib64/camera/com.qti.sensormodule.ofilm_gc02m1_filter.bin|4687d1d2eb8d36b5bed2ceafb197ef21d22bd97e
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgm2.bin|5ebb58c43e95d598f35a0808a0497f51affdcbd6
