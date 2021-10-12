@@ -18,6 +18,8 @@
 
 #include "Thermal.h"
 
+constexpr std::string_view kThermalLogTag("pixel-thermal");
+
 using ::android::OK;
 using ::android::status_t;
 
@@ -35,6 +37,7 @@ static int shutdown() {
 }
 
 int main(int /* argc */, char ** /* argv */) {
+    android::base::SetDefaultTag(kThermalLogTag.data());
     status_t status;
     android::sp<IThermal> service = nullptr;
 
