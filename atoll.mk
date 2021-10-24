@@ -402,6 +402,9 @@ $(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
 PRODUCT_PACKAGES += \
     vndservicemanager
 
+# VNDK
+PRODUCT_EXTRA_VNDK_VERSIONS := 30
+
 # Vibrator
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.vibrator.service
