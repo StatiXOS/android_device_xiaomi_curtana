@@ -1,6 +1,12 @@
 [
     {
         "remote":       "github",
+        "repository":   "BladeRunner-A2C/msm-4.14-miatoll",
+        "target_path":  "kernel/xiaomi/miatoll",
+        "branch":       "sapphire"
+    },
+    {
+        "remote":       "github",
         "repository":   "kdrag0n/proton-clang",
         "target_path":  "prebuilts/clang/host/linux-x86/clang-proton",
         "branch":       "master"

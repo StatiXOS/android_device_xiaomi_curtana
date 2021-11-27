@@ -8,7 +8,7 @@ DEVICE_PATH := device/xiaomi/miatoll
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-2a-dotprod
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := cortex-a76
@@ -100,7 +100,7 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_CLANG_VERSION := proton
 TARGET_KERNEL_CONFIG := vendor/miatoll-perf_defconfig
-TARGET_KERNEL_SOURCE := kernel/msm-4.14
+TARGET_KERNEL_SOURCE := kernel/xiaomi/miatoll
 
 BOARD_KERNEL_CMDLINE += \
     androidboot.console=ttyMSM0 \

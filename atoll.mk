@@ -408,6 +408,10 @@ $(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
 PRODUCT_PACKAGES += \
     vndservicemanager
 
+# Verify Apps
+PRODUCT_BROKEN_VERIFY_USES_LIBRARIES := true
+RELAX_USES_LIBRARY_CHECK := true
+
 # VNDK
 PRODUCT_EXTRA_VNDK_VERSIONS := 30
 
