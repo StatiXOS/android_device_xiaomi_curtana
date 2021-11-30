@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-#include <cerrno>
-#include <mutex>
-#include <string>
+#include "Thermal.h"
 
 #include <android-base/file.h>
 #include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
 
-#include "Thermal.h"
+#include <cerrno>
+#include <mutex>
+#include <string>
+
 #include "thermal-helper.h"
 
 namespace android {

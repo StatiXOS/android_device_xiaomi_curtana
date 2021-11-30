@@ -65,8 +65,10 @@ void set_device_props(const std::string brand, const std::string device, const s
 }
 
 void load_device_properties() {
-    property_override("ro.build.fingerprint", "google/raven/raven:12/SD1A.210817.037/7862242:user/release-keys");
-    property_override("ro.build.description", "raven-user 12 SD1A.210817.037 7862242 release-keys");
+    property_override("ro.build.fingerprint",
+                      "google/raven/raven:12/SD1A.210817.037/7862242:user/release-keys");
+    property_override("ro.build.description",
+                      "raven-user 12 SD1A.210817.037 7862242 release-keys");
     std::string hwname = GetProperty("ro.boot.hwname", "");
     std::string region = GetProperty("ro.boot.hwc", "");
     std::string hwversion = GetProperty("ro.boot.hwversion", "");

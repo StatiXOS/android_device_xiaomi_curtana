@@ -27,9 +27,9 @@ namespace android {
 namespace hardware {
 namespace light {
 
-#define LED_PATH(led)                       "/sys/class/leds/" led "/"
+#define LED_PATH(led) "/sys/class/leds/" led "/"
 
-static const std::string led_paths[] {
+static const std::string led_paths[]{
     [RED] = LED_PATH("red"),
     [GREEN] = LED_PATH("green"),
     [BLUE] = LED_PATH("blue"),
@@ -38,21 +38,20 @@ static const std::string led_paths[] {
 
 static const std::string kLCDFile = "/sys/class/backlight/panel0-backlight/brightness";
 
-#define AutoHwLight(light) {.id = (int)light, .type = light, .ordinal = 0}
+#define AutoHwLight(light) \
+    { .id = (int)light, .type = light, .ordinal = 0 }
 
 // List of supported lights
-const static std::vector<HwLight> kAvailableLights = {
-    AutoHwLight(LightType::BACKLIGHT),
-    AutoHwLight(LightType::BATTERY),
-    AutoHwLight(LightType::NOTIFICATIONS)
-};
+const static std::vector<HwLight> kAvailableLights = {AutoHwLight(LightType::BACKLIGHT),
+                                                      AutoHwLight(LightType::BATTERY),
+                                                      AutoHwLight(LightType::NOTIFICATIONS)};
 
 Lights::Lights() {
     mWhiteLed = !access((led_paths[WHITE] + "brightness").c_str(), W_OK);
 }
 
 // AIDL methods
-ndk::ScopedAStatus Lights::setLightState(int id, const HwLightState& state) {
+ndk::ScopedAStatus Lights::setLightState(int id, const HwLightState &state) {
     switch (id) {
         case (int)LightType::BACKLIGHT:
             WriteToFile(kLCDFile, RgbaToBrightness(state.color));
@@ -73,7 +72,7 @@ ndk::ScopedAStatus Lights::setLightState(int id, const HwLightState& state) {
     return ndk::ScopedAStatus::ok();
 }
 
-ndk::ScopedAStatus Lights::getLights(std::vector<HwLight>* lights) {
+ndk::ScopedAStatus Lights::getLights(std::vector<HwLight> *lights) {
     for (auto i = kAvailableLights.begin(); i != kAvailableLights.end(); i++) {
         lights->push_back(*i);
     }
@@ -81,7 +80,7 @@ ndk::ScopedAStatus Lights::getLights(std::vector<HwLight>* lights) {
 }
 
 // device methods
-void Lights::setSpeakerLightLocked(const HwLightState& state) {
+void Lights::setSpeakerLightLocked(const HwLightState &state) {
     uint32_t alpha, red, green, blue;
     uint32_t blink;
     bool rc = true;
@@ -172,7 +171,7 @@ uint32_t Lights::RgbaToBrightness(uint32_t color) {
 }
 
 // Write value to path and close file.
-bool Lights::WriteToFile(const std::string& path, uint32_t content) {
+bool Lights::WriteToFile(const std::string &path, uint32_t content) {
     return WriteStringToFile(std::to_string(content), path);
 }
 

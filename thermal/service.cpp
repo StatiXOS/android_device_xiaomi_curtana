@@ -15,6 +15,7 @@
  */
 #include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
+
 #include "Thermal.h"
 
 using ::android::OK;

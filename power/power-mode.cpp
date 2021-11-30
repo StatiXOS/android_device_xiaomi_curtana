@@ -22,10 +22,10 @@
 namespace {
 int open_ts_input() {
     int fd = -1;
-    DIR* dir = opendir("/dev/input");
+    DIR *dir = opendir("/dev/input");
 
     if (dir != NULL) {
-        struct dirent* ent;
+        struct dirent *ent;
 
         while ((ent = readdir(dir)) != NULL) {
             if (ent->d_type == DT_CHR) {
@@ -37,7 +37,8 @@ int open_ts_input() {
 
                 fd = open(absolute_path, O_RDWR);
                 if (ioctl(fd, EVIOCGNAME(sizeof(name) - 1), &name) > 0) {
-                    if (strcmp(name, "fts_ts") == 0 || strcmp(name, "NVTCapacitiveTouchScreen") == 0)
+                    if (strcmp(name, "fts_ts") == 0 ||
+                        strcmp(name, "NVTCapacitiveTouchScreen") == 0)
                         break;
                 }
 
@@ -65,7 +66,7 @@ static constexpr int kInputEventWakeupModeOn = 5;
 
 using ::aidl::android::hardware::power::Mode;
 
-bool isDeviceSpecificModeSupported(Mode type, bool* _aidl_return) {
+bool isDeviceSpecificModeSupported(Mode type, bool *_aidl_return) {
     switch (type) {
         case Mode::DOUBLE_TAP_TO_WAKE:
             *_aidl_return = true;
