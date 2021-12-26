@@ -5,12 +5,24 @@
 
 import common
 
+def FullOTA_Assertions(info):
+  CheckRecovery(info)
+  return
+
+def IncrementalOTA_Assertions(info):
+  CheckRecovery(info)
+  return
+
 def FullOTA_InstallEnd(info):
   OTA_InstallEnd(info)
   return
 
 def IncrementalOTA_InstallEnd(info):
   OTA_InstallEnd(info)
+  return
+
+def CheckRecovery(info):
+  info.script.AppendExtra('assert(getprop("ro.statix.version") != "" || ui_print("WARNING: It seems that this is not StatiX recovery. Other recoveries might work but are not supported, so avoid reporting recovery/installation/boot issues if you are on another recovery! Thanks :)"););')
   return
 
 def AddImage(info, basename, dest):
