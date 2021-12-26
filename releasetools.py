@@ -12,6 +12,14 @@
 
 import common
 
+def FullOTA_Assertions(info):
+    CheckRecovery(info)
+    return
+
+def IncrementalOTA_Assertions(info):
+    CheckRecovery(info)
+    return
+
 def FullOTA_InstallEnd(info):
   OTA_InstallEnd(info)
   return
@@ -19,6 +27,10 @@ def FullOTA_InstallEnd(info):
 def IncrementalOTA_InstallEnd(info):
   OTA_InstallEnd(info)
   return
+
+def CheckRecovery(info):
+    info.script.AppendExtra('assert(getprop("ro.orangefox.version") == "" || abort("ERROR: OrangeFox is not supported! "););')
+    return
 
 def AddImage(info, basename, dest):
   path = "IMAGES/" + basename
