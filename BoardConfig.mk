@@ -213,7 +213,7 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
 SELINUX_IGNORE_NEVERALLOWS := true
 
 # Security patch level
-VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
+VENDOR_SECURITY_PATCH := 2021-09-01
 
 # Vendor
 include vendor/xiaomi/miatoll/BoardConfigVendor.mk
