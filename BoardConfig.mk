@@ -215,6 +215,9 @@ SELINUX_IGNORE_NEVERALLOWS := true
 # Security patch level
 VENDOR_SECURITY_PATCH := 2021-09-01
 
+# Shims
+TARGET_LD_SHIM_LIBS := vendor/lib/hw/audio.primary.atoll.so|fakelogprint.so
+
 # Vendor
 include vendor/xiaomi/miatoll/BoardConfigVendor.mk
 
