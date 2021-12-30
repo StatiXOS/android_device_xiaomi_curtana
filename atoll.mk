@@ -100,8 +100,10 @@ PRODUCT_PACKAGES += \
     libgui_vendor \
     libstdc++.vendor
 
-PRODUCT_PACKAGES += \
-    GoogleCamera
+ifeq ($(WITH_GMS), true)
+    PRODUCT_PACKAGES += \
+        GoogleCamera
+endif
 
 # Component overrides
 PRODUCT_COPY_FILES += \
