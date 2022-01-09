@@ -28,6 +28,11 @@ persist.dbg.volte_avail_ovr=1
 persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
 
+# IORap
+iorapd.perfetto.enable=false
+iorapd.readahead.enable=false
+ro.iorapd.enable=false
+
 # Media
 media.settings.xml=/vendor/etc/media_profiles_vendor.xml
 
