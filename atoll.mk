@@ -315,6 +315,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
+# QCOM hardware
+PRODUCT_BOARD_PLATFORM := atoll
+PRODUCT_USES_QCOM_HARDWARE := true
+
 # QMI
 PRODUCT_PACKAGES += \
     libjson \
