@@ -25,8 +25,5 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 # Bootanimation
 TARGET_BOOT_ANIMATION_RES := 1080
 
-# Override build fingerprint and description
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="redfin-user 12 SQ1A.220105.002 7961164 release-keys"
-
+# Override build fingerprint
 BUILD_FINGERPRINT := google/redfin/redfin:12/SQ1A.220105.002/7961164:user/release-keys
