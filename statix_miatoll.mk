@@ -25,3 +25,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 # Bootanimation
 TARGET_BOOT_ANIMATION_RES := 1080
+
+# Pixel Launcher
+INCLUDE_PIXEL_LAUNCHER := true
