@@ -1,0 +1,20 @@
+[
+    {
+        "remote":       "github",
+        "repository":   "PotatoDevices/kernel_xiaomi_miatoll",
+        "target_path":  "kernel/xiaomi/miatoll",
+        "branch":       "frico-release"
+    },
+    {
+        "remote":       "github",
+        "repository":   "PotatoDevices/vendor_xiaomi_miatoll",
+        "target_path":  "vendor/xiaomi/miatoll",
+        "branch":       "frico-release"
+    },
+    {
+        "remote":       "github",
+        "repository":   "PotatoDevices/hardware_xiaomi",
+        "target_path":  "hardware/xiaomi",
+        "branch":       "frico-release"
+    }
+]

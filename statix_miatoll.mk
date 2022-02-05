@@ -11,11 +11,12 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from miatoll device
 $(call inherit-product, device/xiaomi/miatoll/atoll.mk)
 
-# Inherit some common POSP stuff.
-$(call inherit-product, vendor/potato/config/common_full_phone.mk)
+# Inherit StatiX common configuration
+$(call inherit-product, vendor/statix/config/common.mk)
+$(call inherit-product, vendor/statix/config/gsm.mk)
 
 # Device identifier
-PRODUCT_NAME := potato_miatoll
+PRODUCT_NAME := statix_miatoll
 PRODUCT_DEVICE := miatoll
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Miatoll
