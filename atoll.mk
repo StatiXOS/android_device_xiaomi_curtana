@@ -100,9 +100,9 @@ PRODUCT_PACKAGES += \
     libgui_vendor \
     libstdc++.vendor
 
-ifeq ($(WITH_GMS), true)
-    PRODUCT_PACKAGES += \
-        GoogleCamera
+ifneq ($(TARGET_DOES_NOT_USE_GAPPS), true)
+PRODUCT_PACKAGES += \
+    GoogleCamera
 endif
 
 # Component overrides
