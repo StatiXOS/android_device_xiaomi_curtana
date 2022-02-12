@@ -693,4 +693,7 @@
         <!-- B y-intercept --> <item>-0.349361641294833436</item>
     </string-array>
 
+    <!-- Indicates whether device has a power button fingerprint sensor. -->
+    <bool name="config_is_powerbutton_fps">true</bool>
+
 </resources>
