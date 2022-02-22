@@ -23,6 +23,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 
+PRODUCT_VENDOR_PROPERTIES += \
+    dalvik.vm.dex2oat64.enabled=true
+
 # AID/fs configs
 PRODUCT_PACKAGES += \
     fs_config_files
@@ -77,12 +80,33 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
+PRODUCT_SYSTEM_PROPERTIES += \
+    audio.offload.min.duration.secs=30 \
+
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.config.vc_call_vol_steps=10
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1.vendor \
     vendor.qti.hardware.bluetooth_audio@2.1.vendor \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor
+
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac \
+    persist.bluetooth.a2dp_offload.disabled=false \
+    persist.vendor.bt.aac_frm_ctl.enabled=true \
+    persist.vendor.qcom.bluetooth.a2dp_offload_cap=sbc-aptx-aptxtws-aptxhd-aac-ldac-aptxadaptiver2 \
+    persist.vendor.qcom.bluetooth.aac_frm_ctl.enabled=true \
+    persist.vendor.qcom.bluetooth.aac_vbr_ctl.enabled=false \
+    persist.vendor.qcom.bluetooth.enable.splita2dp=true \
+    persist.vendor.qcom.bluetooth.scram.enabled=false \
+    persist.vendor.qcom.bluetooth.soc=cherokee \
+    persist.vendor.qcom.bluetooth.twsp_state.enabled=false \
+    ro.bluetooth.a2dp_offload.supported=true \
+    ro.vendor.bluetooth.wipower=false \
+    vendor.qcom.bluetooth.soc=cherokee
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2400
@@ -106,15 +130,30 @@ PRODUCT_PACKAGES += \
     GoogleCamera
 endif
 
+PRODUCT_SYSTEM_PROPERTIES += \
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera
+
+PRODUCT_VENDOR_PROPERTIES += \
+    camera.disable_zsl_mode=1 \
+    ro.hardware.camera=xiaomi
+
+# Charger
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.charger.enable_suspend=true
+
 # Component overrides
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
+
+# CNE
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.vendor.cne.feature=1
 
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-# Display
+# Display / Graphics
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.4-impl \
     android.hardware.graphics.composer@2.4-service \
@@ -143,10 +182,26 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.mapper@3.0.vendor \
     vendor.qti.hardware.display.mapper@4.0.vendor
 
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.sys.sf.color_mode=9 \
+    persist.sys.sf.color_saturation=1.0 \
+    persist.sys.sf.native_mode=2 \
+    ro.hardware.egl=adreno \
+    ro.hardware.vulkan=adreno \
+    ro.opengles.version=196610 \
+    vendor.gralloc.disable_ubwc=0
+
+# DPM
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.vendor.dpm.feature=11
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.4-service.clearkey \
     android.hardware.drm@1.4.vendor
+
+PRODUCT_VENDOR_PROPERTIES += \
+    drm.service.enabled=true
 
 # Fastbootd
 PRODUCT_PACKAGES += \
@@ -155,6 +210,14 @@ PRODUCT_PACKAGES += \
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.xiaomi_atoll
+
+# Fwk detect
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.vendor.qti.va_aosp.support=1
+
+# FRP
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.frp.pst=/dev/block/bootdevice/by-name/frp
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -186,6 +249,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/keylayout/uinput-fpc.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-fpc.kl \
     $(LOCAL_PATH)/configs/keylayout/uinput-goodix.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/uinput-goodix.kl
 
+# IMS
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1 \
+    persist.dbg.wfc_avail_ovr=1
+
 # IPACM
 PRODUCT_PACKAGES += \
     ipacm \
@@ -206,6 +275,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0.vendor \
     android.hardware.keymaster@4.1.vendor
+
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.crypto.volume.filenames_mode=aes-256-cts \
+    ro.hardware.keystore_desede=true
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -236,6 +309,19 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml
+
+PRODUCT_SYSTEM_PROPERTIES += \
+    media.settings.xml=/vendor/etc/media_profiles_vendor.xml
+
+PRODUCT_VENDOR_PROPERTIES += \
+    debug.media.codec2=2 \
+    debug.stagefright.c2inputsurface=-1 \
+    debug.stagefright.ccodec=4 \
+    debug.stagefright.omx_default_rank=512
+
+# Netflix
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.netflix.bsp_rev=Q6250-19132-1
 
 # Netmgr
 PRODUCT_PACKAGES += \
@@ -278,6 +364,9 @@ PRODUCT_PACKAGES += \
 # Perf
 PRODUCT_PACKAGES += \
     libqti-perfd-client
+
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.vendor.extension_library=libqti-perfd-client.so
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -329,6 +418,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
+# Pre-Rendering
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.vendor.perf.scroll_opt=true
+
+# Qualcomm System Daemon
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.vendor.qcomsysd.enabled=1
+
 # QCOM hardware
 PRODUCT_BOARD_PLATFORM := atoll
 PRODUCT_USES_QCOM_HARDWARE := true
@@ -357,6 +454,27 @@ PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor \
     android.hardware.radio.deprecated@1.0.vendor
 
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.radio.multisim.config=dsds \
+    persist.sys.fflag.override.settings_provider_model=false \
+    persist.vendor.data.iwlan.enable=true \
+    persist.vendor.data.mode=concurrent \
+    persist.vendor.radio.add_power_save=1 \
+    persist.vendor.radio.atfwd.start=true \
+    persist.vendor.radio.apm_sim_not_pwdn=1 \
+    persist.vendor.radio.custom_ecc=1 \
+    persist.vendor.radio.data_con_rprt=1 \
+    persist.vendor.radio.enable_temp_dds=true \
+    persist.vendor.radio.enableadvancedscan=true \
+    persist.vendor.radio.procedure_bytes=SKIP \
+    persist.vendor.radio.rat_on=combine \
+    persist.vendor.radio.sib16_support=1 \
+    persist.vendor.radio.snapshot_enabled=1 \
+    persist.vendor.radio.snapshot_timer=5 \
+    ro.com.android.dataroaming=false \
+    ro.telephony.default_network=22,20 \
+    ro.telephony.iwlan_operation_mode=legacy
+
 # Secure element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
@@ -381,6 +499,10 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@2.1-service.multihal \
     libsensorndkbridge
 
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.vendor.sensors.enable.mag_filter=true \
+    persist.vendor.sensors.allow_non_default_discovery=true
+
 # Servicetracker
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.servicetracker@1.0.vendor \
@@ -400,6 +522,10 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/xiaomi \
     vendor/qcom/opensource/commonsys-intf/display
 
+# SSR
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.vendor.ssr.restart_level=ALL_ENABLE
+
 # Telephony
 PRODUCT_PACKAGES += \
     ims-ext-common \
@@ -412,6 +538,12 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BOOT_JARS += \
     telephony-ext
+
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.vendor.ims.disableADBLogs=1 \
+    persist.vendor.ims.disableDebugLogs=1 \
+    persist.vendor.ims.disableIMSLogs=1 \
+    persist.vendor.ims.disableQXDMLogs=1
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
@@ -438,6 +570,10 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/usb/etc
+
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.vendor.usb.config=mtp,adb \
+    vendor.usb.diag.func.name=diag
 
 # Vendor
 $(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
@@ -474,3 +610,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
+
+PRODUCT_VENDOR_PROPERTIES += \
+    wifi.aware.interface=wifi-aware0
+
+# ZRAM
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.zram.first_wb_delay_mins=180 \
+    ro.zram.mark_idle_delay_mins=60 \
+    ro.zram.periodic_wb_delay_hours=24
