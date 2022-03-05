@@ -209,7 +209,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_atoll
+    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_miatoll
 
 # Fwk detect
 PRODUCT_SYSTEM_PROPERTIES += \
