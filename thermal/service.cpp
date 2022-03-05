@@ -32,7 +32,7 @@ using ::android::hardware::thermal::V2_0::IThermal;
 using ::android::hardware::thermal::V2_0::implementation::Thermal;
 
 static int shutdown() {
-    LOG(ERROR) << "Xiaomi SM6250 Thermal HAL Service is shutting down.";
+    LOG(ERROR) << "Xiaomi Miatoll Thermal HAL Service is shutting down.";
     return 1;
 }
 
@@ -41,7 +41,7 @@ int main(int /* argc */, char ** /* argv */) {
     status_t status;
     android::sp<IThermal> service = nullptr;
 
-    LOG(INFO) << "Xiaomi SM6250 Thermal HAL Service 2.0 starting...";
+    LOG(INFO) << "Xiaomi Miatoll Thermal HAL Service 2.0 starting...";
 
     service = new Thermal();
     if (service == nullptr) {
@@ -57,7 +57,7 @@ int main(int /* argc */, char ** /* argv */) {
         return shutdown();
     }
 
-    LOG(INFO) << "Xiaomi SM6250 Thermal HAL Service 2.0 started successfully.";
+    LOG(INFO) << "Xiaomi Miatoll Thermal HAL Service 2.0 started successfully.";
     joinRpcThreadpool();
     // We should not get past the joinRpcThreadpool().
     return shutdown();

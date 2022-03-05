@@ -1,13 +1,13 @@
 cc_binary {
-  name: "android.hardware.thermal@2.0-service.xiaomi_atoll",
+  name: "android.hardware.thermal@2.0-service.xiaomi_miatoll",
   defaults: [
     "hidl_defaults",
   ],
   vendor: true,
   relative_install_path: "hw",
-  vintf_fragments: ["android.hardware.thermal@2.0-service.xiaomi_atoll.xml"],
+  vintf_fragments: ["android.hardware.thermal@2.0-service.xiaomi_miatoll.xml"],
   init_rc: [
-    "android.hardware.thermal@2.0-service.xiaomi_atoll.rc",
+    "android.hardware.thermal@2.0-service.xiaomi_miatoll.rc",
   ],
   srcs: [
     "service.cpp",
@@ -49,10 +49,10 @@ cc_binary {
 }
 
 sh_binary {
-  name: "xiaomi_atoll_thermal_symlinks",
+  name: "xiaomi_miatoll_thermal_symlinks",
   src: "init.thermal.symlinks.sh",
   vendor: true,
   init_rc: [
-    "xiaomi_atoll-thermal-symlinks.rc",
+    "xiaomi_miatoll-thermal-symlinks.rc",
   ],
 }

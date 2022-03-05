@@ -552,7 +552,7 @@ PRODUCT_SYSTEM_PROPERTIES += \
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.xiaomi_atoll \
+    android.hardware.thermal@2.0-service.xiaomi_miatoll \
     thermal_symlinks
 
 PRODUCT_COPY_FILES += \
