@@ -1,8 +1,8 @@
 cc_binary {
-    name: "android.hardware.lights-service.xiaomi_atoll",
+    name: "android.hardware.lights-service.xiaomi_miatoll",
     relative_install_path: "hw",
-    init_rc: ["lights-xiaomi_atoll.rc"],
-    vintf_fragments: ["lights-xiaomi_atoll.xml"],
+    init_rc: ["lights-xiaomi_miatoll.rc"],
+    vintf_fragments: ["lights-xiaomi_miatoll.xml"],
     vendor: true,
     shared_libs: [
         "libbase",
