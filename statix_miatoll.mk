@@ -25,8 +25,3 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 # Bootanimation
 TARGET_BOOT_ANIMATION_RES := 1080
-
-# Pixel Launcher
-ifneq ($(TARGET_DOES_NOT_USE_GAPPS),true)
-INCLUDE_PIXEL_LAUNCHER := true
-endif
