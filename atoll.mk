@@ -125,11 +125,6 @@ PRODUCT_PACKAGES += \
     libgui_vendor \
     libstdc++.vendor
 
-ifneq ($(TARGET_DOES_NOT_USE_GAPPS), true)
-PRODUCT_PACKAGES += \
-    GoogleCamera
-endif
-
 PRODUCT_SYSTEM_PROPERTIES += \
     vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera
 

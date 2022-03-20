@@ -15,6 +15,9 @@ $(call inherit-product, device/xiaomi/miatoll/atoll.mk)
 $(call inherit-product, vendor/statix/config/common.mk)
 $(call inherit-product, vendor/statix/config/gsm.mk)
 
+# Inherit Google Camera
+$(call inherit-product, vendor/xiaomi/miatoll-gcam/miatoll-gcam-vendor.mk)
+
 # Device identifier
 PRODUCT_NAME := statix_miatoll
 PRODUCT_DEVICE := miatoll

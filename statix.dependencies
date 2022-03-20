@@ -12,6 +12,12 @@
         "branch":       "frico-release"
     },
     {
+        "remote":       "gitlab",
+        "repository":   "LeddaZ/vendor_xiaomi_miatoll-gcam",
+        "target_path":  "vendor/xiaomi/miatoll-gcam",
+        "branch":       "twelve"
+    },
+    {
         "remote":       "github",
         "repository":   "PotatoDevices/hardware_xiaomi",
         "target_path":  "hardware/xiaomi",
