@@ -93,6 +93,9 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor
 
+PRODUCT_PRODUCT_PROPERTIES += \
+    persist.vendor.bluetooth.modem_nv_support=true
+
 PRODUCT_VENDOR_PROPERTIES += \
     persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac \
     persist.bluetooth.a2dp_offload.disabled=false \
