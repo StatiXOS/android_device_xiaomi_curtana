@@ -732,9 +732,6 @@
           pulsating and RGB control would set this config to 75. -->
      <integer name="config_deviceLightCapabilities">232</integer>
 
-    <!-- Whether device has fingerprint on power button -->
-    <bool name="config_is_powerbutton_fps" translatable="false">true</bool>
-
     <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
     <string name="config_oemFastChargerStatusPath" translatable="false">/sys/class/power_supply/bms/fastcharge_mode</string>
 
