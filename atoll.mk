@@ -65,7 +65,6 @@ PRODUCT_PACKAGES += \
     libreverbwrapper \
     libsndmonitor \
     libspkrprot \
-    libssrec \
     libvisualizer \
     libvolumelistener \
     sound_trigger.primary.atoll:32
