@@ -28,3 +28,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 # Bootanimation
 TARGET_BOOT_ANIMATION_RES := 1080
+
+# Disable Quick Tap
+DISABLE_COLUMBUS := true
