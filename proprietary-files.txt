@@ -1,4 +1,4 @@
-# All unpinned blobs below are extracted from curtana_global-user 11 RKQ1.200826.002 V12.5.1.0.RJWMIXM release-keys
+# All unpinned blobs below are extracted from curtana_global-user 11 RKQ1.200826.002 V12.5.5.0.RJWINXM release-keys
 
 # ACDB
 vendor/etc/acdbdata/adsp_avs_config.acdb
@@ -339,7 +339,7 @@ vendor/etc/camera/megviifacepp_0_5_2_model
 vendor/lib64/libmegface.so
 vendor/lib64/libMegviiFacepp-0.5.2.so
 
-# Camera sensors (curtana & gram) - from curtana - RKQ1.200826.002/V12.0.4.0.RJWMIXM
+# Camera sensors (curtana & gram) - from curtana - RKQ1.200826.002/V12.5.5.0.RJWMIXM
 vendor/lib64/camera/com.qti.sensormodule.ofilm_gc02m1_filter.bin|4687d1d2eb8d36b5bed2ceafb197ef21d22bd97e
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgm2.bin|5ebb58c43e95d598f35a0808a0497f51affdcbd6
 vendor/lib64/camera/com.qti.sensormodule.sunny_imx582.bin|0b0d77edf59fe95073c16ed8698a00e7b5a5ed3c
@@ -357,9 +357,9 @@ vendor/lib64/camera/com.qti.sensormodule.sunny_s5kgw1_mirrorflip.bin
 vendor/lib64/camera/com.qti.tuned.sunny_gc02m1.bin
 vendor/lib64/camera/com.qti.tuned.sunny_s5kgw1.bin
 
-# Camera sensors (excalibur) - from excalibur - RKQ1.200826.002/V12.0.1.0.RJXINXM
+# Camera sensors (excalibur) - from excalibur - RKQ1.200826.002/V12.5.6.0.RJXINXM
 vendor/lib64/camera/com.qti.sensormodule.sunny_ov32a1q.bin|a6f8e2da547f15d315412f81c58d4ba6888641d5
-vendor/lib64/camera/com.qti.tuned.sunny_ov32a1q.bin|47e72f5f6dbdaf27eea339f2a1896db55b343b62
+vendor/lib64/camera/com.qti.tuned.sunny_ov32a1q.bin|ea825eadeacdc02debdf1b6406706bf695e11bc0
 
 # Camera sensors (joyeuse)
 vendor/lib64/camera/com.qti.tuned.ofilm_s5kgw1.bin
