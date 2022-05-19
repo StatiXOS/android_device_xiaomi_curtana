@@ -313,10 +313,8 @@ PRODUCT_SYSTEM_PROPERTIES += \
     media.settings.xml=/vendor/etc/media_profiles_vendor.xml
 
 PRODUCT_VENDOR_PROPERTIES += \
-    debug.media.codec2=2 \
-    debug.stagefright.c2inputsurface=-1 \
-    debug.stagefright.ccodec=4 \
-    debug.stagefright.omx_default_rank=512
+    debug.stagefright.ccodec=1 \
+    debug.stagefright.omx_default_rank=0
 
 # Netflix
 PRODUCT_SYSTEM_PROPERTIES += \
