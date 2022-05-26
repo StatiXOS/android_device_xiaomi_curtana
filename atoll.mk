@@ -614,9 +614,3 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_VENDOR_PROPERTIES += \
     wifi.aware.interface=wifi-aware0
-
-# ZRAM
-PRODUCT_VENDOR_PROPERTIES += \
-    ro.zram.first_wb_delay_mins=180 \
-    ro.zram.mark_idle_delay_mins=60 \
-    ro.zram.periodic_wb_delay_hours=24
