@@ -228,9 +228,6 @@ PRODUCT_COPY_FILES += \
 
 # Netmgr
 PRODUCT_PACKAGES += \
-    netutils-wrapper-1.0
-
-PRODUCT_PACKAGES += \
     android.system.net.netd@1.1.vendor
 
 # Neural networks
