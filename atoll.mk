@@ -335,6 +335,8 @@ PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.3.vendor
 
 # NFC
+TARGET_NFC_SKU := joyeuse
+
 PRODUCT_PACKAGES += \
     NfcNci \
     Tag

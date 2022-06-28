@@ -5,8 +5,8 @@ service vendor.nfc_hal_service /vendor/bin/hw/android.hardware.nfc@1.2-service
     group nfc
     disabled
 
-on init && property:ro.boot.product.hardware.sku=nfc
+on init && property:ro.boot.product.hardware.sku=joyeuse
     start vendor.nfc_hal_service
 
-on post-fs-data && property:ro.boot.product.hardware.sku=nfc
+on post-fs-data && property:ro.boot.product.hardware.sku=joyeuse
     mkdir /data/vendor/nfc 0770 nfc nfc
