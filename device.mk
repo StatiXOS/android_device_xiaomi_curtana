@@ -586,9 +586,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     persist.vendor.usb.config=mtp,adb \
     vendor.usb.diag.func.name=diag
 
-# Vendor
-$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
-
 # Vendor service manager
 PRODUCT_PACKAGES += \
     vndservicemanager
@@ -624,3 +621,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_VENDOR_PROPERTIES += \
     wifi.aware.interface=wifi-aware0
+
+# Vendor
+$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)

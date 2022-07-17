@@ -9,7 +9,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from miatoll device
-$(call inherit-product, device/xiaomi/miatoll/atoll.mk)
+$(call inherit-product, device/xiaomi/miatoll/device.mk)
 
 # Inherit StatiX common configuration
 $(call inherit-product, vendor/statix/config/common.mk)

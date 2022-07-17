@@ -3,13 +3,13 @@
         "remote":       "github",
         "repository":   "LeddaZ/kernel_xiaomi_miatoll",
         "target_path":  "kernel/xiaomi/miatoll",
-        "branch":       "frico-release"
+        "branch":       "frico_mr1-release"
     },
     {
         "remote":       "github",
-        "repository":   "PotatoDevices/vendor_xiaomi_miatoll",
+        "repository":   "LeddaZ/vendor_xiaomi_miatoll",
         "target_path":  "vendor/xiaomi/miatoll",
-        "branch":       "frico-release"
+        "branch":       "frico_mr1-release"
     },
     {
         "remote":       "gitlab",
@@ -19,7 +19,7 @@
     },
     {
         "remote":       "github",
-        "repository":   "LineageOS/android_hardware_xiaomi",
+        "repository":   "leddaz-stuff/android_hardware_xiaomi",
         "target_path":  "hardware/xiaomi",
         "branch":       "lineage-19.1"
     }

@@ -211,9 +211,6 @@ VENDOR_SECURITY_PATCH := 2022-03-01
 # Shims
 TARGET_LD_SHIM_LIBS := vendor/lib/hw/audio.primary.atoll.so|fakelogprint.so
 
-# Vendor
-include vendor/xiaomi/miatoll/BoardConfigVendor.mk
-
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
 BOARD_HOSTAPD_DRIVER := NL80211
@@ -228,3 +225,6 @@ WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+# Vendor
+include vendor/xiaomi/miatoll/BoardConfigVendor.mk
