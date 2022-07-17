@@ -531,8 +531,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/google/interfaces \
     hardware/google/pixel \
-    hardware/xiaomi \
-    vendor/qcom/opensource/commonsys-intf/display
+    hardware/xiaomi
 
 # SSR
 PRODUCT_SYSTEM_PROPERTIES += \
