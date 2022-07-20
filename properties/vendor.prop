@@ -81,6 +81,10 @@ vendor.audio_hal.period_size=192
 vendor.voice.path.for.pcm.voip=true
 
 # Bluetooth
+bluetooth.hardware.power.idle_cur_ma=1
+bluetooth.hardware.power.operating_voltage_mv=3300
+bluetooth.hardware.power.rx_cur_ma=50
+bluetooth.hardware.power.tx_cur_ma=50
 persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac-lc3
 persist.bluetooth.a2dp_offload.disabled=false
 persist.vendor.bt.aac_frm_ctl.enabled=true
