@@ -26,9 +26,6 @@ PRODUCT_MODEL := Miatoll
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-# Bootanimation
-TARGET_BOOT_ANIMATION_RES := 1080
-
 # StatiX flags
 INCLUDE_PIXEL_LAUNCHER := true
 TARGET_USES_BLUR := true

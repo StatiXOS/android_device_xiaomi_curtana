@@ -87,7 +87,6 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/device_framework_ma
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 
-
 ODM_MANIFEST_SKUS += \
     joyeuse
 ODM_MANIFEST_JOYEUSE_FILES := $(DEVICE_PATH)/configs/nfc/manifest_nfc.xml
