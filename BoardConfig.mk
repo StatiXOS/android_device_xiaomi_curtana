@@ -75,9 +75,10 @@ TARGET_SCREEN_DENSITY := 420
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_BOOT_HEADER_VERSION := 2
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/miatoll-kernel
 
 # DTBO
-BOARD_KERNEL_SEPARATED_DTBO := true
+BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/miatoll-kernel/dtbo.img
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
@@ -124,9 +125,6 @@ BOARD_RAMDISK_OFFSET := 0x01000000
 
 TARGET_KERNEL_ADDITIONAL_FLAGS += LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CONFIG := vendor/miatoll-perf_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/miatoll
 
 # OTA
 TARGET_OTA_ASSERT_DEVICE := curtana,excalibur,gram,joyeuse,miatoll
@@ -172,7 +170,6 @@ TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # Recovery
-BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_DEVICE_MODULES := libinit_miatoll
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"

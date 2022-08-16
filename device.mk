@@ -271,6 +271,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     fakelogprint
 
+# Kernel
+LOCAL_KERNEL := device/xiaomi/miatoll-kernel/Image
+PRODUCT_COPY_FILES += \
+    $(LOCAL_KERNEL):kernel
+
+# Kernel headers
+PRODUCT_VENDOR_KERNEL_HEADERS := hardware/qcom-caf/sm8150/kernel-headers
+
 # Keymaster
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0.vendor \
