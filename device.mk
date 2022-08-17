@@ -187,6 +187,9 @@ PRODUCT_PACKAGES += \
     libipanat \
     liboffloadhal
 
+PRODUCT_PACKAGES += \
+    android.hardware.tetheroffload.config@1.0
+
 # IR
 PRODUCT_PACKAGES += \
     android.hardware.ir@1.0-impl \
