@@ -28,5 +28,4 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 # StatiX flags
 INCLUDE_PIXEL_LAUNCHER := true
-TARGET_USES_BLUR := true
 ENABLE_GAMETOOLS := true
