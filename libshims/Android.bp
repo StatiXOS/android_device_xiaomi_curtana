@@ -10,3 +10,9 @@ cc_library_shared {
     shared_libs: ["liblog"],
     srcs: ["fakelogprint/fakelogprint.cpp"],
 }
+
+cc_library_shared {
+    name: "libwatermark_shim",
+    srcs: ["libwatermark_shim/libwatermark_shim.c"],
+    vendor: true,
+}

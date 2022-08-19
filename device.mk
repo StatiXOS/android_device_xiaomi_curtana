@@ -283,9 +283,10 @@ PRODUCT_PACKAGES += \
     android.hardware.ir@1.0-impl \
     android.hardware.ir@1.0-service
 
-# Libshims
+# Shims
 PRODUCT_PACKAGES += \
-    fakelogprint
+    fakelogprint \
+    libwatermark_shim
 
 # Kernel
 LOCAL_KERNEL := device/xiaomi/miatoll-kernel/Image
