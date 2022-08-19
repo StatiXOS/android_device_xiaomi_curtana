@@ -359,6 +359,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
 
+# Shims
+PRODUCT_PACKAGES += \
+    libpiex_shim
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 29
 
