@@ -357,9 +357,6 @@ vendor/lib64/camera/com.qti.tuned.sunny_ov32a1q.bin|ea825eadeacdc02debdf1b640670
 # Camera sensors (joyeuse)
 vendor/lib64/camera/com.qti.tuned.ofilm_s5kgw1.bin
 
-# Camera provider
-vendor/lib64/android.hardware.camera.provider@2.4-legacy.so
-
 # CDSP
 vendor/bin/cdsprpcd
 vendor/etc/init/vendor.qti.cdsprpc-service.rc
