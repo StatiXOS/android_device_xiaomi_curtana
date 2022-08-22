@@ -216,7 +216,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_miatoll
+    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_curtana
 
 # Fwk detect
 PRODUCT_SYSTEM_PROPERTIES += \
@@ -229,10 +229,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 # FUSE
 PRODUCT_SYSTEM_PROPERTIES += \
     persist.sys.fuse.passthrough.enable=true
-
-# Google Photos
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/pixel/pixel_2016_exclusive.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/pixel_2016_exclusive.xml
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -289,7 +285,7 @@ PRODUCT_PACKAGES += \
     libwatermark_shim
 
 # Kernel
-LOCAL_KERNEL := device/xiaomi/miatoll-kernel/Image
+LOCAL_KERNEL := device/xiaomi/curtana-kernel/Image
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
@@ -310,7 +306,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.lights-service.xiaomi_miatoll
+    android.hardware.lights-service.xiaomi_curtana
 
 # Media
 PRODUCT_PACKAGES += \
@@ -359,27 +355,6 @@ PRODUCT_PACKAGES += \
 # Neural networks
 PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.3.vendor
-
-# NFC
-TARGET_NFC_SKU := joyeuse
-
-PRODUCT_PACKAGES += \
-    NfcNci \
-    Tag
-
-PRODUCT_PACKAGES += \
-    android.hardware.nfc@1.2-service
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/nfc/libnfc-nci.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf \
-    $(LOCAL_PATH)/configs/nfc/libnfc-nxp.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nxp.conf
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/android.hardware.nfc.hcef.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/com.android.nfc_extras.xml \
-    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/com.nxp.mifare.xml
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -581,18 +556,15 @@ PRODUCT_SYSTEM_PROPERTIES += \
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.xiaomi_miatoll \
+    android.hardware.thermal@2.0-service.xiaomi_curtana \
     thermal_symlinks
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/thermal_info_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/thermal_info_config.json
+    $(LOCAL_PATH)/configs/thermal/thermal_info_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/thermal_info_config.json
 
 # Thermal Configs
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/thermal/thermal-engine-curtana.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-curtana.conf \
-    $(LOCAL_PATH)/configs/thermal/thermal-engine-excalibur.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-excalibur.conf \
-    $(LOCAL_PATH)/configs/thermal/thermal-engine-gram.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-gram.conf \
-    $(LOCAL_PATH)/configs/thermal/thermal-engine-joyeuse.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-joyeuse.conf
+    $(LOCAL_PATH)/configs/thermal/thermal-engine.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine.conf
 
 # USB
 PRODUCT_PACKAGES += \
@@ -650,4 +622,4 @@ PRODUCT_VENDOR_PROPERTIES += \
     wifi.aware.interface=wifi-aware0
 
 # Vendor
-$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
+$(call inherit-product, vendor/xiaomi/curtana/curtana-vendor.mk)

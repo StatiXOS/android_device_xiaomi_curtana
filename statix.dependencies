@@ -2,13 +2,13 @@
     {
         "remote":       "github",
         "repository":   "LeddaZ/device_xiaomi_miatoll-kernel",
-        "target_path":  "device/xiaomi/miatoll-kernel",
+        "target_path":  "device/xiaomi/curtana-kernel",
         "branch":       "tm"
     },
     {
         "remote":       "github",
-        "repository":   "LeddaZ/vendor_xiaomi_miatoll",
-        "target_path":  "vendor/xiaomi/miatoll",
+        "repository":   "LeddaZ/vendor_xiaomi_curtana",
+        "target_path":  "vendor/xiaomi/curtana",
         "branch":       "tm"
     },
     {

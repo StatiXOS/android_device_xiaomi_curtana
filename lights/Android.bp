@@ -1,8 +1,8 @@
 cc_binary {
-    name: "android.hardware.lights-service.xiaomi_miatoll",
+    name: "android.hardware.lights-service.xiaomi_curtana",
     relative_install_path: "hw",
-    init_rc: ["lights-xiaomi_miatoll.rc"],
-    vintf_fragments: ["lights-xiaomi_miatoll.xml"],
+    init_rc: ["lights-xiaomi_curtana.rc"],
+    vintf_fragments: ["lights-xiaomi_curtana.xml"],
     vendor: true,
     shared_libs: [
         "libbase",

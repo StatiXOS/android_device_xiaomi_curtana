@@ -1,13 +1,13 @@
 cc_binary {
-  name: "android.hardware.thermal@2.0-service.xiaomi_miatoll",
+  name: "android.hardware.thermal@2.0-service.xiaomi_curtana",
   defaults: [
     "hidl_defaults",
   ],
   vendor: true,
   relative_install_path: "hw",
-  vintf_fragments: ["android.hardware.thermal@2.0-service.xiaomi_miatoll.xml"],
+  vintf_fragments: ["android.hardware.thermal@2.0-service.xiaomi_curtana.xml"],
   init_rc: [
-    "android.hardware.thermal@2.0-service.xiaomi_miatoll.rc",
+    "android.hardware.thermal@2.0-service.xiaomi_curtana.rc",
   ],
   srcs: [
     "service.cpp",
@@ -49,10 +49,10 @@ cc_binary {
 }
 
 sh_binary {
-  name: "xiaomi_miatoll_thermal_symlinks",
+  name: "xiaomi_curtana_thermal_symlinks",
   src: "init.thermal.symlinks.sh",
   vendor: true,
   init_rc: [
-    "xiaomi_miatoll-thermal-symlinks.rc",
+    "xiaomi_curtana-thermal-symlinks.rc",
   ],
 }

@@ -16,10 +16,10 @@
 //
 
 cc_library_static {
-    name: "libinit_miatoll",
+    name: "libinit_curtana",
     recovery_available: true,
     shared_libs: ["libbase"],
-    srcs: ["init_miatoll.cpp"],
+    srcs: ["init_curtana.cpp"],
     include_dirs: [
         "system/core/init",
         "system/libbase/include"
@@ -29,13 +29,6 @@ cc_library_static {
 prebuilt_etc {
     name: "fstab.qcom",
     src: "fstab.qcom",
-    vendor: true,
-}
-
-prebuilt_etc {
-    name: "init.device.rc",
-    src: "init.device.rc",
-    sub_dir: "init/hw",
     vendor: true,
 }
 

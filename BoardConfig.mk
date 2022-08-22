@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/xiaomi/miatoll
+DEVICE_PATH := device/xiaomi/curtana
 
 # AVB
 BOARD_AVB_ENABLE := true
@@ -75,10 +75,10 @@ TARGET_SCREEN_DENSITY := 420
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_BOOT_HEADER_VERSION := 2
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/miatoll-kernel
+BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/curtana-kernel
 
 # DTBO
-BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/miatoll-kernel/dtbo.img
+BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/curtana-kernel/dtbo.img
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
@@ -88,10 +88,6 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/device_framework_ma
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 
-ODM_MANIFEST_SKUS += \
-    joyeuse
-ODM_MANIFEST_JOYEUSE_FILES := $(DEVICE_PATH)/configs/nfc/manifest_nfc.xml
-
 # Hacks
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_ENFORCE_SYSPROP_OWNER := true
@@ -99,7 +95,7 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_miatoll
+TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_curtana
 
 # Kernel
 BOARD_KERNEL_CMDLINE += \
@@ -127,7 +123,7 @@ TARGET_KERNEL_ADDITIONAL_FLAGS += LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-str
 TARGET_KERNEL_ARCH := arm64
 
 # OTA
-TARGET_OTA_ASSERT_DEVICE := curtana,excalibur,gram,joyeuse,miatoll
+TARGET_OTA_ASSERT_DEVICE := curtana
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 134217728
@@ -180,7 +176,7 @@ TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # Recovery
-TARGET_RECOVERY_DEVICE_MODULES := libinit_miatoll
+TARGET_RECOVERY_DEVICE_MODULES := libinit_curtana
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -224,4 +220,4 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Vendor
-include vendor/xiaomi/miatoll/BoardConfigVendor.mk
+include vendor/xiaomi/curtana/BoardConfigVendor.mk
