@@ -57,12 +57,8 @@ void set_ro_build_prop(const std::string &source, const std::string &prop,
 }
 
 void load_device_properties() {
-    std::string hwname = GetProperty("ro.boot.hwname", "");
-    std::string region = GetProperty("ro.boot.hwc", "");
     std::string hwversion = GetProperty("ro.boot.hwversion", "");
-
     property_override("vendor.boot.hwversion", hwversion.c_str());
-    property_override("ro.boot.product.hardware.sku", hwname.c_str());
 }
 
 void load_dalvik_properties() {
