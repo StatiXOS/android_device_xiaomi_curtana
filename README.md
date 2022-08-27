@@ -16,7 +16,7 @@ Memory  | 4/6 GB RAM
 Shipped Android Version | 10
 Storage | 64/128 GB
 Battery | Non-removable Li-Po 5020 mAh
-Display | 1080 x 2400 pixels, 20:9 ratio, 6.67 inches, IPS LCD, 440ppi
+Display | 1080 x 2400 pixels, 20:9 ratio, 6.67 inches, IPS LCD, 395 ppi
 Camera  | 48 MP f/1.8 + 8 MP f/2.2 + 5 MP f/2.4 + 2 MP f/2.4, 16 MP f/2.5
 
 ## Device picture
