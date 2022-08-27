@@ -1,0 +1,10 @@
+# Bluetooth
+persist.vendor.bluetooth.modem_nv_support=true
+
+# Pixel spoof
+ro.build.fingerprint=google/redfin/redfin:13/TP1A.220624.014/8819323:user/release-keys
+ro.product.brand=google
+ro.product.device=redfin
+ro.product.manufacturer=Google
+ro.product.model=Pixel 5
+ro.product.name=redfin

@@ -1,0 +1,40 @@
+# Audio
+audio.offload.min.duration.secs=30
+
+# Camera
+vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera
+
+# Charger
+ro.charger.enable_suspend=true
+
+# CNE
+persist.vendor.cne.feature=1
+
+# DPM
+persist.vendor.dpm.feature=11
+
+# FUSE
+persist.sys.fuse.passthrough.enable=true
+
+# IMS
+persist.dbg.volte_avail_ovr=1
+persist.dbg.vt_avail_ovr=1
+persist.dbg.wfc_avail_ovr=1
+
+# Media
+media.settings.xml=/vendor/etc/media_profiles_vendor.xml
+
+# Netflix
+ro.netflix.bsp_rev=Q6250-19132-1
+
+# Pre-Rendering
+ro.vendor.perf.scroll_opt=true
+
+# SSR
+persist.vendor.ssr.restart_level=ALL_ENABLE
+
+# Telephony
+persist.vendor.ims.disableADBLogs=1
+persist.vendor.ims.disableDebugLogs=1
+persist.vendor.ims.disableIMSLogs=1
+persist.vendor.ims.disableQXDMLogs=1
