@@ -196,7 +196,6 @@ ENABLE_VENDOR_RIL_SERVICE := true
 
 # Selinux
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-SELINUX_IGNORE_NEVERALLOWS := true
 
 BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor
