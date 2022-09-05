@@ -63,6 +63,9 @@ function blob_fixup() {
             "${PATCHELF_0_8}" --remove-needed "libhidlbase.so" "${2}"
             sed -i "s/libhidltransport.so/libhidlbase-v32.so\x00/" "${2}"
             ;;
+        vendor/etc/init/android.hardware.keymaster@4.0-service-qti.rc)
+            sed -i "s/4\.0/4\.1/g" "${2}"
+            ;;
     esac
 }
 

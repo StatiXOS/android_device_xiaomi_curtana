@@ -116,8 +116,9 @@ PRODUCT_PACKAGES += \
     gralloc.atoll \
     hwcomposer.atoll \
     libdisplayconfig.qti \
-    libdisplayconfig.qti.vendor \
+    libdisplayconfig.system.qti \
     libqdMetaData \
+    libqdMetaData.system \
     libsdmcore \
     libsdmutils \
     libtinyxml \
@@ -213,7 +214,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libavservices_minijail \
     libavservices_minijail.vendor \
-    libavservices_minijail_vendor \
     libcodec2_hidl@1.0.vendor \
     libcodec2_vndk.vendor
 

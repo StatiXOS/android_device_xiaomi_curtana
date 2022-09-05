@@ -199,7 +199,7 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor
 
 # Security patch level
-VENDOR_SECURITY_PATCH := 2022-03-01
+VENDOR_SECURITY_PATCH := 2022-06-05
 
 # Shims
 TARGET_LD_SHIM_LIBS := vendor/lib/hw/audio.primary.atoll.so|fakelogprint.so
