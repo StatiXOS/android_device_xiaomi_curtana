@@ -201,9 +201,6 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
 # Security patch level
 VENDOR_SECURITY_PATCH := 2022-06-05
 
-# Shims
-TARGET_LD_SHIM_LIBS := vendor/lib/hw/audio.primary.atoll.so|fakelogprint.so
-
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
 BOARD_HOSTAPD_DRIVER := NL80211

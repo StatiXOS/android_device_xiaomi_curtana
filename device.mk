@@ -190,7 +190,6 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-    fakelogprint \
     libwatermark_shim
 
 # Kernel
