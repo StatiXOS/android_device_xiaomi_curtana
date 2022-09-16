@@ -67,12 +67,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     android.hardware.camera.provider@2.4-service_64 \
-    libcamera2ndk_vendor \
-    libdng_sdk.vendor \
-    libgui_vendor \
     libmegface \
     libMegviiFacepp-0.5.2 \
-    libstdc++.vendor \
     vendor.qti.hardware.camera.device@1.0.vendor
 
 # DebugFS
@@ -84,7 +80,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Display / Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.4-impl \
     android.hardware.graphics.composer@2.4-service \
     android.hardware.graphics.mapper@3.0-impl-qti-display \
     android.hardware.graphics.mapper@4.0-impl-qti-display \
