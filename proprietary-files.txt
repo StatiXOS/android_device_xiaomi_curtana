@@ -336,6 +336,9 @@ vendor/lib64/camera/com.qti.tuned.ofilm_gc02m1.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_gc02m1_filter.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_s5kgm2.bin
 vendor/lib64/camera/com.qti.tuned.sunny_imx582.bin
+vendor/lib64/camera/com.qti.tuned.sunny_s5kgm2.bin
+vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin
+vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin
 
 # CDSP
 vendor/bin/cdsprpcd
