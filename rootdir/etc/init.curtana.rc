@@ -1,2 +1,0 @@
-on early-init
-    setprop ro.boot.product.hardware.sku curtana

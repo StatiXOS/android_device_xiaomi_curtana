@@ -56,9 +56,39 @@ void set_ro_build_prop(const std::string &source, const std::string &prop,
     property_override(prop_name.c_str(), value.c_str(), true);
 }
 
+void set_device_props(const std::string brand, const std::string device, const std::string model) {
+    for (const auto &source : ro_props_default_source_order) {
+        set_ro_build_prop(source, "brand", brand, true);
+        set_ro_build_prop(source, "device", device, true);
+        set_ro_build_prop(source, "model", model, true);
+    }
+}
+
 void load_device_properties() {
+    std::string hwname = GetProperty("ro.boot.hwname", "");
+    std::string region = GetProperty("ro.boot.hwc", "");
     std::string hwversion = GetProperty("ro.boot.hwversion", "");
+
+    if (region == "Global_TWO") {
+        set_device_props("Redmi", "curtana", "Redmi Note 9S");
+        property_override("ro.build.fingerprint",
+                            "Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys");
+    } else if (region == "Global_PA") {
+        set_device_props("Redmi", "curtana", "Redmi Note 9S");
+        property_override("ro.build.fingerprint",
+                            "Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys");
+    } else if (region == "India") {
+        set_device_props("Redmi", "curtana", "Redmi Note 10 Lite");
+        property_override("ro.build.fingerprint",
+                            "Redmi/curtana_in1/curtana:11/RKQ1.200826.002/V12.5.10.0.RJWINRF:user/release-keys");
+    } else if (region == "Japan") {
+        set_device_props("Redmi", "curtana", "Redmi Note 9S");
+        property_override("ro.build.fingerprint",
+                            "Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys");
+    }
+
     property_override("vendor.boot.hwversion", hwversion.c_str());
+    property_override("ro.boot.product.hardware.sku", hwname.c_str());
 }
 
 void load_dalvik_properties() {
