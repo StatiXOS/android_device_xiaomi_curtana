@@ -6,20 +6,20 @@
         "branch":       "tm"
     },
     {
-        "remote":       "github",
+        "remote":       "leddaz-private",
         "repository":   "LeddaZ/vendor_xiaomi_curtana",
         "target_path":  "vendor/xiaomi/curtana",
         "branch":       "tm"
     },
     {
-        "remote":       "gitlab",
-        "repository":   "LeddaZ/vendor_xiaomi_miatoll-gcam",
+        "remote":       "leddaz-gitlab",
+        "repository":   "vendor_xiaomi_miatoll-gcam",
         "target_path":  "vendor/xiaomi/miatoll-gcam",
         "branch":       "twelve"
     },
     {
-        "remote":       "github",
-        "repository":   "leddaz-stuff/android_hardware_xiaomi",
+        "remote":       "stx-miatoll",
+        "repository":   "android_hardware_xiaomi",
         "target_path":  "hardware/xiaomi",
         "branch":       "tm"
     }
