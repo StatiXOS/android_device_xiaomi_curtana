@@ -4,16 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-PRODUCT_SHIPPING_API_LEVEL := 29
-PRODUCT_BUILD_SUPER_PARTITION := false
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
-
-# Overlays
-DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay
-
-PRODUCT_ENFORCE_RRO_TARGETS := *
-
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
@@ -267,6 +257,21 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Overlays
+PRODUCT_PACKAGES += \
+    CarrierConfigResCommon \
+    CurtanaFrameworks \
+    CurtanaSettings \
+    CurtanaSystemUI \
+    TelephonyResCommon \
+    WifiOverlay
+
+PRODUCT_ENFORCE_RRO_TARGETS := *
+
+# Partitions
+PRODUCT_BUILD_SUPER_PARTITION := false
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # Perf
 PRODUCT_PACKAGES += \
     libqti-perfd-client
@@ -357,6 +362,9 @@ PRODUCT_PACKAGES += \
 # Secure element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
+
+# Shipping API level
+PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Rootdir
 PRODUCT_PACKAGES += \
@@ -453,7 +461,6 @@ PRODUCT_PACKAGES += \
     libwifi-hal-qcom \
     vendor.qti.hardware.wifi.hostapd@1.2.vendor \
     vendor.qti.hardware.wifi.supplicant@2.2.vendor \
-    WifiOverlay \
     wpa_supplicant \
     wpa_supplicant.conf
 
