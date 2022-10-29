@@ -26,6 +26,5 @@ PRODUCT_MODEL := Redmi Note 9S
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-# StatiX flags
+# Pixel Launcher
 INCLUDE_PIXEL_LAUNCHER := true
-ENABLE_GAMETOOLS := true
