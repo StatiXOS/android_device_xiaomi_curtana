@@ -310,7 +310,7 @@ vendor/lib64/libvidhance.so
 vendor/lib64/libxmi_high_dynamic_range.so
 vendor/lib64/libxml2_vendor.so
 
-# Camera provider - from curtana_global-user 11 RKQ1.200826.002 V12.5.6.0.RJWMIXM release-keys
+# Camera provider - from curtana - RKQ1.200826.002/V12.5.6.0.RJWMIXM
 vendor/lib64/android.hardware.camera.provider@2.4-legacy.so|e90855d38e25b174be097fc25d614ca767ab2c06
 
 # Camera sensors
