@@ -261,8 +261,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     CarrierConfigResCommon \
     CurtanaFrameworks \
+    CurtanaGlobalPAWifiOverlay \
+    CurtanaGlobalTWOWifiOverlay \
+    CurtanaIndiaWifiOverlay \
     CurtanaSettings \
     CurtanaSystemUI \
+    CurtanaJapanWifiOverlay \
     TelephonyResCommon \
     WifiOverlay
 
