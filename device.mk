@@ -188,10 +188,6 @@ PRODUCT_PACKAGES += \
     android.hardware.ir@1.0-impl \
     android.hardware.ir@1.0-service
 
-# Shims
-PRODUCT_PACKAGES += \
-    libwatermark_shim
-
 # Kernel
 LOCAL_KERNEL := device/xiaomi/curtana-kernel/Image
 PRODUCT_COPY_FILES += \
