@@ -80,7 +80,7 @@ void load_device_properties() {
     } else if (region == "India") {
         set_device_props("Redmi", "curtana", "Redmi Note 10 Lite");
         property_override("ro.build.fingerprint",
-                            "Redmi/curtana_in1/curtana:11/RKQ1.200826.002/V12.5.10.0.RJWINRF:user/release-keys");
+                            "Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V13.0.1.0.SJWINRF:user/release-keys");
     } else if (region == "Japan") {
         set_device_props("Redmi", "curtana", "Redmi Note 9S");
         property_override("ro.build.fingerprint",
