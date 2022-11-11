@@ -1,7 +1,7 @@
 [
     {
-        "remote":       "github",
-        "repository":   "LeddaZ/device_xiaomi_curtana-kernel",
+        "remote":       "leddaz",
+        "repository":   "device_xiaomi_curtana-kernel",
         "target_path":  "device/xiaomi/curtana-kernel",
         "branch":       "tm"
     },
@@ -16,11 +16,5 @@
         "repository":   "vendor_xiaomi_miatoll-gcam",
         "target_path":  "vendor/xiaomi/miatoll-gcam",
         "branch":       "twelve"
-    },
-    {
-        "remote":       "stx-miatoll",
-        "repository":   "android_hardware_xiaomi",
-        "target_path":  "hardware/xiaomi",
-        "branch":       "tm"
     }
 ]
