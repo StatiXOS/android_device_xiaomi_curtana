@@ -199,7 +199,7 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor
 
 # Security patch level
-VENDOR_SECURITY_PATCH := 2022-06-05
+VENDOR_SECURITY_PATCH := 2022-10-01
 
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn

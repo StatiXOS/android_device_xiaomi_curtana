@@ -1,4 +1,4 @@
-# All unpinned blobs below are extracted from curtana_global-user 12 RKQ1.211019.001 V13.0.2.0.SJWMIXM release-keys
+# All unpinned blobs below are extracted from curtana_eea-user 12 RKQ1.211019.001 V13.0.2.0.SJWEUXM release-keys
 
 # ACDB
 vendor/etc/acdbdata/IDP/atoll-wcd937x-snd-card/IDP_WCD937X_Bluetooth_cal.acdb
@@ -990,8 +990,6 @@ vendor/radio/qcril_database/upgrade/32_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/33_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/34_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/35_version_update_ecc_table.sql
-vendor/radio/qcril_database/upgrade/36_version_update_ecc_table.sql
-vendor/radio/qcril_database/upgrade/37_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/3_version_update_wps_config.sql
 vendor/radio/qcril_database/upgrade/4_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/5_version_update_ecc_table.sql
