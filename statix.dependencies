@@ -1,6 +1,12 @@
 [
     {
         "remote":       "leddaz",
+        "repository":   "device_xiaomi_curtana-firmware",
+        "target_path":  "device/xiaomi/curtana-firmware",
+        "branch":       "tm"
+    },
+    {
+        "remote":       "leddaz",
         "repository":   "device_xiaomi_curtana-kernel",
         "target_path":  "device/xiaomi/curtana-kernel",
         "branch":       "tm"
