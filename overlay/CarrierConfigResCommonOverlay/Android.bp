@@ -4,6 +4,7 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaFrameworks",
-    vendor: true,
+    name: "CarrierConfigResCommonOverlay",
+    aaptflags: ["--keep-raw-values"],
+    product_specific: true,
 }
