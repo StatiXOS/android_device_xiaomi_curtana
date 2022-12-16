@@ -1,25 +1,25 @@
 [
     {
-        "remote":       "leddaz",
-        "repository":   "device_xiaomi_curtana-firmware",
+        "remote":       "gitlab",
+        "repository":   "LeddaZ/device_xiaomi_curtana-firmware",
         "target_path":  "device/xiaomi/curtana-firmware",
-        "branch":       "tm"
+        "branch":       "tm-qpr1"
     },
     {
-        "remote":       "leddaz",
-        "repository":   "device_xiaomi_curtana-kernel",
+        "remote":       "github",
+        "repository":   "LeddaZ/device_xiaomi_curtana-kernel",
         "target_path":  "device/xiaomi/curtana-kernel",
-        "branch":       "tm"
+        "branch":       "tm-qpr1"
     },
     {
-        "remote":       "leddaz-private",
+        "remote":       "github",
         "repository":   "LeddaZ/vendor_xiaomi_curtana",
         "target_path":  "vendor/xiaomi/curtana",
-        "branch":       "tm"
+        "branch":       "tm-qpr1"
     },
     {
-        "remote":       "leddaz-gitlab",
-        "repository":   "vendor_xiaomi_miatoll-gcam",
+        "remote":       "gitlab",
+        "repository":   "LeddaZ/vendor_xiaomi_miatoll-gcam",
         "target_path":  "vendor/xiaomi/miatoll-gcam",
         "branch":       "twelve"
     }
