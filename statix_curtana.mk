@@ -20,7 +20,7 @@ $(call inherit-product, vendor/xiaomi/miatoll-gcam/miatoll-gcam-vendor.mk)
 # Device identifier
 PRODUCT_NAME := statix_curtana
 PRODUCT_DEVICE := curtana
-PRODUCT_BRAND := Xiaomi
+PRODUCT_BRAND := Redmi
 PRODUCT_MODEL := Redmi Note 9S
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
