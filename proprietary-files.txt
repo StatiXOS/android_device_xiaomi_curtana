@@ -316,15 +316,15 @@ vendor/lib64/android.hardware.camera.provider@2.4-legacy.so|e90855d38e25b174be09
 # Camera sensors
 vendor/lib64/camera/com.qti.sensormodule.ofilm_gc02m1_filter.bin
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgm2.bin
+vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_imx582.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_s5kgm2.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_gc02m1.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_gc02m1_filter.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_s5kgm2.bin
+vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin
 vendor/lib64/camera/com.qti.tuned.sunny_imx582.bin
 vendor/lib64/camera/com.qti.tuned.sunny_s5kgm2.bin
-vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin
-vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin
 
 # Camera (CamX)
 vendor/lib/libcamxfdalgov7.so
