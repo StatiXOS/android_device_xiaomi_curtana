@@ -16,10 +16,10 @@
 
 #pragma once
 
+#include <android/hardware/thermal/2.0/IThermal.h>
+
 #include <string>
 #include <unordered_map>
-
-#include <android/hardware/thermal/2.0/IThermal.h>
 
 namespace android {
 namespace hardware {
@@ -75,6 +75,8 @@ struct BindedCdevInfo {
     ReleaseLogic release_logic;
     ThrottlingArray cdev_weight_for_pid;
     CdevArray cdev_ceiling;
+    int max_release_step;
+    int max_throttle_step;
     CdevArray cdev_floor_with_power_link;
     std::string power_rail;
     // The flag for activate release logic when power is higher than power threshold
@@ -93,6 +95,7 @@ struct ThrottlingInfo {
     ThrottlingArray min_alloc_power;
     ThrottlingArray s_power;
     ThrottlingArray i_cutoff;
+    float err_integral_default;
     std::unordered_map<std::string, BindedCdevInfo> binded_cdev_info_map;
 };
 
@@ -107,11 +110,13 @@ struct SensorInfo {
     float multiplier;
     std::chrono::milliseconds polling_delay;
     std::chrono::milliseconds passive_delay;
+    std::chrono::milliseconds time_resolution;
     bool send_cb;
     bool send_powerhint;
-    bool is_monitor;
+    bool is_watch;
+    bool is_hidden;
     std::unique_ptr<VirtualSensorInfo> virtual_sensor_info;
-    std::unique_ptr<ThrottlingInfo> throttling_info;
+    std::shared_ptr<ThrottlingInfo> throttling_info;
 };
 
 struct CdevInfo {
@@ -121,6 +126,7 @@ struct CdevInfo {
     std::vector<float> state2power;
     int max_state;
 };
+
 struct PowerRailInfo {
     std::string rail;
     int power_sample_count;
@@ -128,9 +134,12 @@ struct PowerRailInfo {
     std::unique_ptr<VirtualPowerRailInfo> virtual_power_rail_info;
 };
 
-std::unordered_map<std::string, SensorInfo> ParseSensorInfo(std::string_view config_path);
-std::unordered_map<std::string, CdevInfo> ParseCoolingDevice(std::string_view config_path);
-std::unordered_map<std::string, PowerRailInfo> ParsePowerRailInfo(std::string_view config_path);
+bool ParseSensorInfo(std::string_view config_path,
+                     std::unordered_map<std::string, SensorInfo> *sensors_parsed);
+bool ParseCoolingDevice(std::string_view config_path,
+                        std::unordered_map<std::string, CdevInfo> *cooling_device_parsed);
+bool ParsePowerRailInfo(std::string_view config_path,
+                        std::unordered_map<std::string, PowerRailInfo> *power_rail_parsed);
 
 }  // namespace implementation
 }  // namespace V2_0

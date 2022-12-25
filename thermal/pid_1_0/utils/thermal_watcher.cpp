@@ -34,7 +34,7 @@
 #include <chrono>
 #include <fstream>
 
-#include "thermal-helper.h"
+#include "../thermal-helper.h"
 
 namespace android {
 namespace hardware {

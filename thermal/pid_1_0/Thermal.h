@@ -23,7 +23,7 @@
 #include <mutex>
 #include <thread>
 
-#include "thermal-helper.h"
+#include "pid_1_0/thermal-helper.h"
 
 namespace android {
 namespace hardware {

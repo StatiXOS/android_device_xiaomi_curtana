@@ -232,17 +232,16 @@ ThermalHelper::ThermalHelper(const NotificationCallback &cb)
         }
 
         // Update cooling device max state
-        for (auto &binded_cdev_info_pair :
+        for (auto &binded_cdev_pair :
              name_status_pair.second.throttling_info->binded_cdev_info_map) {
-            const auto &cdev_info = cooling_device_info_map_.at(binded_cdev_info_pair.first);
+            const auto &cdev_info = cooling_device_info_map_.at(binded_cdev_pair.first);
 
-            for (auto &cdev_ceiling : binded_cdev_info_pair.second.cdev_ceiling) {
+            for (auto &cdev_ceiling : binded_cdev_pair.second.cdev_ceiling) {
                 if (cdev_ceiling > cdev_info.max_state) {
                     if (cdev_ceiling != std::numeric_limits<int>::max()) {
-                        LOG(ERROR)
-                            << "Sensor " << name_status_pair.first << "'s "
-                            << binded_cdev_info_pair.first << " cdev_ceiling:" << cdev_ceiling
-                            << " is higher than max state:" << cdev_info.max_state;
+                        LOG(ERROR) << "Sensor " << name_status_pair.first << "'s "
+                                   << binded_cdev_pair.first << " cdev_ceiling:" << cdev_ceiling
+                                   << " is higher than max state:" << cdev_info.max_state;
                     }
                     cdev_ceiling = cdev_info.max_state;
                 }
@@ -250,20 +249,16 @@ ThermalHelper::ThermalHelper(const NotificationCallback &cb)
         }
 
         if (name_status_pair.second.virtual_sensor_info != nullptr &&
-            !name_status_pair.second.virtual_sensor_info->trigger_sensors.empty() &&
+            !name_status_pair.second.virtual_sensor_info->trigger_sensor.empty() &&
             name_status_pair.second.is_watch) {
-            for (size_t i = 0;
-                 i < name_status_pair.second.virtual_sensor_info->trigger_sensors.size(); i++) {
-                if (sensor_info_map_.find(
-                        name_status_pair.second.virtual_sensor_info->trigger_sensors[i]) !=
-                    sensor_info_map_.end()) {
-                    sensor_info_map_[name_status_pair.second.virtual_sensor_info->trigger_sensors[i]]
-                        .is_watch = true;
-                } else {
-                    LOG(FATAL) << name_status_pair.first << "'s trigger sensor: "
-                               << name_status_pair.second.virtual_sensor_info->trigger_sensors[i]
-                               << " is invalid";
-                }
+            if (sensor_info_map_.count(
+                    name_status_pair.second.virtual_sensor_info->trigger_sensor)) {
+                sensor_info_map_[name_status_pair.second.virtual_sensor_info->trigger_sensor]
+                    .is_watch = true;
+            } else {
+                LOG(FATAL) << name_status_pair.first << "'s trigger sensor: "
+                           << name_status_pair.second.virtual_sensor_info->trigger_sensor
+                           << " is invalid";
             }
         }
     }
@@ -333,8 +328,7 @@ bool ThermalHelper::readCoolingDevice(std::string_view cooling_device,
 bool ThermalHelper::readTemperature(std::string_view sensor_name, Temperature_1_0 *out) {
     // Return fail if the thermal sensor cannot be read.
     float temp;
-    std::string sensor_log;
-    if (!readThermalSensor(sensor_name, &temp, false, &sensor_log)) {
+    if (!readThermalSensor(sensor_name, &temp, false)) {
         LOG(ERROR) << "readTemperature: failed to read sensor: " << sensor_name;
         return false;
     }
@@ -353,22 +347,16 @@ bool ThermalHelper::readTemperature(std::string_view sensor_name, Temperature_1_
         sensor_info.hot_thresholds[static_cast<size_t>(ThrottlingSeverity::SHUTDOWN)];
     out->vrThrottlingThreshold = sensor_info.vr_threshold;
 
-    if (sensor_info.is_watch) {
-        LOG(INFO) << sensor_name.data() << ":" << out->currentValue << " raw data:[" << sensor_log
-                  << "]";
-    }
     return true;
 }
 
 bool ThermalHelper::readTemperature(
     std::string_view sensor_name, Temperature_2_0 *out,
-    std::pair<ThrottlingSeverity, ThrottlingSeverity> *throtting_status,
-    const bool force_no_cache) {
+    std::pair<ThrottlingSeverity, ThrottlingSeverity> *throtting_status, const bool force_sysfs) {
     // Return fail if the thermal sensor cannot be read.
     float temp;
-    std::string sensor_log;
 
-    if (!readThermalSensor(sensor_name, &temp, force_no_cache, &sensor_log)) {
+    if (!readThermalSensor(sensor_name, &temp, force_sysfs)) {
         LOG(ERROR) << "readTemperature: failed to read sensor: " << sensor_name;
         return false;
     }
@@ -400,9 +388,7 @@ bool ThermalHelper::readTemperature(
     out->throttlingStatus = static_cast<size_t>(status.first) > static_cast<size_t>(status.second)
                                 ? status.first
                                 : status.second;
-    if (sensor_info.is_watch) {
-        LOG(INFO) << sensor_name.data() << ":" << out->value << " raw data:[" << sensor_log << "]";
-    }
+
     return true;
 }
 
@@ -446,8 +432,6 @@ void ThermalHelper::updateCoolingDevices(const std::vector<std::string> &updated
         }
         if (cooling_devices_.writeCdevFile(target_cdev, std::to_string(max_state))) {
             LOG(INFO) << "Successfully update cdev " << target_cdev << " sysfs to " << max_state;
-        } else {
-            LOG(ERROR) << "Failed to update cdev " << target_cdev << " sysfs to " << max_state;
         }
     }
 }
@@ -791,10 +775,10 @@ bool ThermalHelper::fillCpuUsages(hidl_vec<CpuUsage> *cpu_usages) const {
 }
 
 bool ThermalHelper::readThermalSensor(std::string_view sensor_name, float *temp,
-                                      const bool force_no_cache, std::string *sensor_log) {
+                                      const bool force_sysfs) {
     float temp_val = 0.0;
     std::string file_reading;
-    std::string sub_sensor_log;
+    std::string log_buf;
     boot_clock::time_point now = boot_clock::now();
 
     ATRACE_NAME(StringPrintf("ThermalHelper::readThermalSensor - %s", sensor_name.data()).c_str());
@@ -807,13 +791,11 @@ bool ThermalHelper::readThermalSensor(std::string_view sensor_name, float *temp,
     auto &sensor_status = sensor_status_map_.at(sensor_name.data());
 
     // Check if thermal data need to be read from buffer
-    if (!force_no_cache &&
-        (sensor_status.thermal_cached.timestamp != boot_clock::time_point::min()) &&
+    if (!force_sysfs && (sensor_status.thermal_cached.timestamp != boot_clock::time_point::min()) &&
         (std::chrono::duration_cast<std::chrono::milliseconds>(
              now - sensor_status.thermal_cached.timestamp) < sensor_info.time_resolution) &&
         !isnan(sensor_status.thermal_cached.temp)) {
         *temp = sensor_status.thermal_cached.temp;
-        sensor_log->append(StringPrintf("%s:%0.f ", sensor_name.data(), *temp));
         LOG(VERBOSE) << "read " << sensor_name.data() << " from buffer, value:" << *temp;
         return true;
     }
@@ -829,14 +811,16 @@ bool ThermalHelper::readThermalSensor(std::string_view sensor_name, float *temp,
             return false;
         }
         *temp = std::stof(::android::base::Trim(file_reading));
-        sensor_log->append(StringPrintf("%s:%0.f ", sensor_name.data(), *temp));
     } else {
         for (size_t i = 0; i < sensor_info.virtual_sensor_info->linked_sensors.size(); i++) {
             float sensor_reading = 0.0;
             if (!readThermalSensor(sensor_info.virtual_sensor_info->linked_sensors[i],
-                                   &sensor_reading, force_no_cache, &sub_sensor_log)) {
+                                   &sensor_reading, force_sysfs)) {
                 return false;
             }
+            log_buf.append(StringPrintf("(%s: %0.2f)",
+                                        sensor_info.virtual_sensor_info->linked_sensors[i].c_str(),
+                                        sensor_reading));
             if (std::isnan(sensor_info.virtual_sensor_info->coefficients[i])) {
                 return false;
             }
@@ -867,9 +851,8 @@ bool ThermalHelper::readThermalSensor(std::string_view sensor_name, float *temp,
                     break;
             }
         }
+        LOG(VERBOSE) << sensor_name.data() << "'s sub sensors:" << log_buf;
         *temp = (temp_val + sensor_info.virtual_sensor_info->offset);
-        sensor_log->append(
-            StringPrintf("%s:%0.f(%s) ", sensor_name.data(), *temp, sub_sensor_log.data()));
     }
 
     {
@@ -894,7 +877,7 @@ std::chrono::milliseconds ThermalHelper::thermalWatcherCallbackFunc(
     ATRACE_CALL();
     for (auto &name_status_pair : sensor_status_map_) {
         bool force_update = false;
-        bool force_no_cache = false;
+        bool force_sysfs = false;
         Temperature_2_0 temp;
         TemperatureThreshold threshold;
         SensorStatus &sensor_status = name_status_pair.second;
@@ -915,45 +898,38 @@ std::chrono::milliseconds ThermalHelper::thermalWatcherCallbackFunc(
                             : sensor_info.polling_delay;
 
         if (sensor_info.virtual_sensor_info != nullptr &&
-            !sensor_info.virtual_sensor_info->trigger_sensors.empty()) {
-            for (size_t i = 0; i < sensor_info.virtual_sensor_info->trigger_sensors.size(); i++) {
-                const auto &trigger_sensor_status =
-                    sensor_status_map_.at(sensor_info.virtual_sensor_info->trigger_sensors[i]);
-                if (trigger_sensor_status.severity != ThrottlingSeverity::NONE) {
-                    sleep_ms = sensor_info.passive_delay;
-                }
+            !sensor_info.virtual_sensor_info->trigger_sensor.empty()) {
+            const auto trigger_sensor_status =
+                sensor_status_map_.at(sensor_info.virtual_sensor_info->trigger_sensor);
+            if (trigger_sensor_status.severity != ThrottlingSeverity::NONE) {
+                sleep_ms = sensor_info.passive_delay;
             }
         }
         // Check if the sensor need to be updated
         if (sensor_status.last_update_time == boot_clock::time_point::min()) {
             force_update = true;
-            force_no_cache = true;
+            LOG(VERBOSE) << "Force update " << name_status_pair.first
+                         << "'s temperature after booting";
         } else {
             time_elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 now - sensor_status.last_update_time);
-            if (uevent_sensors.size()) {
-                if (sensor_info.virtual_sensor_info != nullptr) {
-                    for (size_t i = 0; i < sensor_info.virtual_sensor_info->trigger_sensors.size();
-                         i++) {
-                        if (uevent_sensors.find(
-                                sensor_info.virtual_sensor_info->trigger_sensors[i]) !=
-                            uevent_sensors.end()) {
-                            force_update = true;
-                            force_no_cache = true;
-                        }
-                    }
-                } else if (uevent_sensors.find(name_status_pair.first) != uevent_sensors.end()) {
-                    force_update = true;
-                    force_no_cache = true;
-                }
-            } else if (time_elapsed_ms > sleep_ms) {
+            if (time_elapsed_ms > sleep_ms) {
+                // Update the sensor because sleep timeout
                 force_update = true;
+            } else if (uevent_sensors.size() &&
+                       uevent_sensors.find((sensor_info.virtual_sensor_info != nullptr)
+                                               ? sensor_info.virtual_sensor_info->trigger_sensor
+                                               : name_status_pair.first) != uevent_sensors.end()) {
+                // Force update the sensor from sysfs
+                force_update = true;
+                force_sysfs = true;
             }
         }
+
         LOG(VERBOSE) << "sensor " << name_status_pair.first
-                     << ": time_elpased=" << time_elapsed_ms.count()
+                     << ": time_elapsed=" << time_elapsed_ms.count()
                      << ", sleep_ms=" << sleep_ms.count() << ", force_update = " << force_update
-                     << ", force_no_cache = " << force_no_cache;
+                     << ", force_sysfs = " << force_sysfs;
 
         if (!force_update) {
             auto timeout_remaining = sleep_ms - time_elapsed_ms;
@@ -966,7 +942,7 @@ std::chrono::milliseconds ThermalHelper::thermalWatcherCallbackFunc(
         }
 
         std::pair<ThrottlingSeverity, ThrottlingSeverity> throtting_status;
-        if (!readTemperature(name_status_pair.first, &temp, &throtting_status, force_no_cache)) {
+        if (!readTemperature(name_status_pair.first, &temp, &throtting_status, force_sysfs)) {
             LOG(ERROR) << __func__
                        << ": error reading temperature for sensor: " << name_status_pair.first;
             continue;
@@ -1001,8 +977,10 @@ std::chrono::milliseconds ThermalHelper::thermalWatcherCallbackFunc(
         }
 
         if (sensor_status.severity == ThrottlingSeverity::NONE) {
+            LOG(VERBOSE) << temp.name << ": " << temp.value;
             thermal_throttling_.clearThrottlingData(name_status_pair.first, sensor_info);
         } else {
+            LOG(INFO) << temp.name << ": " << temp.value;
             // update thermal throttling request
             thermal_throttling_.thermalThrottlingUpdate(
                 temp, sensor_info, sensor_status.severity, time_elapsed_ms,
