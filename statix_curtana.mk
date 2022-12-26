@@ -25,5 +25,6 @@ PRODUCT_MODEL := Redmi Note 9S
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-# Game overlay
+# StatiX flags
 ENABLE_GAMETOOLS := true
+STATIX_BUILD_TYPE := CUSTOM
