@@ -28,3 +28,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 # StatiX flags
 ENABLE_GAMETOOLS := true
 STATIX_BUILD_TYPE := CUSTOM
+
+# Override build fingerprint
+BUILD_FINGERPRINT := Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys
