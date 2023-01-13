@@ -256,7 +256,7 @@ PRODUCT_PACKAGES += \
 
 # Overlays
 PRODUCT_PACKAGES += \
-    CarrierConfigResCommonOverlay \
+    CurtanaCarrierConfigOverlay \
     CurtanaFrameworksOverlay \
     CurtanaGlobalPAFrameworksOverlay \
     CurtanaGlobalPASettingsProviderOverlay \
@@ -272,8 +272,8 @@ PRODUCT_PACKAGES += \
     CurtanaJapanFrameworksOverlay \
     CurtanaJapanSettingsProviderOverlay \
     CurtanaJapanWifiOverlay \
-    TelephonyResCommonOverlay \
-    WifiOverlay
+    CurtanaTelephonyOverlay \
+    CurtanaWifiOverlay
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 

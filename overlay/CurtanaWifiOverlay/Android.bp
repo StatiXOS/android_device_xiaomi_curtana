@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "TelephonyResCommonOverlay",
-    product_specific: true,
+    name: "CurtanaWifiOverlay",
+    vendor: true
 }
