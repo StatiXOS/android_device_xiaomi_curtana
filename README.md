@@ -1,7 +1,7 @@
-Device configuration for Redmi Note 9S
+Device configuration for Redmi Note 9S, 9 Pro, 10 Lite
 =========================================
 
-The Redmi Note 9S (codenamed _curtana_) is a mid range smartphone from Xiaomi.
+The Redmi Note 9S (codenamed _curtana_) is a mid range smartphone from Xiaomi. It was launched in India as Redmi Note 9 Pro and later rebranded as Redmi Note 10 Lite.
 
 It was announced on March 23, 2020. Release date was April 30, 2020.
 
