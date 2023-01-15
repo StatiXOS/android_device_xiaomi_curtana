@@ -11,4 +11,3 @@ service vendor.thermal-hal-2-0 /vendor/bin/hw/android.hardware.thermal@2.0-servi
     user system
     group system
     priority -20
-    disabled
