@@ -1,0 +1,6 @@
+# All unpinned blobs below are extracted from curtana_eea-user 12 RKQ1.211019.001 V13.0.2.0.SJWEUXM release-keys
+
+# Touchscreen firmware
+vendor/firmware/focaltech_ts_fw_huaxing.bin:recovery/root/vendor/firmware/focaltech_ts_fw_huaxing.bin
+vendor/firmware/novatek_ts_tianma_fw.bin:recovery/root/vendor/firmware/novatek_ts_tianma_fw.bin
+vendor/firmware/novatek_ts_tianma_mp.bin:recovery/root/vendor/firmware/novatek_ts_tianma_mp.bin
