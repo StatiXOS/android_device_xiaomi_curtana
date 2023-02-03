@@ -180,8 +180,8 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # Selinux
 include device/qcom/sepolicy_vndr-legacy-um/SEPolicy.mk
 
-BOARD_VENDOR_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 
 # Security patch level
 VENDOR_SECURITY_PATCH := 2022-10-01
