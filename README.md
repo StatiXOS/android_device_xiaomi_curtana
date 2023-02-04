@@ -5,6 +5,8 @@ The Redmi Note 9S (codenamed _curtana_) is a mid range smartphone from Xiaomi. I
 
 It was announced on March 23, 2020. Release date was April 30, 2020.
 
+**NOTE:** the Redmi Note 9 Pro will be detected as Redmi Note 10 Lite since there's no way of distinguishing them.
+
 ## Device specifications
 
 Basic   | Spec Sheet
