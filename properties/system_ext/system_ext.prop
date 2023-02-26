@@ -15,3 +15,6 @@ bluetooth.profile.pan.panu.enabled=true
 bluetooth.profile.pbap.server.enabled=true
 bluetooth.profile.sap.server.enabled=true
 persist.vendor.btstack.enable.lpa=true
+
+# Variant specific props
+import /system_ext/etc/system_ext.${ro.boot.hwc}.prop

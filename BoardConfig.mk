@@ -154,9 +154,11 @@ TARGET_BOARD_PLATFORM := atoll
 TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
 
 # Properties
-TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/properties/system_ext.prop
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system.prop
-TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor.prop
+TARGET_ODM_PROP += $(DEVICE_PATH)/properties/odm/odm.prop
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/properties/product/product.prop
+TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/properties/system_ext/system_ext.prop
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system/system.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor/vendor.prop
 
 # Recovery
 BOARD_INCLUDE_RECOVERY_DTBO := true

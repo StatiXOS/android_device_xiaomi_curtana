@@ -33,6 +33,9 @@ persist.vendor.ims.disableDebugLogs=1
 persist.vendor.ims.disableIMSLogs=1
 persist.vendor.ims.disableQXDMLogs=1
 
+# Variant specific props
+import /system/system.${ro.boot.hwc}.prop
+
 # WFD
 persist.debug.wfd.enable=1
 vendor.sys.video.disable.ubwc=1

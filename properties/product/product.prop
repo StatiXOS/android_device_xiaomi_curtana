@@ -1,0 +1,2 @@
+# Variant specific props
+import /product/etc/product.${ro.boot.hwc}.prop

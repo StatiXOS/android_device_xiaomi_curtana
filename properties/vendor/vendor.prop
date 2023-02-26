@@ -200,5 +200,8 @@ vendor.usb.rndis.func.name=gsi
 vendor.usb.use_ffs_mtp=0
 vendor.usb.use_gadget_hal=0
 
+# Variant specific props
+import /vendor/vendor.${ro.boot.hwc}.prop
+
 # Wi-FI
 wifi.aware.interface=wifi-aware0

@@ -1,0 +1,21 @@
+#
+# Japan variant specific props
+#
+ro.build.product=curtana
+ro.product.brand=Redmi
+ro.product.board=curtana
+ro.product.bootimage.device=curtana
+ro.product.bootimage.brand=Redmi
+ro.product.bootimage.marketname=
+ro.product.bootimage.model=Redmi Note 9S
+ro.product.bootimage.name=curtana_global
+ro.product.device=curtana
+ro.product.marketname=
+ro.product.model=Redmi Note 9S
+ro.product.name=curtana_global
+ro.product.vendor.brand=Redmi
+ro.product.vendor.device=curtana
+ro.product.vendor.marketname=
+ro.product.vendor.model=Redmi Note 9S
+ro.product.vendor.name=curtana_global
+ro.vendor.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys

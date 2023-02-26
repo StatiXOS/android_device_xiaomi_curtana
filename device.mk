@@ -443,6 +443,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/usb/etc
 
+# Variant properties
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,odm.*.prop,$(LOCAL_PATH)/properties/odm/,$(TARGET_COPY_OUT_ODM)) \
+    $(call find-copy-subdir-files,product.*.prop,$(LOCAL_PATH)/properties/product/,$(TARGET_COPY_OUT_PRODUCT)/etc) \
+    $(call find-copy-subdir-files,system.*.prop,$(LOCAL_PATH)/properties/system/,$(TARGET_COPY_OUT_SYSTEM)) \
+    $(call find-copy-subdir-files,system_ext.*.prop,$(LOCAL_PATH)/properties/system_ext/,$(TARGET_COPY_OUT_SYSTEM_EXT)/etc) \
+    $(call find-copy-subdir-files,vendor.*.prop,$(LOCAL_PATH)/properties/vendor/,$(TARGET_COPY_OUT_VENDOR))
+
 # Vendor service manager
 PRODUCT_PACKAGES += \
     vndservicemanager

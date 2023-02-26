@@ -1,0 +1,2 @@
+# Variant specific props
+import /odm/odm.${ro.boot.hwc}.prop
