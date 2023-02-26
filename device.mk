@@ -252,24 +252,29 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     CurtanaCarrierConfigOverlay \
     CurtanaFrameworksOverlay \
-    CurtanaGlobalPAFrameworksOverlay \
-    CurtanaGlobalPASettingsProviderOverlay \
-    CurtanaGlobalPAWifiOverlay \
-    CurtanaGlobalTWOFrameworksOverlay \
-    CurtanaGlobalTWOSettingsProviderOverlay \
-    CurtanaGlobalTWOWifiOverlay \
-    CurtanaIndiaFrameworksOverlay \
-    CurtanaIndiaSettingsProviderOverlay \
-    CurtanaIndiaWifiOverlay \
     CurtanaSettingsOverlay \
     CurtanaSystemUIOverlay \
-    CurtanaJapanFrameworksOverlay \
-    CurtanaJapanSettingsProviderOverlay \
-    CurtanaJapanWifiOverlay \
     CurtanaTelephonyOverlay \
     CurtanaWifiOverlay
 
-PRODUCT_ENFORCE_RRO_TARGETS := *
+# Variant-specific overlays
+PRODUCT_PACKAGES += \
+    CurtanaGlobalPAFrameworksOverlay \
+    CurtanaGlobalPASettingsOverlay \
+    CurtanaGlobalPASettingsProviderOverlay \
+    CurtanaGlobalPAWifiOverlay \
+    CurtanaGlobalTWOFrameworksOverlay \
+    CurtanaGlobalTWOSettingsOverlay \
+    CurtanaGlobalTWOSettingsProviderOverlay \
+    CurtanaGlobalTWOWifiOverlay \
+    CurtanaIndiaFrameworksOverlay \
+    CurtanaIndiaSettingsOverlay \
+    CurtanaIndiaSettingsProviderOverlay \
+    CurtanaIndiaWifiOverlay \
+    CurtanaJapanFrameworksOverlay \
+    CurtanaJapanSettingsOverlay \
+    CurtanaJapanSettingsProviderOverlay \
+    CurtanaJapanWifiOverlay
 
 # Partitions
 PRODUCT_BUILD_SUPER_PARTITION := false
