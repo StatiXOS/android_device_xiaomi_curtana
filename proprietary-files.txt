@@ -176,11 +176,6 @@ vendor/lib64/libvidhance.so|470394c5db179c6bf185a3306a4c3d14ac302819
 vendor/lib64/libxmi_high_dynamic_range.so|e04faf84d44f22d16e8387619234efecd73b244d
 vendor/lib64/libxml2_vendor.so|336de129dd9072f31d8aaee3286e5f10c1bf32fe
 
-# Camera (Megvii) - from curtana - RKQ1.200826.002/V12.5.6.0.RJWMIXM
-vendor/etc/camera/megviifacepp_0_5_2_model|a2b8751f04d94f0634453c40426e66b0a1283da1
-vendor/lib64/libMegviiFacepp-0.5.2.so|a439145c3700d62446af21fe385775e6d5cb1a9a
-vendor/lib64/libmegface.so|8f67d986f23a110e48a2c6c57024ac3dee4993aa
-
 # Camera components - from curtana - RKQ1.200826.002/V12.5.6.0.RJWMIXM
 vendor/lib64/camera/components/etc/visidon_clearshot_params.xml|ee064b324f3e4369a2d081b774076d2b71f6246a
 vendor/lib64/camera/components/com.almalence.node.sr.so|0820f4372b4e0cdfa3a6e9b0f027e8103756bea1
