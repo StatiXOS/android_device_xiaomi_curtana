@@ -581,10 +581,8 @@ vendor/bin/xtwifi-inet-agent
 vendor/etc/apdr.conf
 vendor/etc/cacert_location.pem
 vendor/etc/flp.conf
-vendor/etc/gps.conf
 vendor/etc/init/android.hardware.gnss@2.1-service-qti.rc
 vendor/etc/izat.conf
-vendor/etc/lowi.conf
 vendor/etc/sap.conf
 vendor/etc/vintf/manifest/android.hardware.gnss@2.1-service-qti.xml
 vendor/etc/vintf/manifest/vendor.qti.gnss@4.0-service.xml
