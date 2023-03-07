@@ -99,6 +99,7 @@ BOARD_KERNEL_CMDLINE += \
     cgroup.memory=nokmem,nosocket \
     console=ttyMSM0,115200n8 \
     earlycon=msm_geni_serial,0xa88000 \
+    kpti=off \
     loop.max_part=7 \
     lpm_levels.sleep_disabled=1 \
     msm_rtb.enabled=1 \
