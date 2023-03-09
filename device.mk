@@ -235,7 +235,6 @@ PRODUCT_PACKAGES += \
 
 # NFC
 PRODUCT_PACKAGES += \
-    NfcNci \
     Tag
 
 PRODUCT_PACKAGES += \
