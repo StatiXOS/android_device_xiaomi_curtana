@@ -74,8 +74,5 @@ function blob_fixup() {
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
 
 extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
-if [ -s "${MY_DIR}/proprietary-files-recovery.txt" ]; then
-        extract "${MY_DIR}/proprietary-files-recovery.txt" "${SRC}" "${KANG}" --section "${SECTION}"
-fi
 
 "${MY_DIR}/setup-makefiles.sh"
