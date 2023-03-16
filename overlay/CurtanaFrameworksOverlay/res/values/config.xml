@@ -673,4 +673,7 @@
     -->
     <bool name="config_enableWifiDisplay">true</bool>
 
+    <!-- Auto-brightness sensor type string -->
+    <string name="config_displayLightSensorType">"android.sensor.light"</string>
+
 </resources>
