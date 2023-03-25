@@ -446,9 +446,6 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.rc \
     init.qcom.usb.sh
 
-PRODUCT_SOONG_NAMESPACES += \
-    vendor/qcom/opensource/usb/etc
-
 # Variant properties
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,odm.*.prop,$(LOCAL_PATH)/properties/odm/,$(TARGET_COPY_OUT_ODM)) \
