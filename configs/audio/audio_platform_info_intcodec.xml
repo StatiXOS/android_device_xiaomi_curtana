@@ -82,7 +82,7 @@
         <param key="hifi_filter" value="false"/>
         <param key="native_audio_mode" value="multiple_mix_dsp"/>
         <param key="hfp_pcm_dev_id" value="39"/>
-        <param key="input_mic_max_count" value="2"/>
+        <param key="input_mic_max_count" value="4"/>
     </config_params>
     <acdb_ids>
         <device name="SND_DEVICE_OUT_SPEAKER" acdb_id="15"/>
@@ -107,6 +107,9 @@
         <device name="SND_DEVICE_IN_UNPROCESSED_QUAD_MIC" acdb_id="146"/>
         <device name="SND_DEVICE_IN_UNPROCESSED_HEADSET_MIC" acdb_id="147"/>
         <device name="SND_DEVICE_IN_HANDSET_GENERIC_QMIC" acdb_id="157"/>
+        <device name="SND_DEVICE_IN_HEADSET_MIC_VOICE_RECORD" acdb_id="10018"/>
+        <device name="SND_DEVICE_IN_USB_HEADSET_MIC_VOICE_RECORD" acdb_id="10018"/>
+        <device name="SND_DEVICE_IN_VOICE_REC_HEADSET_MIC_CTS" acdb_id="10032"/>
     </acdb_ids>
     <backend_names>
         <device name="SND_DEVICE_OUT_HEADPHONES" backend="headphones" interface="RX_CDC_DMA_RX_0"/>
