@@ -2,7 +2,7 @@
 # Japan variant specific props
 #
 bluetooth.device.default_name=Redmi Note 9S
-ro.odm.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V13.0.2.0.SJWMIXM:user/release-keys
+ro.odm.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.3.0.SJWMIXM:user/release-keys
 ro.product.odm.brand=Redmi
 ro.product.odm.device=curtana
 ro.product.odm.marketname=
