@@ -69,5 +69,5 @@ if len(sys.argv) == 2 and sys.argv[1] == '-c':
 else:
     update()
 
-with open('proprietary-files.txt', 'w') as file:
+with open('proprietary-files.txt', 'w', newline='\n') as file:
     file.write('\n'.join(lines) + '\n')

@@ -42,5 +42,5 @@ if __name__ == "__main__":
             section_list.sort(key=cmp_to_key(strcoll_extract_utils))
             ordered_sections.append("\n".join(section_list))
 
-        with open(file, "w") as f:
+        with open(file, "w", newline='\n') as f:
             f.write("\n\n".join(ordered_sections).strip() + "\n")
