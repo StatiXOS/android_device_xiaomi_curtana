@@ -404,8 +404,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/init.recovery.qcom.rc:recovery/root/init.recovery.qcom.rc
 
 # Sensors
+$(call inherit-product, vendor/hardware/xiaomi/hidl/sensors/sensors_product.mk)
+
 PRODUCT_PACKAGES += \
-    android.hardware.sensors@2.1-service.multihal \
     libsensorndkbridge
 
 # Soong namespaces
