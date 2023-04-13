@@ -65,7 +65,7 @@ function blob_fixup() {
             ;;
         # Fix camera in 3rd party apps
         vendor/lib64/camera/components/com.qti.node.watermark.so)
-            "${PATCHELF}" --add-needed "libpiex_shim.so" "${2}"
+            grep -q "libpiex_shim.so" "$2" || "${PATCHELF}" --add-needed "libpiex_shim.so" "${2}"
             ;;
     esac
 }
