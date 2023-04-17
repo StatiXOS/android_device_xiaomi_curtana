@@ -152,7 +152,7 @@ PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.xiaomi
 
 # Google Camera
-$(call inherit-product, vendor/gcam/gcam-vendor.mk)
+$(call inherit-product, vendor/xiaomi/curtana-gcam/curtana-gcam-vendor.mk)
 
 # GPS
 PRODUCT_PACKAGES += \
