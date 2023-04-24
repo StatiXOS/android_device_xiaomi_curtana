@@ -18,4 +18,4 @@ ro.product.vendor.device=curtana
 ro.product.vendor.marketname=
 ro.product.vendor.model=Redmi Note 10 Lite
 ro.product.vendor.name=curtana_in1
-ro.vendor.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V13.0.3.0.SJWINRF:user/release-keys
+ro.vendor.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V14.0.2.0.SJWINRF:user/release-keys
