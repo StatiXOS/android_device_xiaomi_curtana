@@ -43,6 +43,24 @@
       "ResetOnInit": true
     },
     {
+      "Name": "CPULittleClusterGovernor",
+      "Path": "/sys/devices/system/cpu/cpufreq/policy0/scaling_governor",
+      "Values": [
+        "schedutil",
+        "powersave"
+      ],
+      "ResetOnInit": true
+    },
+    {
+      "Name": "CPUBigClusterGovernor",
+      "Path": "/sys/devices/system/cpu/cpufreq/policy4/scaling_governor",
+      "Values": [
+        "schedutil",
+        "powersave"
+      ],
+      "ResetOnInit": true
+    },
+    {
       "Name": "GPUMaxFreq",
       "Path": "/sys/class/kgsl/kgsl-3d0/max_pwrlevel",
       "Values": [
@@ -247,6 +265,18 @@
       "Node": "LLCCBWMinFreq",
       "Duration": 0,
       "Value": "2929"
+    },
+    {
+      "PowerHint": "INTERACTIVE",
+      "Node": "CPULittleClusterGovernor",
+      "Duration": 0,
+      "Value": "schedutil"
+    },
+    {
+      "PowerHint": "INTERACTIVE",
+      "Node": "CPUBigClusterGovernor",
+      "Duration": 0,
+      "Value": "schedutil"
     },
     {
       "PowerHint": "LAUNCH",
