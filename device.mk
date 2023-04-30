@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# 64-bit only configuration
 DEVICE_IS_64BIT_ONLY ?= $(if $(filter %_64,$(TARGET_PRODUCT)),true,false)
 
 ifeq ($(DEVICE_IS_64BIT_ONLY),true)
@@ -11,21 +12,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
-
-# Enable updating of APEXes
-$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
-
-# Inherit non-ab devices
-$(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
-
-# Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
-
-# Setup dalvik vm configs
-$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
-
-# Project ID Quota
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -81,9 +67,8 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor
 
-# Boot animation
-TARGET_SCREEN_HEIGHT := 2400
-TARGET_SCREEN_WIDTH := 1080
+# Blur
+TARGET_USES_BLUR := true
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -143,6 +128,9 @@ PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey \
     android.hardware.drm@1.4.vendor
 
+# Enable updating of APEXes
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
 # Fastbootd
 PRODUCT_PACKAGES += \
     fastbootd
@@ -150,6 +138,9 @@ PRODUCT_PACKAGES += \
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.xiaomi
+
+# Game mode
+ENABLE_GAMETOOLS := true
 
 # Google Camera
 $(call inherit-product, vendor/xiaomi/curtana-gcam/curtana-gcam-vendor.mk)
@@ -175,12 +166,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
 
+# Inherit non-ab devices
+$(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
+
 # Input
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/idc/,$(TARGET_COPY_OUT_VENDOR)/usr/idc)
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/keylayout/,$(TARGET_COPY_OUT_VENDOR)/usr/keylayout)
+
+# Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
 # IPACM
 PRODUCT_PACKAGES += \
@@ -256,13 +253,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     CurtanaCarrierConfigOverlay \
     CurtanaFrameworksOverlay \
-    CurtanaSettingsOverlay \
-    CurtanaSystemUIOverlay \
-    CurtanaTelephonyOverlay \
-    CurtanaWifiOverlay
-
-# Variant-specific overlays
-PRODUCT_PACKAGES += \
     CurtanaGlobalPAFrameworksOverlay \
     CurtanaGlobalPASettingsOverlay \
     CurtanaGlobalPASettingsProviderOverlay \
@@ -279,6 +269,13 @@ PRODUCT_PACKAGES += \
     CurtanaJapanSettingsOverlay \
     CurtanaJapanSettingsProviderOverlay \
     CurtanaJapanWifiOverlay
+    CurtanaSettingsOverlay \
+    CurtanaSystemUIOverlay \
+    CurtanaTelephonyOverlay \
+    CurtanaWifiOverlay
+
+# Pixel Launcher
+INCLUDE_PIXEL_LAUNCHER := true
 
 # Partitions
 PRODUCT_BUILD_SUPER_PARTITION := false
@@ -336,6 +333,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
 
+# Platform
+PRODUCT_BOARD_PLATFORM := atoll
+PRODUCT_USES_QCOM_HARDWARE := true
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service.xiaomi-libperfmgr
@@ -343,9 +344,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
-# QCOM hardware
-PRODUCT_BOARD_PLATFORM := atoll
-PRODUCT_USES_QCOM_HARDWARE := true
+# Project ID Quota
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
+# Proprietary blobs
+$(call inherit-product, vendor/xiaomi/curtana/curtana-vendor.mk)
 
 # QMI
 PRODUCT_PACKAGES += \
@@ -367,9 +370,16 @@ PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor \
     android.hardware.radio.deprecated@1.0.vendor
 
+# Screen resolution
+TARGET_SCREEN_HEIGHT := 2400
+TARGET_SCREEN_WIDTH := 1080
+
 # Secure element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
+
+# Setup dalvik vm configs
+$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 
 # Shims
 PRODUCT_PACKAGES += \
@@ -450,7 +460,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/usb/etc
 
-# Variant properties
+# Variant-specific properties
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,odm.*.prop,$(LOCAL_PATH)/properties/odm/,$(TARGET_COPY_OUT_ODM)) \
     $(call find-copy-subdir-files,product.*.prop,$(LOCAL_PATH)/properties/product/,$(TARGET_COPY_OUT_PRODUCT)/etc) \
@@ -462,7 +472,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     vndservicemanager
 
-# Verify Apps
+# Verify apps
 PRODUCT_BROKEN_VERIFY_USES_LIBRARIES := true
 RELAX_USES_LIBRARY_CHECK := true
 
@@ -491,6 +501,3 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
-
-# Inherit proprietary blobs
-$(call inherit-product, vendor/xiaomi/curtana/curtana-vendor.mk)

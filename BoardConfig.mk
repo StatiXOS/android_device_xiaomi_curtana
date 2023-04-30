@@ -4,8 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/xiaomi/curtana
-
 # AVB
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
@@ -79,18 +77,18 @@ BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/curtana-kernel
 BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/curtana-kernel/dtbo.img
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/configs/config.fs
-
-# HIDL
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
-    $(DEVICE_PATH)/configs/hidl/framework_compatibility_matrix.xml
-DEVICE_MATRIX_FILE := $(DEVICE_PATH)/configs/hidl/compatibility_matrix.xml
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/hidl/manifest.xml
+TARGET_FS_CONFIG_GEN := $(LOCAL_PATH)/configs/config.fs
 
 # Hacks
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
+# HIDL
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
+    $(LOCAL_PATH)/configs/hidl/framework_compatibility_matrix.xml
+DEVICE_MATRIX_FILE := $(LOCAL_PATH)/configs/hidl/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/configs/hidl/manifest.xml
 
 # Kernel
 BOARD_KERNEL_CMDLINE += \
@@ -150,33 +148,36 @@ TARGET_BOARD_PLATFORM := atoll
 TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
 
 # Properties
-TARGET_ODM_PROP += $(DEVICE_PATH)/properties/odm/odm.prop
-TARGET_PRODUCT_PROP += $(DEVICE_PATH)/properties/product/product.prop
-TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/properties/system_ext/system_ext.prop
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system/system.prop
-TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor/vendor.prop
+TARGET_ODM_PROP += $(LOCAL_PATH)/properties/odm/odm.prop
+TARGET_PRODUCT_PROP += $(LOCAL_PATH)/properties/product/product.prop
+TARGET_SYSTEM_EXT_PROP += $(LOCAL_PATH)/properties/system_ext/system_ext.prop
+TARGET_SYSTEM_PROP += $(LOCAL_PATH)/properties/system/system.prop
+TARGET_VENDOR_PROP += $(LOCAL_PATH)/properties/vendor/vendor.prop
+
+# Proprietary blobs
+include vendor/xiaomi/curtana/BoardConfigVendor.mk
 
 # Recovery
 BOARD_INCLUDE_RECOVERY_DTBO := true
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_RECOVERY_UI_MARGIN_HEIGHT := 165
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
+TARGET_RELEASETOOLS_EXTENSIONS := $(LOCAL_PATH)
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
 
-# Selinux
+# SELinux
 include device/qcom/sepolicy_vndr-legacy-um/SEPolicy.mk
 
-BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
-SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy/vendor
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy/private
 
-# Security patch level
+# Vendor security patch level
 VENDOR_SECURITY_PATCH := 2023-02-01
 
 # WiFi
@@ -193,6 +194,3 @@ WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-
-# Vendor
-include vendor/xiaomi/curtana/BoardConfigVendor.mk
