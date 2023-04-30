@@ -1084,8 +1084,8 @@ vendor/lib64/libsnsdiaglog.so
 vendor/lib64/libssc.so
 vendor/lib64/sensors.ssc.so
 
-# Thermal engine - from sunfish - RQ3A.210805.001.A1/7474174
-vendor/bin/thermal-engine|549f8284d4aca92e2b8187ab2a283a90c40e6dca
+# Thermal engine - from sunfish - TQ2A.230405.003/9719927
+vendor/bin/thermal-engine|b96e997ab7c784b0529fa833a7ea33170d0bd066
 
 # ThermalClient
 vendor/lib64/libthermalclient.so
