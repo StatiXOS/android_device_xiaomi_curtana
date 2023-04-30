@@ -379,7 +379,7 @@ PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
 
 # Setup dalvik vm configs
-$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 # Shims
 PRODUCT_PACKAGES += \
