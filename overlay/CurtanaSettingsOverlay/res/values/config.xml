@@ -4,6 +4,8 @@
     SPDX-License-Identifer: Apache-2.0
 -->
 <resources>
+
     <!-- Whether to show a preference item for regulatory information in About phone -->
     <bool name="config_show_regulatory_info">true</bool>
+    
 </resources>
