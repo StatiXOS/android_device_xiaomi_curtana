@@ -4,3 +4,6 @@ allow system_app vendor_sysfs_battery_supply:file { open };
 allow system_app vendor_sysfs_battery_supply:file { getattr };
 
 r_dir_file(system_app, vendor_sysfs_battery_supply)
+
+# Allow system apps to read Bluetooth props
+get_prop(system_app, vendor_bluetooth_prop)
