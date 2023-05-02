@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "607067e4_264259f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000158
+      },
+      "writtenOn": "2023-05-02T18:06:42Z",
+      "side": 1,
+      "message": "curtana doesn\u0027t have prime cluster, do drop CPUBigPlusClusterGovernor related hints",
+      "revId": "44bcae6e325abdd1b53977e326decbd37cb6fb57",
+      "serverId": "039621b9-0c7c-40f3-867c-684f4bc911d6"
+    }
+  ]
+}
