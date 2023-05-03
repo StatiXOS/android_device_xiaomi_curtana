@@ -268,7 +268,7 @@ PRODUCT_PACKAGES += \
     CurtanaJapanFrameworksOverlay \
     CurtanaJapanSettingsOverlay \
     CurtanaJapanSettingsProviderOverlay \
-    CurtanaJapanWifiOverlay
+    CurtanaJapanWifiOverlay \
     CurtanaSettingsOverlay \
     CurtanaSystemUIOverlay \
     CurtanaTelephonyOverlay \
