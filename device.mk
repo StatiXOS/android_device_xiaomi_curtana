@@ -15,19 +15,15 @@ endif
 
 # Audio
 PRODUCT_PACKAGES += \
+    audio.bluetooth.default \
     android.hardware.audio@6.0-impl \
     android.hardware.audio.effect@6.0-impl \
     android.hardware.audio.service \
     android.hardware.bluetooth.audio-impl \
-    android.hardware.soundtrigger@2.2-impl
-
-PRODUCT_PACKAGES += \
-    audio.bluetooth.default \
+    android.hardware.soundtrigger@2.2-impl \
     audio.primary.atoll \
     audio.r_submix.default \
     audio.usb.default \
-
-PRODUCT_PACKAGES += \
     liba2dpoffload \
     libaudiopreprocessing \
     libaudio-resampler \
@@ -74,17 +70,13 @@ TARGET_USES_BLUR := true
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     android.hardware.camera.provider@2.4-service_64 \
-    vendor.qti.hardware.camera.device@1.0.vendor
-
-PRODUCT_PACKAGES += \
-    libMegviiFacepp-0.5.2 \
-    libmegface
-
-PRODUCT_PACKAGES += \
     libcamera2ndk_vendor \
     libdng_sdk.vendor \
     libgui_vendor \
-    libstdc++.vendor
+    libmegface \
+    libMegviiFacepp-0.5.2 \
+    libstdc++.vendor \
+    vendor.qti.hardware.camera.device@1.0.vendor
 
 # DebugFS
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
@@ -181,13 +173,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
 # IPACM
 PRODUCT_PACKAGES += \
+    android.hardware.tetheroffload.config@1.0 \
     ipacm \
     IPACM_cfg.xml \
     libipanat \
     liboffloadhal
-
-PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0
 
 # IR
 PRODUCT_PACKAGES += \
@@ -245,6 +235,11 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libOmxVenc \
     libstagefrighthw
+
+# Optimizations
+PRODUCT_SYSTEM_SERVER_COMPILER_FILTER := speed-profile
+PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
+PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
 
 # Overlays
 PRODUCT_PACKAGES += \
@@ -357,15 +352,13 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    android.hardware.radio@1.6.vendor \
+    android.hardware.radio.config@1.3.vendor \
+    android.hardware.radio.deprecated@1.0.vendor \
     libprotobuf-cpp-full \
     librmnetctl \
     libwpa_client \
     libxml2
-
-PRODUCT_PACKAGES += \
-    android.hardware.radio@1.6.vendor \
-    android.hardware.radio.config@1.3.vendor \
-    android.hardware.radio.deprecated@1.0.vendor
 
 # Screen resolution
 TARGET_SCREEN_HEIGHT := 2400
@@ -423,11 +416,6 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/pixel \
     vendor/hardware/xiaomi
 
-# Speed profile services and wifi-service to reduce RAM and storage
-PRODUCT_SYSTEM_SERVER_COMPILER_FILTER := speed-profile
-PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
-PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
-
 # Telephony
 PRODUCT_PACKAGES += \
     ims-ext-common \
@@ -453,9 +441,7 @@ PRODUCT_COPY_FILES += \
 
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
-
-PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service \
     init.qcom.usb.rc \
     init.qcom.usb.sh
 
