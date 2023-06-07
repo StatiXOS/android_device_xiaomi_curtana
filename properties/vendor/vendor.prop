@@ -203,7 +203,7 @@ vendor.usb.use_gadget_hal=0
 # Variant specific props
 import /vendor/vendor.${ro.boot.hwc}.prop
 
-# Wi-FI
+# Wi-Fi
 wifi.aware.interface=wifi-aware0
 
 # Zygote
