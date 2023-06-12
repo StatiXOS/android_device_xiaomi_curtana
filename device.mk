@@ -63,9 +63,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor
 
-# Blur
-TARGET_USES_BLUR := true
-
 # Camera
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
@@ -130,9 +127,6 @@ PRODUCT_PACKAGES += \
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.xiaomi
-
-# Game mode
-ENABLE_GAMETOOLS := true
 
 # Google Camera
 $(call inherit-product, vendor/xiaomi/curtana-gcam/curtana-gcam-vendor.mk)
@@ -258,9 +252,6 @@ PRODUCT_PACKAGES += \
     CurtanaSystemUIOverlay \
     CurtanaTelephonyOverlay \
     CurtanaWifiOverlay
-
-# Pixel Launcher
-INCLUDE_PIXEL_LAUNCHER := true
 
 # Partitions
 PRODUCT_BUILD_SUPER_PARTITION := false
