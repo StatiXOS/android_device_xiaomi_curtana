@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.settings.overlay.curtanaglobaltwo">
+    package="com.android.settings.overlay.curtana_global">
     <application android:hasCode="false" />
     <overlay android:targetPackage="com.android.settings"
              android:requiredSystemPropertyName="ro.boot.hwc"
-             android:requiredSystemPropertyValue="Global_TWO"
+             android:requiredSystemPropertyValue="Global_PA,Global_TWO"
              android:isStatic="true" />
 </manifest>

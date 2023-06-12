@@ -4,12 +4,12 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.providers.settings.curtanaglobaltwo">
+    package="com.android.providers.settings.curtana_global">
 
     <overlay
         android:isStatic="true"
         android:priority="850"
         android:requiredSystemPropertyName="ro.boot.hwc"
-        android:requiredSystemPropertyValue="Global_TWO"
+        android:requiredSystemPropertyValue="Global_PA,Global_TWO,Japan"
         android:targetPackage="com.android.providers.settings" />
 </manifest>

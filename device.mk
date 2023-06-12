@@ -245,22 +245,15 @@ PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-im
 PRODUCT_PACKAGES += \
     CurtanaCarrierConfigOverlay \
     CurtanaFrameworksOverlay \
-    CurtanaGlobalPAFrameworksOverlay \
-    CurtanaGlobalPASettingsOverlay \
-    CurtanaGlobalPASettingsProviderOverlay \
-    CurtanaGlobalPAWifiOverlay \
-    CurtanaGlobalTWOFrameworksOverlay \
-    CurtanaGlobalTWOSettingsOverlay \
-    CurtanaGlobalTWOSettingsProviderOverlay \
-    CurtanaGlobalTWOWifiOverlay \
+    CurtanaGlobalFrameworksOverlay \
+    CurtanaGlobalSettingsOverlay \
+    CurtanaGlobalSettingsProviderOverlay \
+    CurtanaGlobalWifiOverlay \
     CurtanaIndiaFrameworksOverlay \
     CurtanaIndiaSettingsOverlay \
     CurtanaIndiaSettingsProviderOverlay \
     CurtanaIndiaWifiOverlay \
-    CurtanaJapanFrameworksOverlay \
     CurtanaJapanSettingsOverlay \
-    CurtanaJapanSettingsProviderOverlay \
-    CurtanaJapanWifiOverlay \
     CurtanaSettingsOverlay \
     CurtanaSystemUIOverlay \
     CurtanaTelephonyOverlay \
