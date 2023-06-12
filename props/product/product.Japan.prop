@@ -1,9 +1,1 @@
-#
-# Japan variant specific props
-#
-ro.product.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.3.0.SJWMIXM:user/release-keys
-ro.product.product.brand=Redmi
-ro.product.product.device=curtana
-ro.product.product.marketname=
-ro.product.product.model=Redmi Note 9S
-ro.product.product.name=curtana_global
+import /product/etc/product.Global.prop

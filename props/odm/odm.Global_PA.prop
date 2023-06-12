@@ -1,11 +1,1 @@
-#
-# Global_PA variant specific props
-#
-bluetooth.device.default_name=Redmi Note 9S
-ro.odm.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.3.0.SJWMIXM:user/release-keys
-ro.product.odm.brand=Redmi
-ro.product.odm.device=curtana
-ro.product.odm.marketname=
-ro.product.odm.model=Redmi Note 9S
-ro.product.odm.name=curtana_global
-vendor.usb.product_string=Redmi Note 9S
+import /odm/odm.Global.prop
