@@ -18,4 +18,4 @@ ro.product.vendor.device=curtana
 ro.product.vendor.marketname=
 ro.product.vendor.model=Redmi Note 9S
 ro.product.vendor.name=curtana_global
-ro.vendor.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.3.0.SJWMIXM:user/release-keys
+ro.vendor.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.4.0.SJWMIXM:user/release-keys

@@ -1,4 +1,4 @@
-# All unpinned blobs below are extracted from curtana_global-user 12 RKQ1.211019.001 V14.0.3.0.SJWMIXM release-keys
+# All unpinned blobs below are extracted from curtana_global-user 12 RKQ1.211019.001 V14.0.4.0.SJWMIXM release-keys
 
 # ACDB
 vendor/etc/acdbdata/IDP/IDP_Bluetooth_cal.acdb
@@ -1013,6 +1013,7 @@ vendor/radio/qcril_database/upgrade/69_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/6_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/70_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/71_version_update_ecc_table.sql
+vendor/radio/qcril_database/upgrade/72_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/7_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/8_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/9_version_update_ecc_table.sql
