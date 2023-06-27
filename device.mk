@@ -441,7 +441,7 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Variant-specific props
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,odm.*.prop,$(LOCAL_PATH)/props/odm/,$(TARGET_COPY_OUT_ODM)) \
+    $(call find-copy-subdir-files,odm.*.prop,$(LOCAL_PATH)/props/odm/,$(TARGET_COPY_OUT_ODM)/etc) \
     $(call find-copy-subdir-files,product.*.prop,$(LOCAL_PATH)/props/product/,$(TARGET_COPY_OUT_PRODUCT)/etc) \
     $(call find-copy-subdir-files,system.*.prop,$(LOCAL_PATH)/props/system/,$(TARGET_COPY_OUT_SYSTEM)) \
     $(call find-copy-subdir-files,system_ext.*.prop,$(LOCAL_PATH)/props/system_ext/,$(TARGET_COPY_OUT_SYSTEM_EXT)/etc) \
