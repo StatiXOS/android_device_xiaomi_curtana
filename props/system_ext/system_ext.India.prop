@@ -1,9 +1,6 @@
 #
 # India variant specific props
 #
-ro.product.system_ext.brand=Redmi
-ro.product.system_ext.device=curtana
-ro.product.system_ext.marketname=
 ro.product.system_ext.model=Redmi Note 10 Lite
 ro.product.system_ext.name=curtana_in1
 ro.system_ext.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V14.0.2.0.SJWINRF:user/release-keys

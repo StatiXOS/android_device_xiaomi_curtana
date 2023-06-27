@@ -1,9 +1,6 @@
 #
 # Global variant specific props
 #
-ro.product.system_ext.brand=Redmi
-ro.product.system_ext.device=curtana
-ro.product.system_ext.marketname=
 ro.product.system_ext.model=Redmi Note 9S
 ro.product.system_ext.name=curtana_global
 ro.system_ext.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.4.0.SJWMIXM:user/release-keys

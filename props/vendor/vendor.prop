@@ -104,6 +104,16 @@ vendor.qcom.bluetooth.soc=cherokee
 camera.disable_zsl_mode=1
 ro.hardware.camera=xiaomi
 
+# Common device props
+ro.build.product=curtana
+ro.product.brand=Redmi
+ro.product.board=curtana
+ro.product.bootimage.brand=Redmi
+ro.product.bootimage.device=curtana
+ro.product.device=curtana
+ro.product.vendor.brand=Redmi
+ro.product.vendor.device=curtana
+
 # Dalvik
 dalvik.vm.dex2oat64.enabled=true
 
