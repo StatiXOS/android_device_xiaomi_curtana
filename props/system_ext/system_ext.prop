@@ -16,5 +16,9 @@ bluetooth.profile.pbap.server.enabled=true
 bluetooth.profile.sap.server.enabled=true
 persist.vendor.btstack.enable.lpa=true
 
+# Common device props
+ro.product.system_ext.brand=Redmi
+ro.product.system_ext.device=curtana
+
 # Variant specific props
 import /system_ext/etc/system_ext.${ro.boot.hwc}.prop

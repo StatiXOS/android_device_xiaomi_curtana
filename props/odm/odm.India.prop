@@ -3,9 +3,6 @@
 #
 bluetooth.device.default_name=Redmi Note 10 Lite
 ro.odm.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V14.0.2.0.SJWINRF:user/release-keys
-ro.product.odm.brand=Redmi
-ro.product.odm.device=curtana
-ro.product.odm.marketname=
 ro.product.odm.model=Redmi Note 10 Lite
 ro.product.odm.name=curtana_in1
 vendor.usb.product_string=Redmi Note 10 Lite
