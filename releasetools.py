@@ -35,12 +35,12 @@ def AddImage(info, basename, dest):
   info.script.AppendExtra('package_extract_file("%s", "%s");' % (basename, dest))
 
 def AddImageRadio(info, basename, dest):
-    name = basename
-    if ("RADIO/" + basename) in info.input_zip.namelist():
-        data = info.input_zip.read("RADIO/" + basename)
-        common.ZipWriteStr(info.output_zip, name, data)
-        info.script.Print("Patching {} image unconditionally...".format(dest.split('/')[-1]))
-        info.script.AppendExtra('package_extract_file("%s", "%s");' % (name, dest))
+  name = basename
+  if ("RADIO/" + basename) in info.input_zip.namelist():
+    data = info.input_zip.read("RADIO/" + basename)
+    common.ZipWriteStr(info.output_zip, name, data)
+    info.script.Print("Patching {} image unconditionally...".format(dest.split('/')[-1]))
+    info.script.AppendExtra('package_extract_file("%s", "%s");' % (name, dest))
 
 def OTA_InstallEnd(info):
   info.script.Print("Patching dtbo and vbmeta images...")
@@ -48,7 +48,7 @@ def OTA_InstallEnd(info):
   AddImage(info, "vbmeta.img", "/dev/block/bootdevice/by-name/vbmeta")
   AddImage(info, "vbmeta_system.img", "/dev/block/bootdevice/by-name/vbmeta_system")
   
-  info.script.Print("Patching firmware images...")
+  info.script.Print("Flashing firmware...")
   AddImageRadio(info, "abl.elf", "/dev/block/bootdevice/by-name/abl");
   AddImageRadio(info, "aop.mbn", "/dev/block/bootdevice/by-name/aop");
   AddImageRadio(info, "BTFM.bin", "/dev/block/bootdevice/by-name/bluetooth");
