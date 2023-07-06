@@ -11,10 +11,6 @@ ro.charger.enable_suspend=true
 persist.vendor.cne.feature=1
 
 # Common device props
-ro.build.product=curtana
-ro.product.brand=Redmi
-ro.product.board=curtana
-ro.product.device=curtana
 ro.product.system.brand=Redmi
 ro.product.system.device=curtana
 
