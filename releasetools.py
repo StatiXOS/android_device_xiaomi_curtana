@@ -23,12 +23,12 @@ def AddImage(info, basename, dest):
   info.script.AppendExtra('package_extract_file("%s", "%s");' % (basename, dest))
 
 def AddImageRadio(info, basename, dest):
-  name = basename
   if ("RADIO/" + basename) in info.input_zip.namelist():
     data = info.input_zip.read("RADIO/" + basename)
-    common.ZipWriteStr(info.output_zip, name, data)
+    path = "firmware-update/" + basename
+    common.ZipWriteStr(info.output_zip, path, data)
     info.script.Print("Flashing {} image...".format(dest.split('/')[-1]))
-    info.script.AppendExtra('package_extract_file("%s", "%s");' % (name, dest))
+    info.script.AppendExtra('package_extract_file("%s", "%s");' % (path, dest))
 
 def OTA_InstallEnd(info):
   info.script.Print("Patching dtbo and vbmeta images...")
