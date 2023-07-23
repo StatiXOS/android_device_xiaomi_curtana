@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2022-2023 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+
+    <!-- Enable auxiliary cameras selector. -->
+    <bool name="config_enableAuxCameras">true</bool>
+
+    <!-- List of ID of auxiliary cameras that must be ignored by the app. -->
+    <string-array name="config_ignoredAuxCameraIds">
+        <item>20</item>
+        <item>61</item>
+        <item>100</item>
+        <item>101</item>
+    </string-array>
+
+    <!-- Decide whether to ignore auxiliary cameras that
+         are logical (made of multiple physical sensors).
+         Set this to false if your camera HAL doesn't expose
+         one or more aux cameras as a standalone camera device.
+         Note that you will probably need to add
+         more camera IDs to ignoreCameraIds. -->
+    <bool name="config_ignoreLogicalAuxCameras">false</bool>
+    
+</resources>
