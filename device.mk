@@ -235,6 +235,7 @@ PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-im
 # Overlays
 PRODUCT_PACKAGES += \
     CurtanaCarrierConfigOverlay \
+    CurtanaFlashOverlay \
     CurtanaFrameworksOverlay \
     CurtanaGlobalPAFrameworksOverlay \
     CurtanaGlobalPASettingsOverlay \
