@@ -15,7 +15,6 @@
  */
 #include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
-
 #include "Thermal.h"
 
 constexpr std::string_view kThermalLogTag("pixel-thermal");
@@ -32,7 +31,7 @@ using ::android::hardware::thermal::V2_0::IThermal;
 using ::android::hardware::thermal::V2_0::implementation::Thermal;
 
 static int shutdown() {
-    LOG(ERROR) << "Xiaomi curtana Thermal HAL Service is shutting down.";
+    LOG(ERROR) << "Pixel Thermal HAL Service is shutting down.";
     return 1;
 }
 
@@ -41,7 +40,7 @@ int main(int /* argc */, char ** /* argv */) {
     status_t status;
     android::sp<IThermal> service = nullptr;
 
-    LOG(INFO) << "Xiaomi curtana Thermal HAL Service 2.0 starting...";
+    LOG(INFO) << "Pixel Thermal HAL Service 2.0 starting...";
 
     service = new Thermal();
     if (service == nullptr) {
@@ -59,7 +58,7 @@ int main(int /* argc */, char ** /* argv */) {
         return shutdown();
     }
 
-    LOG(INFO) << "Xiaomi curtana Thermal HAL Service 2.0 started successfully.";
+    LOG(INFO) << "Pixel Thermal HAL Service 2.0 started successfully.";
     joinRpcThreadpool();
     // We should not get past the joinRpcThreadpool().
     return shutdown();

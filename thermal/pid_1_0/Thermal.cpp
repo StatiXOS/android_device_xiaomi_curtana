@@ -64,7 +64,7 @@ Return<void> setInitFailureAndCallback(T _hidl_cb, hidl_vec<U> data) {
 // Thermal() is killed.
 Thermal::Thermal()
     : thermal_helper_(
-          std::bind(&Thermal::sendThermalChangedCallback, this, std::placeholders::_1)) {}
+              std::bind(&Thermal::sendThermalChangedCallback, this, std::placeholders::_1)) {}
 
 // Methods from ::android::hardware::thermal::V1_0::IThermal.
 Return<void> Thermal::getTemperatures(getTemperatures_cb _hidl_cb) {
@@ -219,7 +219,7 @@ Return<void> Thermal::registerThermalChangedCallback(const sp<IThermalChangedCal
 }
 
 Return<void> Thermal::unregisterThermalChangedCallback(
-    const sp<IThermalChangedCallback> &callback, unregisterThermalChangedCallback_cb _hidl_cb) {
+        const sp<IThermalChangedCallback> &callback, unregisterThermalChangedCallback_cb _hidl_cb) {
     ThermalStatus status;
     if (callback == nullptr) {
         status.code = ThermalStatusCode::FAILURE;
@@ -233,19 +233,20 @@ Return<void> Thermal::unregisterThermalChangedCallback(
     bool removed = false;
     std::lock_guard<std::mutex> _lock(thermal_callback_mutex_);
     callbacks_.erase(
-        std::remove_if(callbacks_.begin(), callbacks_.end(),
-                       [&](const CallbackSetting &c) {
-                           if (interfacesEqual(c.callback, callback)) {
-                               LOG(INFO)
-                                   << "a callback has been unregistered to ThermalHAL, isFilter: "
-                                   << c.is_filter_type << " Type: "
-                                   << android::hardware::thermal::V2_0::toString(c.type);
-                               removed = true;
-                               return true;
-                           }
-                           return false;
-                       }),
-        callbacks_.end());
+            std::remove_if(
+                    callbacks_.begin(), callbacks_.end(),
+                    [&](const CallbackSetting &c) {
+                        if (interfacesEqual(c.callback, callback)) {
+                            LOG(INFO)
+                                    << "a callback has been unregistered to ThermalHAL, isFilter: "
+                                    << c.is_filter_type << " Type: "
+                                    << android::hardware::thermal::V2_0::toString(c.type);
+                            removed = true;
+                            return true;
+                        }
+                        return false;
+                    }),
+            callbacks_.end());
     if (!removed) {
         status.code = ThermalStatusCode::FAILURE;
         status.debugMessage = "The callback was not registered before";
@@ -263,21 +264,21 @@ void Thermal::sendThermalChangedCallback(const Temperature_2_0 &t) {
                  << " Name: " << t.name << " CurrentValue: " << t.value << " ThrottlingStatus: "
                  << android::hardware::thermal::V2_0::toString(t.throttlingStatus);
 
-    callbacks_.erase(std::remove_if(callbacks_.begin(), callbacks_.end(),
-                                    [&](const CallbackSetting &c) {
-                                        if (!c.is_filter_type || t.type == c.type) {
-                                            Return<void> ret = c.callback->notifyThrottling(t);
-                                            if (!ret.isOk()) {
-                                                LOG(ERROR)
-                                                    << "a Thermal callback is dead, removed from "
-                                                       "callback list.";
-                                                return true;
-                                            }
-                                            return false;
-                                        }
-                                        return false;
-                                    }),
-                     callbacks_.end());
+    callbacks_.erase(
+            std::remove_if(callbacks_.begin(), callbacks_.end(),
+                           [&](const CallbackSetting &c) {
+                               if (!c.is_filter_type || t.type == c.type) {
+                                   Return<void> ret = c.callback->notifyThrottling(t);
+                                   if (!ret.isOk()) {
+                                       LOG(ERROR) << "a Thermal callback is dead, removed from "
+                                                     "callback list.";
+                                       return true;
+                                   }
+                                   return false;
+                               }
+                               return false;
+                           }),
+            callbacks_.end());
 }
 
 void Thermal::dumpVirtualSensorInfo(std::ostringstream *dump_buf) {
@@ -293,8 +294,8 @@ void Thermal::dumpVirtualSensorInfo(std::ostringstream *dump_buf) {
             }
             *dump_buf << "]" << std::endl;
             *dump_buf << "  LinkedSensorCoefficient: [";
-            for (size_t i = 0;
-                 i < sensor_info_pair.second.virtual_sensor_info->coefficients.size(); i++) {
+            for (size_t i = 0; i < sensor_info_pair.second.virtual_sensor_info->coefficients.size();
+                 i++) {
                 *dump_buf << sensor_info_pair.second.virtual_sensor_info->coefficients[i] << " ";
             }
             *dump_buf << "]" << std::endl;
@@ -302,8 +303,8 @@ void Thermal::dumpVirtualSensorInfo(std::ostringstream *dump_buf) {
                       << std::endl;
             *dump_buf << "  Trigger Sensor: "
                       << (sensor_info_pair.second.virtual_sensor_info->trigger_sensor.empty()
-                              ? "N/A"
-                              : sensor_info_pair.second.virtual_sensor_info->trigger_sensor)
+                                  ? "N/A"
+                                  : sensor_info_pair.second.virtual_sensor_info->trigger_sensor)
                       << std::endl;
             *dump_buf << "  Formula: ";
             switch (sensor_info_pair.second.virtual_sensor_info->formula) {
@@ -336,7 +337,8 @@ void Thermal::dumpThrottlingInfo(std::ostringstream *dump_buf) {
     for (const auto &name_info_pair : map) {
         if (name_info_pair.second.throttling_info->binded_cdev_info_map.size()) {
             *dump_buf << " Name: " << name_info_pair.first << std::endl;
-            if (thermal_throttling_status_map.at(name_info_pair.first).pid_power_budget_map.size()) {
+            if (thermal_throttling_status_map.at(name_info_pair.first)
+                        .pid_power_budget_map.size()) {
                 *dump_buf << "  PID Info:" << std::endl;
                 *dump_buf << "   K_po: [";
                 for (size_t i = 0; i < kThrottlingSeverityCount; ++i) {
@@ -389,7 +391,7 @@ void Thermal::dumpThrottlingInfo(std::ostringstream *dump_buf) {
                  name_info_pair.second.throttling_info->binded_cdev_info_map) {
                 *dump_buf << "   Cooling device name: " << binded_cdev_info_pair.first << std::endl;
                 if (thermal_throttling_status_map.at(name_info_pair.first)
-                        .pid_power_budget_map.size()) {
+                            .pid_power_budget_map.size()) {
                     *dump_buf << "    WeightForPID: [";
                     for (size_t i = 0; i < kThrottlingSeverityCount; ++i) {
                         *dump_buf << binded_cdev_info_pair.second.cdev_weight_for_pid[i] << " ";
@@ -541,9 +543,9 @@ void Thermal::dumpPowerRailInfo(std::ostringstream *dump_buf) {
             for (size_t i = 0; i < power_history.size(); ++i) {
                 if (power_rail_pair.second.virtual_power_rail_info != nullptr) {
                     *dump_buf
-                        << "  Linked power rail "
-                        << power_rail_pair.second.virtual_power_rail_info->linked_power_rails[i]
-                        << std::endl;
+                            << "  Linked power rail "
+                            << power_rail_pair.second.virtual_power_rail_info->linked_power_rails[i]
+                            << std::endl;
                     *dump_buf << "   Coefficient="
                               << power_rail_pair.second.virtual_power_rail_info->coefficients[i]
                               << std::endl;
@@ -597,8 +599,8 @@ Return<void> Thermal::debug(const hidl_handle &handle, const hidl_vec<hidl_strin
                              << " CachedValue: " << sensor_status_pair.second.thermal_cached.temp
                              << " TimeToCache: "
                              << std::chrono::duration_cast<std::chrono::milliseconds>(
-                                    now - sensor_status_pair.second.thermal_cached.timestamp)
-                                    .count()
+                                        now - sensor_status_pair.second.thermal_cached.timestamp)
+                                        .count()
                              << "ms" << std::endl;
                 }
             }
@@ -626,7 +628,7 @@ Return<void> Thermal::debug(const hidl_handle &handle, const hidl_vec<hidl_strin
                              << " Name: " << name_info_pair.first
                              << " CurrentValue: " << temp_2_0.value << " ThrottlingStatus: "
                              << android::hardware::thermal::V2_0::toString(
-                                    temp_2_0.throttlingStatus)
+                                        temp_2_0.throttlingStatus)
                              << std::endl;
                 }
                 dump_buf << "getTemperatureThresholds:" << std::endl;
@@ -636,7 +638,7 @@ Return<void> Thermal::debug(const hidl_handle &handle, const hidl_vec<hidl_strin
                     }
                     dump_buf << " Type: "
                              << android::hardware::thermal::V2_0::toString(
-                                    name_info_pair.second.type)
+                                        name_info_pair.second.type)
                              << " Name: " << name_info_pair.first;
                     dump_buf << " hotThrottlingThreshold: [";
                     for (size_t i = 0; i < kThrottlingSeverityCount; ++i) {

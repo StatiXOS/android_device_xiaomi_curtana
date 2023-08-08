@@ -148,8 +148,8 @@ static int nlFamilyHandle(struct nl_msg *msg, void *arg) {
 static int nlGetMulticastId(struct nl_sock *sock, const char *family, const char *group) {
     int err = 0, ctrlid;
     struct HandlerArgs grp = {
-        .group = group,
-        .id = -ENOENT,
+            .group = group,
+            .id = -ENOENT,
     };
 
     std::unique_ptr<nl_msg, decltype(&nlmsg_free)> msg(nlmsg_alloc(), nlmsg_free);
@@ -488,7 +488,7 @@ void ThermalWatcher::parseGenlink(std::set<std::string> *sensors_set) {
         std::string name;
         if (getThermalZoneTypeById(tz_id, &name) &&
             std::find(monitored_sensors_.begin(), monitored_sensors_.end(), name) !=
-                monitored_sensors_.end()) {
+                    monitored_sensors_.end()) {
             sensors_set->insert(name);
         }
     }
@@ -504,8 +504,8 @@ bool ThermalWatcher::threadLoop() {
     int fd;
     std::set<std::string> sensors;
 
-    auto time_elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        boot_clock::now() - last_update_time_);
+    auto time_elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(boot_clock::now() -
+                                                                                 last_update_time_);
 
     if (time_elapsed_ms < sleep_ms_ &&
         looper_->pollOnce(sleep_ms_.count(), &fd, nullptr, nullptr) >= 0) {

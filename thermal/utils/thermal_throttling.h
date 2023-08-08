@@ -69,23 +69,23 @@ class ThermalThrottling {
     void clearThrottlingData(std::string_view sensor_name, const SensorInfo &sensor_info);
     // Register map for throttling algo
     bool registerThermalThrottling(
-        std::string_view sensor_name, const std::shared_ptr<ThrottlingInfo> &throttling_info,
-        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
+            std::string_view sensor_name, const std::shared_ptr<ThrottlingInfo> &throttling_info,
+            const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
     // Register map for throttling release algo
     bool registerThrottlingReleaseToWatch(std::string_view sensor_name, std::string_view cdev_name,
                                           const BindedCdevInfo &binded_cdev_info);
     // Get throttling status map
     const std::unordered_map<std::string, ThermalThrottlingStatus> &GetThermalThrottlingStatusMap()
-        const {
+            const {
         std::shared_lock<std::shared_mutex> _lock(thermal_throttling_status_map_mutex_);
         return thermal_throttling_status_map_;
     }
     // Update thermal throttling request for the specific sensor
     void thermalThrottlingUpdate(
-        const Temperature_2_0 &temp, const SensorInfo &sensor_info,
-        const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
-        const std::unordered_map<std::string, PowerStatus> &power_status_map,
-        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
+            const Temperature_2_0 &temp, const SensorInfo &sensor_info,
+            const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
+            const std::unordered_map<std::string, PowerStatus> &power_status_map,
+            const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
 
     // Compute the throttling target from all the sensors' request
     void computeCoolingDevicesRequest(std::string_view sensor_name, const SensorInfo &sensor_info,
@@ -106,24 +106,24 @@ class ThermalThrottling {
 
     // PID algo - allocate the power to target CDEV according to the ODPM
     bool allocatePowerToCdev(
-        const Temperature_2_0 &temp, const SensorInfo &sensor_info,
-        const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
-        const std::unordered_map<std::string, PowerStatus> &power_status_map,
-        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
+            const Temperature_2_0 &temp, const SensorInfo &sensor_info,
+            const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
+            const std::unordered_map<std::string, PowerStatus> &power_status_map,
+            const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
     // PID algo - map the target throttling state according to the power budget
     void updateCdevRequestByPower(
-        std::string sensor_name,
-        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
+            std::string sensor_name,
+            const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map);
     // Hard limit algo - assign the throttling state according to the severity
     void updateCdevRequestBySeverity(std::string_view sensor_name, const SensorInfo &sensor_info,
                                      ThrottlingSeverity curr_severity);
     // Throttling release algo - decide release step according to the predefined power threshold,
     // return false if the throttling release is not registered in thermal config
     bool throttlingReleaseUpdate(
-        std::string_view sensor_name,
-        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map,
-        const std::unordered_map<std::string, PowerStatus> &power_status_map,
-        const ThrottlingSeverity severity, const SensorInfo &sensor_info);
+            std::string_view sensor_name,
+            const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map,
+            const std::unordered_map<std::string, PowerStatus> &power_status_map,
+            const ThrottlingSeverity severity, const SensorInfo &sensor_info);
 
     mutable std::shared_mutex thermal_throttling_status_map_mutex_;
     // Thermal throttling status from each sensor

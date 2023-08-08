@@ -70,7 +70,7 @@ bool ThermalFiles::readThermalFile(std::string_view thermal_name, std::string *d
 
 bool ThermalFiles::writeCdevFile(std::string_view cdev_name, std::string_view data) {
     std::string file_path =
-        getThermalFilePath(android::base::StringPrintf("%s_%s", cdev_name.data(), "w"));
+            getThermalFilePath(android::base::StringPrintf("%s_%s", cdev_name.data(), "w"));
 
     ATRACE_NAME(StringPrintf("ThermalFiles::writeCdevFile - %s", cdev_name.data()).c_str());
     if (!android::base::WriteStringToFile(data.data(), file_path)) {

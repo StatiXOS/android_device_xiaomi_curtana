@@ -65,12 +65,12 @@ class Thermal : public IThermal {
                                         getCurrentTemperatures_cb _hidl_cb) override;
     Return<void> getTemperatureThresholds(bool filterType, TemperatureType_2_0 type,
                                           getTemperatureThresholds_cb _hidl_cb) override;
-    Return<void> registerThermalChangedCallback(const sp<IThermalChangedCallback> &callback,
-                                                bool filterType, TemperatureType_2_0 type,
-                                                registerThermalChangedCallback_cb _hidl_cb) override;
+    Return<void> registerThermalChangedCallback(
+            const sp<IThermalChangedCallback> &callback, bool filterType, TemperatureType_2_0 type,
+            registerThermalChangedCallback_cb _hidl_cb) override;
     Return<void> unregisterThermalChangedCallback(
-        const sp<IThermalChangedCallback> &callback,
-        unregisterThermalChangedCallback_cb _hidl_cb) override;
+            const sp<IThermalChangedCallback> &callback,
+            unregisterThermalChangedCallback_cb _hidl_cb) override;
     Return<void> getCurrentCoolingDevices(bool filterType, CoolingType type,
                                           getCurrentCoolingDevices_cb _hidl_cb) override;
 

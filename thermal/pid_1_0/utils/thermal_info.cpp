@@ -339,8 +339,7 @@ bool ParseSensorInfo(std::string_view config_path,
                 cold_hysteresis[j] = getFloatFromValue(values[j]);
                 if (std::isnan(cold_hysteresis[j])) {
                     LOG(ERROR) << "Invalid "
-                               << "Sensor[" << name
-                               << "]'s ColdHysteresis: " << cold_hysteresis[j];
+                               << "Sensor[" << name << "]'s ColdHysteresis: " << cold_hysteresis[j];
                     sensors_parsed->clear();
                     return false;
                 }
@@ -440,16 +439,16 @@ bool ParseSensorInfo(std::string_view config_path,
         std::chrono::milliseconds polling_delay = kUeventPollTimeoutMs;
         if (!sensors[i]["PollingDelay"].empty()) {
             const auto value = getIntFromValue(sensors[i]["PollingDelay"]);
-            polling_delay =
-                (value > 0) ? std::chrono::milliseconds(value) : std::chrono::milliseconds::max();
+            polling_delay = (value > 0) ? std::chrono::milliseconds(value)
+                                        : std::chrono::milliseconds::max();
         }
         LOG(INFO) << "Sensor[" << name << "]'s Polling delay: " << polling_delay.count();
 
         std::chrono::milliseconds passive_delay = kMinPollIntervalMs;
         if (!sensors[i]["PassiveDelay"].empty()) {
             const auto value = getIntFromValue(sensors[i]["PassiveDelay"]);
-            passive_delay =
-                (value > 0) ? std::chrono::milliseconds(value) : std::chrono::milliseconds::max();
+            passive_delay = (value > 0) ? std::chrono::milliseconds(value)
+                                        : std::chrono::milliseconds::max();
         }
         LOG(INFO) << "Sensor[" << name << "]'s Passive delay: " << passive_delay.count();
 
@@ -458,7 +457,7 @@ bool ParseSensorInfo(std::string_view config_path,
             time_resolution = kMinPollIntervalMs;
         } else {
             time_resolution =
-                std::chrono::milliseconds(getIntFromValue(sensors[i]["TimeResolution"]));
+                    std::chrono::milliseconds(getIntFromValue(sensors[i]["TimeResolution"]));
         }
         LOG(INFO) << "Sensor[" << name << "]'s Time resolution: " << time_resolution.count();
 
@@ -605,8 +604,8 @@ bool ParseSensorInfo(std::string_view config_path,
                 if (!values[j]["CdevWeightForPID"].empty()) {
                     LOG(INFO) << "Sensor[" << name << "]: Star to parse " << cdev_name
                               << "'s CdevWeightForPID";
-                    if (!getFloatFromJsonValues(values[j]["CdevWeightForPID"],
-                                                &cdev_weight_for_pid, false, false)) {
+                    if (!getFloatFromJsonValues(values[j]["CdevWeightForPID"], &cdev_weight_for_pid,
+                                                false, false)) {
                         LOG(ERROR) << "Failed to parse CdevWeightForPID";
                         sensors_parsed->clear();
                         return false;
@@ -673,7 +672,7 @@ bool ParseSensorInfo(std::string_view config_path,
             cdev_floor_with_power_link.fill(0);
 
             const bool power_link_disabled =
-                android::base::GetBoolProperty(kPowerLinkDisabledProperty.data(), false);
+                    android::base::GetBoolProperty(kPowerLinkDisabledProperty.data(), false);
             if (!power_link_disabled) {
                 power_rail = values[j]["BindedPowerRail"].asString();
 
@@ -729,17 +728,17 @@ bool ParseSensorInfo(std::string_view config_path,
             }
 
             binded_cdev_info_map[cdev_name] = {
-                .limit_info = limit_info,
-                .power_thresholds = power_thresholds,
-                .release_logic = release_logic,
-                .high_power_check = high_power_check,
-                .throttling_with_power_link = throttling_with_power_link,
-                .cdev_weight_for_pid = cdev_weight_for_pid,
-                .cdev_ceiling = cdev_ceiling,
-                .max_release_step = max_release_step,
-                .max_throttle_step = max_throttle_step,
-                .cdev_floor_with_power_link = cdev_floor_with_power_link,
-                .power_rail = power_rail,
+                    .limit_info = limit_info,
+                    .power_thresholds = power_thresholds,
+                    .release_logic = release_logic,
+                    .high_power_check = high_power_check,
+                    .throttling_with_power_link = throttling_with_power_link,
+                    .cdev_weight_for_pid = cdev_weight_for_pid,
+                    .cdev_ceiling = cdev_ceiling,
+                    .max_release_step = max_release_step,
+                    .max_throttle_step = max_throttle_step,
+                    .cdev_floor_with_power_link = cdev_floor_with_power_link,
+                    .power_rail = power_rail,
             };
         }
 
@@ -759,27 +758,27 @@ bool ParseSensorInfo(std::string_view config_path,
         }
 
         std::shared_ptr<ThrottlingInfo> throttling_info(
-            new ThrottlingInfo{k_po, k_pu, k_i, k_d, i_max, max_alloc_power, min_alloc_power,
-                               s_power, i_cutoff, err_integral_default, binded_cdev_info_map});
+                new ThrottlingInfo{k_po, k_pu, k_i, k_d, i_max, max_alloc_power, min_alloc_power,
+                                   s_power, i_cutoff, err_integral_default, binded_cdev_info_map});
 
         (*sensors_parsed)[name] = {
-            .type = sensor_type,
-            .hot_thresholds = hot_thresholds,
-            .cold_thresholds = cold_thresholds,
-            .hot_hysteresis = hot_hysteresis,
-            .cold_hysteresis = cold_hysteresis,
-            .temp_path = temp_path,
-            .vr_threshold = vr_threshold,
-            .multiplier = multiplier,
-            .polling_delay = polling_delay,
-            .passive_delay = passive_delay,
-            .time_resolution = time_resolution,
-            .send_cb = send_cb,
-            .send_powerhint = send_powerhint,
-            .is_watch = is_watch,
-            .is_hidden = is_hidden,
-            .virtual_sensor_info = std::move(virtual_sensor_info),
-            .throttling_info = std::move(throttling_info),
+                .type = sensor_type,
+                .hot_thresholds = hot_thresholds,
+                .cold_thresholds = cold_thresholds,
+                .hot_hysteresis = hot_hysteresis,
+                .cold_hysteresis = cold_hysteresis,
+                .temp_path = temp_path,
+                .vr_threshold = vr_threshold,
+                .multiplier = multiplier,
+                .polling_delay = polling_delay,
+                .passive_delay = passive_delay,
+                .time_resolution = time_resolution,
+                .send_cb = send_cb,
+                .send_powerhint = send_powerhint,
+                .is_watch = is_watch,
+                .is_hidden = is_hidden,
+                .virtual_sensor_info = std::move(virtual_sensor_info),
+                .throttling_info = std::move(throttling_info),
         };
 
         ++total_parsed;
@@ -861,10 +860,10 @@ bool ParseCoolingDevice(std::string_view config_path,
         LOG(INFO) << "Cooling device power rail : " << power_rail;
 
         (*cooling_devices_parsed)[name] = {
-            .type = cooling_device_type,
-            .read_path = read_path,
-            .write_path = write_path,
-            .state2power = state2power,
+                .type = cooling_device_type,
+                .read_path = read_path,
+                .write_path = write_path,
+                .state2power = state2power,
         };
         ++total_parsed;
     }
@@ -990,7 +989,7 @@ bool ParsePowerRailInfo(std::string_view config_path,
         std::unique_ptr<VirtualPowerRailInfo> virtual_power_rail_info;
         if (is_virtual_power_rail) {
             virtual_power_rail_info.reset(
-                new VirtualPowerRailInfo{linked_power_rails, coefficients, offset, formula});
+                    new VirtualPowerRailInfo{linked_power_rails, coefficients, offset, formula});
         }
 
         power_sample_count = power_rails[i]["PowerSampleCount"].asInt();
@@ -1000,14 +999,14 @@ bool ParsePowerRailInfo(std::string_view config_path,
             power_sample_delay = std::chrono::milliseconds::max();
         } else {
             power_sample_delay =
-                std::chrono::milliseconds(getIntFromValue(power_rails[i]["PowerSampleDelay"]));
+                    std::chrono::milliseconds(getIntFromValue(power_rails[i]["PowerSampleDelay"]));
         }
 
         (*power_rails_parsed)[name] = {
-            .rail = rail,
-            .power_sample_count = power_sample_count,
-            .power_sample_delay = power_sample_delay,
-            .virtual_power_rail_info = std::move(virtual_power_rail_info),
+                .rail = rail,
+                .power_sample_count = power_sample_count,
+                .power_sample_delay = power_sample_delay,
+                .virtual_power_rail_info = std::move(virtual_power_rail_info),
         };
         ++total_parsed;
     }

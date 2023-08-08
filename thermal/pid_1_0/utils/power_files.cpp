@@ -68,8 +68,8 @@ bool PowerFiles::registerPowerRailsToWatch(std::string_view config_path) {
         }
 
         PowerSample power_sample = {
-            .energy_counter = 0,
-            .duration = 0,
+                .energy_counter = 0,
+                .duration = 0,
         };
 
         if (power_rail_info_pair.second.virtual_power_rail_info != nullptr &&
@@ -77,11 +77,11 @@ bool PowerFiles::registerPowerRailsToWatch(std::string_view config_path) {
             for (size_t i = 0;
                  i < power_rail_info_pair.second.virtual_power_rail_info->linked_power_rails.size();
                  ++i) {
-                if (!energy_info_map_.count(
-                        power_rail_info_pair.second.virtual_power_rail_info->linked_power_rails[i])) {
+                if (!energy_info_map_.count(power_rail_info_pair.second.virtual_power_rail_info
+                                                    ->linked_power_rails[i])) {
                     LOG(ERROR) << " Could not find energy source "
                                << power_rail_info_pair.second.virtual_power_rail_info
-                                      ->linked_power_rails[i];
+                                          ->linked_power_rails[i];
                     return false;
                 }
                 power_history.emplace_back(std::queue<PowerSample>());
@@ -103,9 +103,9 @@ bool PowerFiles::registerPowerRailsToWatch(std::string_view config_path) {
 
         if (power_history.size()) {
             power_status_map_[power_rail_info_pair.first] = {
-                .power_history = power_history,
-                .last_update_time = boot_clock::time_point::min(),
-                .last_updated_avg_power = NAN,
+                    .power_history = power_history,
+                    .last_update_time = boot_clock::time_point::min(),
+                    .last_updated_avg_power = NAN,
             };
         } else {
             LOG(ERROR) << "power history size is zero";
@@ -140,7 +140,7 @@ bool PowerFiles::findEnergySourceToWatch(void) {
                                   &deviceEnergyContent)) {
             } else if (deviceEnergyContent.size()) {
                 energy_path_set_.emplace(
-                    StringPrintf("%s/%s", devicePath.data(), kEnergyValueNode.data()));
+                        StringPrintf("%s/%s", devicePath.data(), kEnergyValueNode.data()));
             }
         }
     }
@@ -179,7 +179,7 @@ bool PowerFiles::updateEnergyValues(void) {
         auto end_pos = line.find(')');
         if (start_pos != std::string::npos) {
             duration =
-                strtoul(line.substr(start_pos + 2, end_pos - start_pos - 2).c_str(), NULL, 10);
+                    strtoul(line.substr(start_pos + 2, end_pos - start_pos - 2).c_str(), NULL, 10);
         } else {
             continue;
         }
@@ -201,8 +201,8 @@ bool PowerFiles::updateEnergyValues(void) {
         }
 
         energy_info_map_[railName] = {
-            .energy_counter = energy_counter,
-            .duration = duration,
+                .energy_counter = energy_counter,
+                .duration = duration,
         };
     }
 
@@ -257,8 +257,8 @@ float PowerFiles::updatePowerRail(std::string_view power_rail) {
     auto &power_status = power_status_map_.at(power_rail.data());
 
     boot_clock::time_point now = boot_clock::now();
-    auto time_elapsed_ms =
-        std::chrono::duration_cast<std::chrono::milliseconds>(now - power_status.last_update_time);
+    auto time_elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now - power_status.last_update_time);
 
     if (power_status.last_update_time != boot_clock::time_point::min() &&
         time_elapsed_ms < power_rail_info.power_sample_delay) {
@@ -278,9 +278,9 @@ float PowerFiles::updatePowerRail(std::string_view power_rail) {
         for (size_t i = 0; i < power_rail_info.virtual_power_rail_info->linked_power_rails.size();
              i++) {
             float coefficient = power_rail_info.virtual_power_rail_info->coefficients[i];
-            float avg_power_number =
-                updateAveragePower(power_rail_info.virtual_power_rail_info->linked_power_rails[i],
-                                   &power_status.power_history[i]);
+            float avg_power_number = updateAveragePower(
+                    power_rail_info.virtual_power_rail_info->linked_power_rails[i],
+                    &power_status.power_history[i]);
 
             switch (power_rail_info.virtual_power_rail_info->formula) {
                 case FormulaOption::COUNT_THRESHOLD:

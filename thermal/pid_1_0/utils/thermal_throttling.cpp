@@ -81,14 +81,14 @@ void ThermalThrottling::clearThrottlingData(std::string_view sensor_name,
     }
 
     thermal_throttling_status_map_[sensor_name.data()].err_integral =
-        sensor_info.throttling_info->err_integral_default;
+            sensor_info.throttling_info->err_integral_default;
     thermal_throttling_status_map_[sensor_name.data()].prev_err = NAN;
     return;
 }
 
 bool ThermalThrottling::registerThermalThrottling(
-    std::string_view sensor_name, const std::shared_ptr<ThrottlingInfo> &throttling_info,
-    const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
+        std::string_view sensor_name, const std::shared_ptr<ThrottlingInfo> &throttling_info,
+        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
     if (thermal_throttling_status_map_.count(sensor_name.data())) {
         LOG(ERROR) << "Sensor " << sensor_name.data() << " throttling map has been registered";
         return false;
@@ -99,7 +99,7 @@ bool ThermalThrottling::registerThermalThrottling(
         return false;
     }
     thermal_throttling_status_map_[sensor_name.data()].err_integral =
-        throttling_info->err_integral_default;
+            throttling_info->err_integral_default;
     thermal_throttling_status_map_[sensor_name.data()].prev_err = NAN;
 
     for (auto &binded_cdev_pair : throttling_info->binded_cdev_info_map) {
@@ -112,11 +112,12 @@ bool ThermalThrottling::registerThermalThrottling(
         for (const auto &cdev_weight : binded_cdev_pair.second.cdev_weight_for_pid) {
             if (!std::isnan(cdev_weight)) {
                 thermal_throttling_status_map_[sensor_name.data()]
-                    .pid_power_budget_map[binded_cdev_pair.first] = std::numeric_limits<int>::max();
+                        .pid_power_budget_map[binded_cdev_pair.first] =
+                        std::numeric_limits<int>::max();
                 thermal_throttling_status_map_[sensor_name.data()]
-                    .pid_cdev_request_map[binded_cdev_pair.first] = 0;
+                        .pid_cdev_request_map[binded_cdev_pair.first] = 0;
                 thermal_throttling_status_map_[sensor_name.data()]
-                    .cdev_status_map[binded_cdev_pair.first] = 0;
+                        .cdev_status_map[binded_cdev_pair.first] = 0;
                 break;
             }
         }
@@ -124,9 +125,9 @@ bool ThermalThrottling::registerThermalThrottling(
         for (const auto &limit_info : binded_cdev_pair.second.limit_info) {
             if (limit_info > 0) {
                 thermal_throttling_status_map_[sensor_name.data()]
-                    .hardlimit_cdev_request_map[binded_cdev_pair.first] = 0;
+                        .hardlimit_cdev_request_map[binded_cdev_pair.first] = 0;
                 thermal_throttling_status_map_[sensor_name.data()]
-                    .cdev_status_map[binded_cdev_pair.first] = 0;
+                        .cdev_status_map[binded_cdev_pair.first] = 0;
                 break;
             }
         }
@@ -135,7 +136,7 @@ bool ThermalThrottling::registerThermalThrottling(
             for (const auto &power_threshold : binded_cdev_pair.second.power_thresholds) {
                 if (!std::isnan(power_threshold)) {
                     thermal_throttling_status_map_[sensor_name.data()]
-                        .throttling_release_map[binded_cdev_pair.first] = 0;
+                            .throttling_release_map[binded_cdev_pair.first] = 0;
                     break;
                 }
             }
@@ -198,9 +199,9 @@ float ThermalThrottling::updatePowerBudget(const Temperature_2_0 &temp,
 }
 
 bool ThermalThrottling::updateCdevRequestByPower(
-    const Temperature_2_0 &temp, const SensorInfo &sensor_info,
-    const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
-    const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
+        const Temperature_2_0 &temp, const SensorInfo &sensor_info,
+        const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
+        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
     float total_weight = 0, cdev_power_budget;
     size_t j;
 
@@ -210,8 +211,8 @@ bool ThermalThrottling::updateCdevRequestByPower(
     std::unique_lock<std::shared_mutex> _lock(thermal_throttling_status_map_mutex_);
     // Compute total cdev weight
     for (const auto &binded_cdev_info_pair : sensor_info.throttling_info->binded_cdev_info_map) {
-        const auto cdev_weight =
-            binded_cdev_info_pair.second.cdev_weight_for_pid[static_cast<size_t>(curr_severity)];
+        const auto cdev_weight = binded_cdev_info_pair.second
+                                         .cdev_weight_for_pid[static_cast<size_t>(curr_severity)];
         if (std::isnan(cdev_weight)) {
             continue;
         }
@@ -225,7 +226,7 @@ bool ThermalThrottling::updateCdevRequestByPower(
             cdev_power_budget = total_power_budget * (cdev_weight / total_weight);
 
             const CdevInfo &cdev_info_pair =
-                cooling_device_info_map.at(binded_cdev_info_pair.first);
+                    cooling_device_info_map.at(binded_cdev_info_pair.first);
             for (j = 0; j < cdev_info_pair.state2power.size() - 1; ++j) {
                 if (cdev_power_budget > cdev_info_pair.state2power[j]) {
                     break;
@@ -233,7 +234,7 @@ bool ThermalThrottling::updateCdevRequestByPower(
             }
 
             thermal_throttling_status_map_[temp.name].pid_cdev_request_map.at(
-                binded_cdev_info_pair.first) = static_cast<int>(j);
+                    binded_cdev_info_pair.first) = static_cast<int>(j);
             LOG(VERBOSE) << "Power allocator: Sensor " << temp.name << " allocate "
                          << cdev_power_budget << "mW to " << binded_cdev_info_pair.first
                          << "(cdev_weight=" << cdev_weight << ") update state to " << j;
@@ -248,20 +249,20 @@ void ThermalThrottling::updateCdevRequestBySeverity(std::string_view sensor_name
     std::unique_lock<std::shared_mutex> _lock(thermal_throttling_status_map_mutex_);
     for (auto const &binded_cdev_info_pair : sensor_info.throttling_info->binded_cdev_info_map) {
         thermal_throttling_status_map_[sensor_name.data()].hardlimit_cdev_request_map.at(
-            binded_cdev_info_pair.first) =
-            binded_cdev_info_pair.second.limit_info[static_cast<size_t>(curr_severity)];
+                binded_cdev_info_pair.first) =
+                binded_cdev_info_pair.second.limit_info[static_cast<size_t>(curr_severity)];
         LOG(VERBOSE) << "Hard Limit: Sensor " << sensor_name.data() << " update cdev "
                      << binded_cdev_info_pair.first << " to "
                      << thermal_throttling_status_map_[sensor_name.data()]
-                            .hardlimit_cdev_request_map.at(binded_cdev_info_pair.first);
+                                .hardlimit_cdev_request_map.at(binded_cdev_info_pair.first);
     }
 }
 
 bool ThermalThrottling::throttlingReleaseUpdate(
-    std::string_view sensor_name,
-    const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map,
-    const std::unordered_map<std::string, PowerStatus> &power_status_map,
-    const ThrottlingSeverity severity, const SensorInfo &sensor_info) {
+        std::string_view sensor_name,
+        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map,
+        const std::unordered_map<std::string, PowerStatus> &power_status_map,
+        const ThrottlingSeverity severity, const SensorInfo &sensor_info) {
     ATRACE_CALL();
     std::unique_lock<std::shared_mutex> _lock(thermal_throttling_status_map_mutex_);
     if (!thermal_throttling_status_map_.count(sensor_name.data())) {
@@ -279,9 +280,9 @@ bool ThermalThrottling::throttlingReleaseUpdate(
         const auto max_state = cooling_device_info_map.at(binded_cdev_info_pair.first).max_state;
 
         auto &release_step =
-            thermal_throttling_status.throttling_release_map.at(binded_cdev_info_pair.first);
+                thermal_throttling_status.throttling_release_map.at(binded_cdev_info_pair.first);
         avg_power =
-            power_status_map.at(binded_cdev_info_pair.second.power_rail).last_updated_avg_power;
+                power_status_map.at(binded_cdev_info_pair.second.power_rail).last_updated_avg_power;
 
         // Return false if we cannot get the AVG power
         if (std::isnan(avg_power) || avg_power < 0) {
@@ -349,10 +350,10 @@ bool ThermalThrottling::throttlingReleaseUpdate(
 }
 
 void ThermalThrottling::thermalThrottlingUpdate(
-    const Temperature_2_0 &temp, const SensorInfo &sensor_info,
-    const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
-    const std::unordered_map<std::string, PowerStatus> &power_status_map,
-    const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
+        const Temperature_2_0 &temp, const SensorInfo &sensor_info,
+        const ThrottlingSeverity curr_severity, const std::chrono::milliseconds time_elapsed_ms,
+        const std::unordered_map<std::string, PowerStatus> &power_status_map,
+        const std::unordered_map<std::string, CdevInfo> &cooling_device_info_map) {
     if (!thermal_throttling_status_map_.count(temp.name)) {
         return;
     }
@@ -373,8 +374,9 @@ void ThermalThrottling::thermalThrottlingUpdate(
 }
 
 void ThermalThrottling::computeCoolingDevicesRequest(
-    std::string_view sensor_name, const SensorInfo &sensor_info,
-    const ThrottlingSeverity curr_severity, std::vector<std::string> *cooling_devices_to_update) {
+        std::string_view sensor_name, const SensorInfo &sensor_info,
+        const ThrottlingSeverity curr_severity,
+        std::vector<std::string> *cooling_devices_to_update) {
     int release_step = 0;
     std::unique_lock<std::shared_mutex> _lock(thermal_throttling_status_map_mutex_);
 
@@ -389,20 +391,20 @@ void ThermalThrottling::computeCoolingDevicesRequest(
         int pid_cdev_request = 0;
         int hardlimit_cdev_request = 0;
         const auto &binded_cdev_info =
-            sensor_info.throttling_info->binded_cdev_info_map.at(cdev_request_pair.first);
+                sensor_info.throttling_info->binded_cdev_info_map.at(cdev_request_pair.first);
         const auto cdev_ceiling = binded_cdev_info.cdev_ceiling[static_cast<size_t>(curr_severity)];
         const auto cdev_floor =
-            binded_cdev_info.cdev_floor_with_power_link[static_cast<size_t>(curr_severity)];
+                binded_cdev_info.cdev_floor_with_power_link[static_cast<size_t>(curr_severity)];
         release_step = 0;
 
         if (thermal_throttling_status.pid_cdev_request_map.count(cdev_request_pair.first)) {
             pid_cdev_request =
-                thermal_throttling_status.pid_cdev_request_map.at(cdev_request_pair.first);
+                    thermal_throttling_status.pid_cdev_request_map.at(cdev_request_pair.first);
         }
 
         if (thermal_throttling_status.hardlimit_cdev_request_map.count(cdev_request_pair.first)) {
-            hardlimit_cdev_request =
-                thermal_throttling_status.hardlimit_cdev_request_map.at(cdev_request_pair.first);
+            hardlimit_cdev_request = thermal_throttling_status.hardlimit_cdev_request_map.at(
+                    cdev_request_pair.first);
         }
 
         if (cdev_release_map.count(cdev_request_pair.first)) {

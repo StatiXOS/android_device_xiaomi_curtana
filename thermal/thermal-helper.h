@@ -95,9 +95,9 @@ class ThermalHelper {
     // Read the temperature of a single sensor.
     bool readTemperature(std::string_view sensor_name, Temperature_1_0 *out);
     bool readTemperature(
-        std::string_view sensor_name, Temperature_2_0 *out,
-        std::pair<ThrottlingSeverity, ThrottlingSeverity> *throtting_status = nullptr,
-        const bool force_sysfs = false);
+            std::string_view sensor_name, Temperature_2_0 *out,
+            std::pair<ThrottlingSeverity, ThrottlingSeverity> *throtting_status = nullptr,
+            const bool force_sysfs = false);
     bool readTemperatureThreshold(std::string_view sensor_name, TemperatureThreshold *out) const;
     // Read the value of a single cooling device.
     bool readCoolingDevice(std::string_view cooling_device, CoolingDevice_2_0 *out) const;
@@ -116,7 +116,7 @@ class ThermalHelper {
     }
     // Get ThermalThrottling Map
     const std::unordered_map<std::string, ThermalThrottlingStatus> &GetThermalThrottlingStatusMap()
-        const {
+            const {
         return thermal_throttling_.GetThermalThrottlingStatusMap();
     }
     // Get PowerRailInfo Map
@@ -142,13 +142,13 @@ class ThermalHelper {
 
     // For thermal_watcher_'s polling thread, return the sleep interval
     std::chrono::milliseconds thermalWatcherCallbackFunc(
-        const std::set<std::string> &uevent_sensors);
+            const std::set<std::string> &uevent_sensors);
     // Return hot and cold severity status as std::pair
     std::pair<ThrottlingSeverity, ThrottlingSeverity> getSeverityFromThresholds(
-        const ThrottlingArray &hot_thresholds, const ThrottlingArray &cold_thresholds,
-        const ThrottlingArray &hot_hysteresis, const ThrottlingArray &cold_hysteresis,
-        ThrottlingSeverity prev_hot_severity, ThrottlingSeverity prev_cold_severity,
-        float value) const;
+            const ThrottlingArray &hot_thresholds, const ThrottlingArray &cold_thresholds,
+            const ThrottlingArray &hot_hysteresis, const ThrottlingArray &cold_hysteresis,
+            ThrottlingSeverity prev_hot_severity, ThrottlingSeverity prev_cold_severity,
+            float value) const;
     // Read temperature data according to thermal sensor's info
     bool readThermalSensor(std::string_view sensor_name, float *temp, const bool force_sysfs,
                            std::map<std::string, float> *sensor_log_map);
@@ -165,7 +165,7 @@ class ThermalHelper {
     std::unordered_map<std::string, CdevInfo> cooling_device_info_map_;
     std::unordered_map<std::string, SensorInfo> sensor_info_map_;
     std::unordered_map<std::string, std::map<ThrottlingSeverity, ThrottlingSeverity>>
-        supported_powerhint_map_;
+            supported_powerhint_map_;
     PowerHalService power_hal_service_;
 
     mutable std::shared_mutex sensor_status_map_mutex_;
