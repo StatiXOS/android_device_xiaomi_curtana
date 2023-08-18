@@ -422,8 +422,7 @@ PRODUCT_BOOT_JARS += \
 $(call soong_config_set,thermal_hal_feature,pid,apply_1_0)
 
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.curtana \
-    curtana_thermal_symlinks
+    android.hardware.thermal@2.0-service.pixel
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/thermal/,$(TARGET_COPY_OUT_VENDOR)/etc)
