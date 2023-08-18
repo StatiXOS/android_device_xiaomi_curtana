@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaGlobalTWOFrameworksOverlay",
-    vendor: true,
+    name: "CurtanaGlobalFrameworksOverlay",
+    product_specific: true,
 }

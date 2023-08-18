@@ -5,5 +5,5 @@
 
 runtime_resource_overlay {
     name: "CurtanaApertureOverlay",
-    vendor: true,
+    product_specific: true,
 }

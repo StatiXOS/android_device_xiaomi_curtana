@@ -1,4 +1,4 @@
 runtime_resource_overlay {
-    name: "CurtanaIndiaSettingsOverlay",
+    name: "CurtanaGlobalSettingsOverlay",
     vendor: true,
 }

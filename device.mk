@@ -237,22 +237,15 @@ PRODUCT_PACKAGES += \
     CurtanaApertureOverlay \
     CurtanaCarrierConfigOverlay \
     CurtanaFrameworksOverlay \
-    CurtanaGlobalPAFrameworksOverlay \
-    CurtanaGlobalPASettingsOverlay \
-    CurtanaGlobalPASettingsProviderOverlay \
-    CurtanaGlobalPAWifiOverlay \
-    CurtanaGlobalTWOFrameworksOverlay \
-    CurtanaGlobalTWOSettingsOverlay \
-    CurtanaGlobalTWOSettingsProviderOverlay \
-    CurtanaGlobalTWOWifiOverlay \
+    CurtanaGlobalFrameworksOverlay \
+    CurtanaGlobalSettingsOverlay \
+    CurtanaGlobalSettingsProviderOverlay \
+    CurtanaGlobalWifiOverlay \
     CurtanaIndiaFrameworksOverlay \
     CurtanaIndiaSettingsOverlay \
     CurtanaIndiaSettingsProviderOverlay \
     CurtanaIndiaWifiOverlay \
-    CurtanaJapanFrameworksOverlay \
     CurtanaJapanSettingsOverlay \
-    CurtanaJapanSettingsProviderOverlay \
-    CurtanaJapanWifiOverlay \
     CurtanaSettingsOverlay \
     CurtanaSystemUIOverlay \
     CurtanaTelephonyOverlay \
