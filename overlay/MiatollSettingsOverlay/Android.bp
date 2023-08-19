@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaWifiOverlay",
-    vendor: true
+    name: "MiatollSettingsOverlay",
+    vendor: true,
 }

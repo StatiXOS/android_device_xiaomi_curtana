@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaSettingsOverlay",
-    vendor: true,
+    name: "MiatollApertureOverlay",
+    product_specific: true,
 }

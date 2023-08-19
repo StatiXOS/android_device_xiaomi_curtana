@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/xiaomi/curtana
+DEVICE_PATH := device/xiaomi/miatoll
 
 # Architecture
 TARGET_ARCH := arm64
@@ -37,7 +37,7 @@ BOARD_SUPPORTS_SOUND_TRIGGER := true
 BOARD_USES_ALSA_AUDIO := true
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := curtana
+TARGET_BOOTLOADER_BOARD_NAME := miatoll
 TARGET_NO_BOOTLOADER := true
 
 # Camera
@@ -57,10 +57,10 @@ TARGET_SCREEN_DENSITY := 420
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_BOOT_HEADER_VERSION := 2
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/curtana-kernel
+BOARD_PREBUILT_DTBIMAGE_DIR := device/xiaomi/miatoll-kernel
 
 # DTBO
-BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/curtana-kernel/dtbo.img
+BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/miatoll-kernel/dtbo.img
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/configs/config.fs
@@ -138,9 +138,6 @@ TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/props/system_ext/system_ext.prop
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/props/system/system.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/props/vendor/vendor.prop
 
-# Proprietary blobs
-include vendor/xiaomi/curtana/BoardConfigVendor.mk
-
 # Recovery
 BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
@@ -190,3 +187,6 @@ WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+# Proprietary blobs
+include vendor/xiaomi/miatoll/BoardConfigVendor.mk

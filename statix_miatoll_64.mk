@@ -5,7 +5,7 @@
 #
 
 # Inherit base configuration
-$(call inherit-product, device/xiaomi/curtana/statix_curtana.mk)
+$(call inherit-product, device/xiaomi/miatoll/statix_miatoll.mk)
 
 # Device identifier
-PRODUCT_NAME := statix_curtana_64
+PRODUCT_NAME := statix_miatoll_64

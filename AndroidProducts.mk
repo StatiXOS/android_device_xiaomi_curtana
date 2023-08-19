@@ -6,14 +6,14 @@
 
 # Product Makefiles
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/statix_curtana.mk \
-    $(LOCAL_DIR)/statix_curtana_64.mk
+    $(LOCAL_DIR)/statix_miatoll.mk \
+    $(LOCAL_DIR)/statix_miatoll_64.mk
 
 # Lunch targets
 COMMON_LUNCH_CHOICES := \
-    statix_curtana-user \
-    statix_curtana-userdebug \
-    statix_curtana-eng \
-    statix_curtana_64-user \
-    statix_curtana_64-userdebug \
-    statix_curtana_64-eng
+    statix_miatoll-user \
+    statix_miatoll-userdebug \
+    statix_miatoll-eng \
+    statix_miatoll_64-user \
+    statix_miatoll_64-userdebug \
+    statix_miatoll_64-eng

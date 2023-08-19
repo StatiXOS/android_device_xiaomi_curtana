@@ -4,7 +4,7 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaCarrierConfigOverlay",
+    name: "MiatollCarrierConfigOverlay",
     aaptflags: ["--keep-raw-values"],
     vendor: true,
 }

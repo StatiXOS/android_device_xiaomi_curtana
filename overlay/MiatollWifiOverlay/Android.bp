@@ -4,6 +4,6 @@
 //
 
 runtime_resource_overlay {
-    name: "CurtanaApertureOverlay",
-    product_specific: true,
+    name: "MiatollWifiOverlay",
+    vendor: true
 }

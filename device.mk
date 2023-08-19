@@ -177,7 +177,7 @@ PRODUCT_PACKAGES += \
 
 # Kernel
 PRODUCT_COPY_FILES += \
-    device/xiaomi/curtana-kernel/Image:kernel
+    device/xiaomi/miatoll-kernel/Image:kernel
 
 # Keymaster
 PRODUCT_PACKAGES += \
@@ -322,7 +322,7 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Proprietary blobs
-$(call inherit-product, vendor/xiaomi/curtana/curtana-vendor.mk)
+$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
 
 # QMI
 PRODUCT_PACKAGES += \
@@ -362,9 +362,9 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 
 # Recovery
 PRODUCT_COPY_FILES += \
-    vendor/xiaomi/curtana/proprietary/vendor/firmware/focaltech_ts_fw_huaxing.bin:recovery/root/vendor/firmware/focaltech_ts_fw_huaxing.bin \
-    vendor/xiaomi/curtana/proprietary/vendor/firmware/novatek_ts_tianma_fw.bin:recovery/root/vendor/firmware/novatek_ts_tianma_fw.bin \
-    vendor/xiaomi/curtana/proprietary/vendor/firmware/novatek_ts_tianma_mp.bin:recovery/root/vendor/firmware/novatek_ts_tianma_mp.bin
+    vendor/xiaomi/miatoll/proprietary/vendor/firmware/focaltech_ts_fw_huaxing.bin:recovery/root/vendor/firmware/focaltech_ts_fw_huaxing.bin \
+    vendor/xiaomi/miatoll/proprietary/vendor/firmware/novatek_ts_tianma_fw.bin:recovery/root/vendor/firmware/novatek_ts_tianma_fw.bin \
+    vendor/xiaomi/miatoll/proprietary/vendor/firmware/novatek_ts_tianma_mp.bin:recovery/root/vendor/firmware/novatek_ts_tianma_mp.bin
 
 # Rootdir
 PRODUCT_PACKAGES += \
@@ -374,7 +374,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.curtana.perf.rc \
+    init.miatoll.perf.rc \
     init.qcom.power.rc \
     init.qcom.rc \
     init.recovery.qcom.rc \
