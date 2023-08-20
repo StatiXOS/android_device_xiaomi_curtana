@@ -799,7 +799,11 @@ vendor/lib64/unnhal-acc-hta.so
 vendor/lib64/unnhal-acc-hvx.so
 
 # NFC - from joyeuse - RKQ1.211019.001/V14.0.3.0.SJZMIXM
+vendor/etc/libnfc-nci.conf|b6834fe0b8b96ddd28f1918f2c440114c4656ae9
+vendor/etc/libnfc-nxp.conf|cff1a68e333bd6c740de1165248c3ec4a41d1bde
 vendor/lib/libpn553_fw.so|a8e29cc3ebb2e0df0fb505fc2da9c69a015680fb
+vendor/lib/libpn553_fw.so|a8e29cc3ebb2e0df0fb505fc2da9c69a015680fb
+vendor/libnfc-nxp_RF.conf|4c758c560873efa415f6e569132cdf6d5bfe60de
 
 # Permissions
 product/etc/permissions/telephony_product_privapp-permissions-qti.xml
