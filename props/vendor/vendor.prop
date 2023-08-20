@@ -105,12 +105,6 @@ camera.disable_zsl_mode=1
 ro.hardware.camera=xiaomi
 vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.aperture,org.lineageos.aperture.dev
 
-# Common device props
-ro.product.bootimage.brand=Redmi
-ro.product.bootimage.device=curtana
-ro.product.vendor.brand=Redmi
-ro.product.vendor.device=curtana
-
 # Dalvik
 dalvik.vm.dex2oat64.enabled=true
 
@@ -208,7 +202,7 @@ vendor.usb.use_ffs_mtp=0
 vendor.usb.use_gadget_hal=0
 
 # Variant specific props
-import /vendor/vendor.${ro.boot.hwc}.prop
+import /vendor/vendor.${ro.boot.hwname}.prop
 
 # Wi-Fi
 wifi.aware.interface=wifi-aware0

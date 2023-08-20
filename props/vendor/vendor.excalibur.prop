@@ -1,0 +1,13 @@
+# excalibur props
+ro.bootimage.build.fingerprint=Redmi/excalibur_in/excalibur:12/RKQ1.211019.001/V14.0.2.0.SJXINXM:user/release-keys
+ro.product.bootimage.brand=Redmi
+ro.product.bootimage.device=excalibur
+ro.product.bootimage.model=Redmi Note 9 Pro Max
+ro.product.bootimage.name=excalibur_in
+ro.product.model=Redmi Note 9 Pro Max
+ro.product.name=excalibur_in
+ro.product.vendor.brand=Redmi
+ro.product.vendor.device=excalibur
+ro.product.vendor.model=Redmi Note 9 Pro Max
+ro.product.vendor.name=excalibur_in
+ro.vendor.build.fingerprint=Redmi/excalibur_in/excalibur:12/RKQ1.211019.001/V14.0.2.0.SJXINXM:user/release-keys

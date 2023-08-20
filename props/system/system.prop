@@ -7,10 +7,6 @@ ro.charger.enable_suspend=true
 # CNE
 persist.vendor.cne.feature=1
 
-# Common device props
-ro.product.system.brand=Redmi
-ro.product.system.device=curtana
-
 # DPM
 persist.vendor.dpm.feature=11
 
@@ -35,7 +31,7 @@ persist.vendor.ims.disableIMSLogs=1
 persist.vendor.ims.disableQXDMLogs=1
 
 # Variant specific props
-import /system/system.${ro.boot.hwc}.prop
+import /system/system.${ro.boot.hwname}.prop
 
 # WFD
 debug.sf.enable_hwc_vds=1

@@ -1,0 +1,8 @@
+# curtana props
+ro.product.bootimage.brand=Redmi
+ro.product.bootimage.device=curtana
+ro.product.vendor.brand=Redmi
+ro.product.vendor.device=curtana
+
+# Variant specific props
+import /vendor/vendor.curtana_${ro.boot.hwc}.prop

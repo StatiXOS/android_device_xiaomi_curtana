@@ -1,0 +1,13 @@
+# gram props
+ro.bootimage.build.fingerprint=POCO/gram_in/gram:12/RKQ1.211019.001/V14.0.5.0.SJPINXM:user/release-keys
+ro.product.bootimage.brand=POCO
+ro.product.bootimage.device=gram
+ro.product.bootimage.model=POCO M2 Pro
+ro.product.bootimage.name=gram_in
+ro.product.model=POCO M2 Pro
+ro.product.name=gram_in
+ro.product.vendor.brand=POCO
+ro.product.vendor.device=gram
+ro.product.vendor.model=POCO M2 Pro
+ro.product.vendor.name=gram_in
+ro.vendor.build.fingerprint=POCO/gram_in/gram:12/RKQ1.211019.001/V14.0.5.0.SJPINXM:user/release-keys

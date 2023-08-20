@@ -1,0 +1,8 @@
+# excalibur props
+bluetooth.device.default_name=Redmi Note 9 Pro Max
+ro.odm.build.fingerprint=Redmi/excalibur_in/excalibur:12/RKQ1.211019.001/V14.0.2.0.SJXINXM:user/release-keys
+ro.product.odm.brand=Redmi
+ro.product.odm.device=excalibur
+ro.product.odm.model=Redmi Note 9 Pro Max
+ro.product.odm.name=excalibur_in
+vendor.usb.product_string=Redmi Note 9 Pro Max

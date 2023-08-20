@@ -1,0 +1,13 @@
+# joyeuse props
+ro.bootimage.build.fingerprint=Redmi/joyeuse_global/joyeuse:12/RKQ1.211019.001/V14.0.3.0.SJZMIXM:user/release-keys
+ro.product.bootimage.brand=Redmi
+ro.product.bootimage.device=joyeuse
+ro.product.bootimage.model=Redmi Note 9 Pro
+ro.product.bootimage.name=joyeuse_global
+ro.product.model=Redmi Note 9 Pro
+ro.product.name=joyeuse_global
+ro.product.vendor.brand=Redmi
+ro.product.vendor.device=joyeuse
+ro.product.vendor.model=Redmi Note 9 Pro
+ro.product.vendor.name=joyeuse_global
+ro.vendor.build.fingerprint=Redmi/joyeuse_global/joyeuse:12/RKQ1.211019.001/V14.0.3.0.SJZMIXM:user/release-keys

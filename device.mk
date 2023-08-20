@@ -321,9 +321,6 @@ PRODUCT_COPY_FILES += \
 # Project ID Quota
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Proprietary blobs
-$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)
-
 # QMI
 PRODUCT_PACKAGES += \
     libjson \
@@ -470,3 +467,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
+
+# Proprietary blobs
+$(call inherit-product, vendor/xiaomi/miatoll/miatoll-vendor.mk)

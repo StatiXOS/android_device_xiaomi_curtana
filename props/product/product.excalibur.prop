@@ -1,0 +1,6 @@
+# excalibur props
+ro.product.build.fingerprint=Redmi/excalibur_in/excalibur:12/RKQ1.211019.001/V14.0.2.0.SJXINXM:user/release-keys
+ro.product.product.brand=Redmi
+ro.product.product.device=excalibur
+ro.product.product.model=Redmi Note 9 Pro Max
+ro.product.product.name=excalibur_in

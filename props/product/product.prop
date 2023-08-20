@@ -1,6 +1,2 @@
-# Common device props
-ro.product.product.brand=Redmi
-ro.product.product.device=curtana
-
 # Variant specific props
-import /product/etc/product.${ro.boot.hwc}.prop
+import /product/etc/product.${ro.boot.hwname}.prop

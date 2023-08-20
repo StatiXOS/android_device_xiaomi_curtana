@@ -1,0 +1,6 @@
+# gram props
+ro.product.system_ext.brand=POCO
+ro.product.system_ext.device=gram
+ro.product.system_ext.model=POCO M2 Pro
+ro.product.system_ext.name=gram_in
+ro.system_ext.build.fingerprint=POCO/gram_in/gram:12/RKQ1.211019.001/V14.0.5.0.SJPINXM:user/release-keys

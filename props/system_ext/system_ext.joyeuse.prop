@@ -1,0 +1,6 @@
+# joyeuse props
+ro.product.system_ext.brand=Redmi
+ro.product.system_ext.device=joyeuse
+ro.product.system_ext.model=Redmi Note 9 Pro
+ro.product.system_ext.name=joyeuse_global
+ro.system_ext.build.fingerprint=Redmi/joyeuse_global/joyeuse:12/RKQ1.211019.001/V14.0.3.0.SJZMIXM:user/release-keys
