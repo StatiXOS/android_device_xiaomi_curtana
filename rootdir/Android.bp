@@ -32,8 +32,8 @@ prebuilt_etc {
 
 // Init configuration files
 prebuilt_etc {
-    name: "init.curtana.perf.rc",
-    src: "etc/init.curtana.perf.rc",
+    name: "init.miatoll.perf.rc",
+    src: "etc/init.miatoll.perf.rc",
     sub_dir: "init",
     vendor: true,
 }
