@@ -4,12 +4,12 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.providers.settings.curtana_india">
+    package="com.android.providers.settings.joyeuse">
 
     <overlay
         android:isStatic="true"
-        android:priority="851"
-        android:requiredSystemPropertyName="ro.boot.hwc"
-        android:requiredSystemPropertyValue="India"
+        android:priority="852"
+        android:requiredSystemPropertyName="ro.boot.hwname"
+        android:requiredSystemPropertyValue="joyeuse"
         android:targetPackage="com.android.providers.settings" />
 </manifest>

@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.settings.curtana_japan">
 
-    <overlay android:targetPackage="com.android.settings"
-             android:requiredSystemPropertyName="ro.boot.hwc"
-             android:requiredSystemPropertyValue="Japan"
-             android:isStatic="true" />
+    <overlay
+        android:isStatic="true"
+        android:priority="101"
+        android:requiredSystemPropertyName="ro.boot.hwc"
+        android:requiredSystemPropertyValue="Japan"
+        android:targetPackage="com.android.settings" />
 </manifest>
