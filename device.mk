@@ -385,7 +385,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     init.qcom.early_boot.sh \
     init.qcom.sh \
-    init.qti.chg_policy.sh
+    init.qti.chg_policy.sh \
+    init.sensors_fixup.sh
 
 PRODUCT_PACKAGES += \
     fstab.qcom \
