@@ -23,7 +23,10 @@ persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
 
 # Media
-media.settings.xml=/vendor/etc/media_profiles_vendor.xml
+media.stagefright.thumbnail.prefer_hw_codecs=true
+ro.media.recorder-max-base-layer-fps=60
+persist.mm.enable.prefetch=true
+vendor.mm.enable.qcom_parser=16777199
 
 # Pre-Rendering
 ro.vendor.perf.scroll_opt=true
