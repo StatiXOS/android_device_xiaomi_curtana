@@ -65,6 +65,7 @@ function blob_fixup() {
             "${PATCHELF_0_8}" --remove-needed "libhidlbase.so" "${2}"
             sed -i "s/libhidltransport.so/libhidlbase-v32.so\x00/" "${2}"
             ;;
+        # Load keymaster 4.1
         vendor/etc/init/android.hardware.keymaster@4.0-service-qti.rc)
             sed -i "s/4\.0/4\.1/g" "${2}"
             ;;
@@ -72,8 +73,8 @@ function blob_fixup() {
         vendor/lib64/camera/components/com.qti.node.watermark.so)
             grep -q "libpiex_shim.so" "$2" || "${PATCHELF}" --add-needed "libpiex_shim.so" "${2}"
             ;;
+        # NOP out report_input_event()
         vendor/lib64/hw/fingerprint.fpc.default.so)
-            # NOP out report_input_event()
             "${SIGSCAN}" -p "30 00 00 90 11 3a 42 f9" -P "30 00 00 90 1f 20 03 d5" -f "${2}"
             ;;
     esac
