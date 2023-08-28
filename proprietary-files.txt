@@ -278,7 +278,7 @@ vendor/etc/camera/watermark_font_2300_3199.dat
 vendor/firmware/CAMERA_ICP.elf
 vendor/firmware/osc_rtp_24K_5s.bin
 
-# Camera sensors
+# Camera sensors (curtana & gram)
 vendor/lib64/camera/com.qti.eeprom.sunny_gc8034.so
 vendor/lib64/camera/com.qti.sensor.curtana_gc02m1.so
 vendor/lib64/camera/com.qti.sensor.curtana_gc8034.so
@@ -289,6 +289,14 @@ vendor/lib64/camera/com.qti.sensor.curtana_ov2180.so
 vendor/lib64/camera/com.qti.sensor.curtana_ov8856.so
 vendor/lib64/camera/com.qti.sensor.curtana_s5k5e9.so
 vendor/lib64/camera/com.qti.sensor.curtana_s5kgm2.so
+vendor/lib64/camera/com.qti.sensor.excalibur_gc02m1.so
+vendor/lib64/camera/com.qti.sensor.excalibur_gc8034.so
+vendor/lib64/camera/com.qti.sensor.excalibur_hi556.so
+vendor/lib64/camera/com.qti.sensor.excalibur_ov2180.so
+vendor/lib64/camera/com.qti.sensor.excalibur_ov32a1q.so
+vendor/lib64/camera/com.qti.sensor.excalibur_ov8856.so
+vendor/lib64/camera/com.qti.sensor.excalibur_s5k5e9.so
+vendor/lib64/camera/com.qti.sensor.excalibur_s5kgw1.so
 vendor/lib64/camera/com.qti.sensormodule.ofilm_gc02m1.bin
 vendor/lib64/camera/com.qti.sensormodule.ofilm_gc02m1_filter.bin
 vendor/lib64/camera/com.qti.sensormodule.ofilm_ov16a1q.bin
@@ -298,7 +306,6 @@ vendor/lib64/camera/com.qti.sensormodule.ofilm_s5k5e9.bin
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgm2.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_gc02m1.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_gc8034.bin
-vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_imx582.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_ov16a1q.bin
 vendor/lib64/camera/com.qti.sensormodule.sunny_ov2180.bin
@@ -314,15 +321,30 @@ vendor/lib64/camera/com.qti.tuned.ofilm_ov8856.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_s5k5e9.bin
 vendor/lib64/camera/com.qti.tuned.ofilm_s5kgm2.bin
 vendor/lib64/camera/com.qti.tuned.sunny_gc8034.bin
-vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin
 vendor/lib64/camera/com.qti.tuned.sunny_imx582.bin
 vendor/lib64/camera/com.qti.tuned.sunny_ov16a1q.bin
 vendor/lib64/camera/com.qti.tuned.sunny_ov2180.bin
 vendor/lib64/camera/com.qti.tuned.sunny_s5k5e9.bin
+vendor/lib64/camera/com.qti.tuned.sunny_s5kgm2.bin
 vendor/lib64/camera/fdconfigpreview.bin
 vendor/lib64/camera/fdconfigpreviewlite.bin
 vendor/lib64/camera/fdconfigvideo.bin
 vendor/lib64/camera/fdconfigvideolite.bin
+
+# Camera sensors - from joyeuse - RKQ1.211019.001/V14.0.3.0.SJZMIXM
+vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgw1.bin|d7d7d51d436d46da23bb985982151cc3595e0634
+vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgw1_mirrorflip.bin|5f980c2f9520998ac0b53c938d4ce2c952c4c80b
+vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin|699854c027d805565ca93fc5f0f9161e83bd7c63
+vendor/lib64/camera/com.qti.sensormodule.sunny_s5kgw1.bin|98a20d97d7babb7aab1406d5a6b0a3d7cfeeae41
+vendor/lib64/camera/com.qti.sensormodule.sunny_s5kgw1_mirrorflip.bin|8e170a3952e7032f8354e9f148893b2a24fc2e7d
+vendor/lib64/camera/com.qti.tuned.ofilm_s5kgw1.bin|4994082692a72eb45a5ea47026ad1a7e6abbc954
+vendor/lib64/camera/com.qti.tuned.sunny_gc02m1.bin|6da95663bb077bde61ff4f6d714590f952ee6267
+vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin|afb36797ed415f294adf859332a5f1c600df86fb
+vendor/lib64/camera/com.qti.tuned.sunny_s5kgw1.bin|bf89cf6c63d33370f1762bd3a55365a3750055ac
+
+# Camera sensors - from excalibur - RKQ1.211019.001/V14.0.2.0.SJXINXM
+vendor/lib64/camera/com.qti.sensormodule.sunny_ov32a1q.bin|a6f8e2da547f15d315412f81c58d4ba6888641d5
+vendor/lib64/camera/com.qti.tuned.sunny_ov32a1q.bin|832fb5849953dd173de82589fbadddeb0eae6e7a
 
 # Camera provider
 vendor/lib64/android.hardware.camera.provider@2.4-legacy.so
@@ -775,6 +797,9 @@ vendor/lib64/unnhal-acc-adreno.so
 vendor/lib64/unnhal-acc-common.so
 vendor/lib64/unnhal-acc-hta.so
 vendor/lib64/unnhal-acc-hvx.so
+
+# NFC - from joyeuse - RKQ1.211019.001/V14.0.3.0.SJZMIXM
+vendor/lib/libpn553_fw.so|a8e29cc3ebb2e0df0fb505fc2da9c69a015680fb
 
 # Permissions
 product/etc/permissions/telephony_product_privapp-permissions-qti.xml
