@@ -252,30 +252,25 @@ PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-im
 
 # Overlays
 PRODUCT_PACKAGES += \
-    CurtanaGlobalFrameworksOverlay \
     CurtanaGlobalSettingsOverlay \
     CurtanaGlobalSettingsProviderOverlay \
     CurtanaGlobalWifiOverlay \
-    CurtanaIndiaFrameworksOverlay \
     CurtanaIndiaSettingsOverlay \
     CurtanaIndiaSettingsProviderOverlay \
     CurtanaIndiaWifiOverlay \
     CurtanaJapanSettingsOverlay
 
 PRODUCT_PACKAGES += \
-    ExcaliburFrameworksOverlay \
     ExcaliburSettingsOverlay \
     ExcaliburSettingsProviderOverlay \
     ExcaliburWifiOverlay
 
 PRODUCT_PACKAGES += \
-    GramFrameworksOverlay \
     GramSettingsOverlay \
     GramSettingsProviderOverlay \
     GramWifiOverlay
 
 PRODUCT_PACKAGES += \
-    JoyeuseFrameworksOverlay \
     JoyeuseSettingsOverlay \
     JoyeuseSettingsProviderOverlay \
     JoyeuseWifiOverlay
