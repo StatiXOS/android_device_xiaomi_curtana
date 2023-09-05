@@ -7,8 +7,12 @@
 # Inherit framework first
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from curtana device
+# Inherit from miatoll device
 $(call inherit-product, device/xiaomi/miatoll/device.mk)
+
+# Inherit AOSP common configuration
+$(call inherit-product, vendor/aosp/config/common.mk)
+$(call inherit-product, vendor/aosp/config/gsm.mk)
 
 # Device identifier
 PRODUCT_NAME := aosp_miatoll
