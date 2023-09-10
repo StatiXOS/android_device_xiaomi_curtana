@@ -1,0 +1,2 @@
+# Let system server toggle xtra-daemon
+set_prop(system_server, xtra_control_prop)
