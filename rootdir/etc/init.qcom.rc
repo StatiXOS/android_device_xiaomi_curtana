@@ -259,11 +259,14 @@ on boot
     # Create hvdcp_opti directory
     mkdir /mnt/vendor/persist/hvdcp_opti 0770 root system
 
-    #Create camera directory
+    # Create camera directory
     mkdir /mnt/vendor/persist/camera 0755 system cameraserver
 
     # Create pa-cal driver directory lct-20181009
     mkdir /mnt/vendor/persist/audio 0770 audio audio
+
+    # Start Pixel Thermal HAL
+    start vendor.thermal-hal-2-0
 
 # msm specific files that need to be created on /data
 on post-fs-data
