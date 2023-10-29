@@ -62,7 +62,7 @@ function blob_fixup() {
             ;;
         # Use VNDK 32 libhidlbase
         vendor/lib64/libvendor.goodix.hardware.biometrics.fingerprint@2.1.so)
-            grep -q "libhidlbase-v32.so" "${2}" || "${PATCHELF}" --replace-needed "libhidlbase.so" "libhidlbase-v32.so" "${2}"
+            sed -i "s|libhidlbase.so|v32hidlbase.so|g" "${2}"
             ;;
         # Load keymaster 4.1
         vendor/etc/init/android.hardware.keymaster@4.0-service-qti.rc)
