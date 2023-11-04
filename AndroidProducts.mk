@@ -6,14 +6,14 @@
 
 # Product Makefiles
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/aosp_miatoll.mk \
-    $(LOCAL_DIR)/aosp_miatoll_64.mk
+    $(LOCAL_DIR)/statix_miatoll.mk \
+    $(LOCAL_DIR)/statix_miatoll_64.mk
 
 # Lunch targets
 COMMON_LUNCH_CHOICES := \
-    aosp_miatoll-user \
-    aosp_miatoll-userdebug \
-    aosp_miatoll-eng \
-    aosp_miatoll_64-user \
-    aosp_miatoll_64-userdebug \
-    aosp_miatoll_64-eng
+    statix_miatoll-user \
+    statix_miatoll-userdebug \
+    statix_miatoll-eng \
+    statix_miatoll_64-user \
+    statix_miatoll_64-userdebug \
+    statix_miatoll_64-eng
