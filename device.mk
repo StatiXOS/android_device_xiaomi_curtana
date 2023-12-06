@@ -133,6 +133,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.xiaomi
 
+PRODUCT_PACKAGES += \
+    libvendor.goodix.hardware.biometrics.fingerprint@2.1.vendor
+
 # GNSS
 PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1-impl-qti \
