@@ -108,7 +108,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.atoll \
     libdisplayconfig.system.qti \
     libqdMetaData.system \
-    libtinyxml \
     memtrack.atoll
 
 # DRM
