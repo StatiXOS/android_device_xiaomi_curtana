@@ -310,7 +310,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     MiatollApertureOverlay \
-    MiatollCarrierConfigOverlay \
     MiatollFrameworksOverlay \
     MiatollSettingsOverlay \
     MiatollSystemUIOverlay \
