@@ -202,6 +202,9 @@ vendor.usb.use_gadget_hal=0
 # Variant specific props
 import /vendor/vendor.${ro.boot.hwname}.prop
 
+# Volume steps
+ro.config.media_vol_steps=25
+
 # Wi-Fi
 wifi.aware.interface=wifi-aware0
 
