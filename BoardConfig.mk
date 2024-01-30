@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 The LineageOS Project
+# Copyright (C) 2021-2024 The LineageOS Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -140,9 +140,6 @@ BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 8589934588 # (BOARD_SUPER_PARTITION_SIZE - 
 # Platform
 BOARD_VENDOR := xiaomi
 TARGET_BOARD_PLATFORM := atoll
-
-# Power
-TARGET_TAP_TO_WAKE_NODE := "/sys/touchpanel/double_tap"
 
 # Properties
 TARGET_ODM_PROP += $(DEVICE_PATH)/props/odm/odm.prop
