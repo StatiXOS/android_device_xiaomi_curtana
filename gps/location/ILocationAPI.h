@@ -31,15 +31,14 @@
 
 #include "LocationDataTypes.h"
 
-class ILocationAPI
-{
-public:
+class ILocationAPI {
+  public:
     virtual ~ILocationAPI(){};
 
     /** @brief Updates/changes the callbacks that will be called.
         mandatory callbacks must be present for callbacks to be successfully updated
         no return value */
-    virtual void updateCallbacks(LocationCallbacks&) = 0;
+    virtual void updateCallbacks(LocationCallbacks &) = 0;
 
     /* ================================== TRACKING ================================== */
 
@@ -53,7 +52,7 @@ public:
                 LOCATION_ERROR_ALREADY_STARTED if a startTracking session is already in progress
                 LOCATION_ERROR_CALLBACK_MISSING if no trackingCallback was passed
                 LOCATION_ERROR_INVALID_PARAMETER if LocationOptions parameter is invalid */
-    virtual uint32_t startTracking(TrackingOptions&) = 0;
+    virtual uint32_t startTracking(TrackingOptions &) = 0;
 
     /** @brief Stops a tracking session associated with id parameter.
         responseCallback returns:
@@ -66,7 +65,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if LocationOptions parameters are invalid
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a tracking session */
-    virtual void updateTrackingOptions(uint32_t id, TrackingOptions&) = 0;
+    virtual void updateTrackingOptions(uint32_t id, TrackingOptions &) = 0;
 
     /* ================================== BATCHING ================================== */
 
@@ -86,7 +85,7 @@ public:
                 LOCATION_ERROR_CALLBACK_MISSING if no batchingCallback
                 LOCATION_ERROR_INVALID_PARAMETER if a parameter is invalid
                 LOCATION_ERROR_NOT_SUPPORTED if batching is not supported */
-    virtual uint32_t startBatching(BatchingOptions&) = 0;
+    virtual uint32_t startBatching(BatchingOptions &) = 0;
 
     /** @brief Stops a batching session associated with id parameter.
         responseCallback returns:
@@ -99,7 +98,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if LocationOptions parameters are invalid
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a batching session */
-    virtual void updateBatchingOptions(uint32_t id, BatchingOptions&) = 0;
+    virtual void updateBatchingOptions(uint32_t id, BatchingOptions &) = 0;
 
     /** @brief Gets a number of locations that are currently stored/batched
        on the low power processor, delivered by the batchingCallback passed in createInstance.
@@ -123,14 +122,14 @@ public:
                 LOCATION_ERROR_CALLBACK_MISSING if no geofenceBreachCallback
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
                 LOCATION_ERROR_NOT_SUPPORTED if geofence is not supported */
-    virtual uint32_t* addGeofences(size_t count, GeofenceOption*, GeofenceInfo*) = 0;
+    virtual uint32_t *addGeofences(size_t count, GeofenceOption *, GeofenceInfo *) = 0;
 
     /** @brief Removes any number of geofences. Caller should delete ids array after
        removeGeofences returneds.
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void removeGeofences(size_t count, uint32_t* ids) = 0;
+    virtual void removeGeofences(size_t count, uint32_t *ids) = 0;
 
     /** @brief Modifies any number of geofences. Caller should delete ids array after
        modifyGeofences returns.
@@ -138,7 +137,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid */
-    virtual void modifyGeofences(size_t count, uint32_t* ids, GeofenceOption* options) = 0;
+    virtual void modifyGeofences(size_t count, uint32_t *ids, GeofenceOption *options) = 0;
 
     /** @brief Pauses any number of geofences, which is similar to removeGeofences,
        only that they can be resumed at any time. Caller should delete ids array after
@@ -146,28 +145,27 @@ public:
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void pauseGeofences(size_t count, uint32_t* ids) = 0;
+    virtual void pauseGeofences(size_t count, uint32_t *ids) = 0;
 
     /** @brief Resumes any number of geofences that are currently paused. Caller should
        delete ids array after resumeGeofences returns.
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void resumeGeofences(size_t count, uint32_t* ids) = 0;
+    virtual void resumeGeofences(size_t count, uint32_t *ids) = 0;
 
     /* ================================== GNSS ====================================== */
 
-     /** @brief gnssNiResponse is called in response to a gnssNiCallback.
-        responseCallback returns:
-                LOCATION_ERROR_SUCCESS if session was successful
-                LOCATION_ERROR_INVALID_PARAMETER if any parameters in GnssNiResponse are invalid
-                LOCATION_ERROR_ID_UNKNOWN if id does not match a gnssNiCallback */
+    /** @brief gnssNiResponse is called in response to a gnssNiCallback.
+       responseCallback returns:
+               LOCATION_ERROR_SUCCESS if session was successful
+               LOCATION_ERROR_INVALID_PARAMETER if any parameters in GnssNiResponse are invalid
+               LOCATION_ERROR_ID_UNKNOWN if id does not match a gnssNiCallback */
     virtual void gnssNiResponse(uint32_t id, GnssNiResponse response) = 0;
 };
 
-class ILocationControlAPI
-{
-public:
+class ILocationControlAPI {
+  public:
     virtual ~ILocationControlAPI(){};
 
     /** @brief Updates the gnss specific configuration, which returns a session id array
@@ -179,7 +177,7 @@ public:
                 LOCATION_ERROR_SUCCESS if session was successful
                 LOCATION_ERROR_INVALID_PARAMETER if any other parameters are invalid
                 LOCATION_ERROR_GENERAL_FAILURE if failure for any other reason */
-    virtual uint32_t* gnssUpdateConfig(const GnssConfig& config) = 0;
+    virtual uint32_t *gnssUpdateConfig(const GnssConfig &config) = 0;
 
     /** @brief Delete specific gnss aiding data for testing, which returns a session id
        that will be returned in responseCallback to match command with response.
@@ -188,7 +186,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
                 LOCATION_ERROR_NOT_SUPPORTED if build is not userdebug */
-    virtual uint32_t gnssDeleteAidingData(GnssAidingData& data) = 0;
+    virtual uint32_t gnssDeleteAidingData(GnssAidingData &data) = 0;
 
     /** @brief
         Configure the constellation and SVs to be used by the GNSS engine on
@@ -210,9 +208,8 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
-    virtual uint32_t configConstellations(
-            const GnssSvTypeConfig& constellationEnablementConfig,
-            const GnssSvIdConfig&   blacklistSvConfig) = 0;
+    virtual uint32_t configConstellations(const GnssSvTypeConfig &constellationEnablementConfig,
+                                          const GnssSvIdConfig &blacklistSvConfig) = 0;
 
     /** @brief
         Configure the secondary band of constellations to be used by
@@ -230,7 +227,7 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
     virtual uint32_t configConstellationSecondaryBand(
-            const GnssSvTypeConfig& secondaryBandConfig) = 0;
+            const GnssSvTypeConfig &secondaryBandConfig) = 0;
 
     /** @brief
         Enable or disable the constrained time uncertainty feature.
@@ -264,9 +261,8 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters
                 are invalid
     */
-    virtual uint32_t configConstrainedTimeUncertainty(
-            bool enable, float tuncThreshold = 0.0,
-            uint32_t energyBudget = 0) = 0;
+    virtual uint32_t configConstrainedTimeUncertainty(bool enable, float tuncThreshold = 0.0,
+                                                      uint32_t energyBudget = 0) = 0;
 
     /** @brief
         Enable or disable position assisted clock estimator feature.
@@ -309,7 +305,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
-    virtual uint32_t configLeverArm(const LeverArmConfigInfo& configInfo) = 0;
+    virtual uint32_t configLeverArm(const LeverArmConfigInfo &configInfo) = 0;
 
     /** @brief
         Configure the robust location setting.
@@ -362,7 +358,8 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
-    virtual uint32_t configDeadReckoningEngineParams(const DeadReckoningEngineConfig& dreConfig)=0;
+    virtual uint32_t configDeadReckoningEngineParams(
+            const DeadReckoningEngineConfig &dreConfig) = 0;
 
     /** @brief
         This API is used to instruct the specified engine to be in

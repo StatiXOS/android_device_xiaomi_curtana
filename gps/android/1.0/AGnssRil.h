@@ -31,13 +31,13 @@ namespace gnss {
 namespace V1_0 {
 namespace implementation {
 
-using ::android::hardware::gnss::V1_0::IAGnssRil;
-using ::android::hardware::gnss::V1_0::IAGnssRilCallback;
+using ::android::sp;
+using ::android::hardware::hidl_string;
+using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::hidl_string;
-using ::android::sp;
+using ::android::hardware::gnss::V1_0::IAGnssRil;
+using ::android::hardware::gnss::V1_0::IAGnssRilCallback;
 
 struct Gnss;
 /*
@@ -48,30 +48,28 @@ struct Gnss;
  * IAGnssiRilCallback interface to be passed into the conventional implementation of the GNSS HAL.
  */
 struct AGnssRil : public IAGnssRil {
-    AGnssRil(Gnss* gnss);
+    AGnssRil(Gnss *gnss);
     ~AGnssRil();
 
     /*
      * Methods from ::android::hardware::gnss::V1_0::IAGnssRil follow.
      * These declarations were generated from IAGnssRil.hal.
      */
-    Return<void> setCallback(const sp<IAGnssRilCallback>& /*callback*/) override {
+    Return<void> setCallback(const sp<IAGnssRilCallback> & /*callback*/) override { return Void(); }
+    Return<void> setRefLocation(const IAGnssRil::AGnssRefLocation & /*agnssReflocation*/) override {
         return Void();
     }
-    Return<void> setRefLocation(const IAGnssRil::AGnssRefLocation& /*agnssReflocation*/) override {
-        return Void();
-    }
-    Return<bool> setSetId(IAGnssRil::SetIDType /*type*/, const hidl_string& /*setid*/) override {
+    Return<bool> setSetId(IAGnssRil::SetIDType /*type*/, const hidl_string & /*setid*/) override {
         return false;
     }
     Return<bool> updateNetworkAvailability(bool /*available*/,
-                                    const hidl_string& /*apn*/) override {
+                                           const hidl_string & /*apn*/) override {
         return false;
     }
     Return<bool> updateNetworkState(bool connected, NetworkType type, bool roaming) override;
 
- private:
-    Gnss* mGnss = nullptr;
+  private:
+    Gnss *mGnss = nullptr;
 };
 
 }  // namespace implementation

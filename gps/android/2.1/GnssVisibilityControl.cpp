@@ -27,10 +27,11 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "GnssVisibilityControl.h"
+
 #include <android/hardware/gnss/visibility_control/1.0/IGnssVisibilityControl.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
-#include "GnssVisibilityControl.h"
 #include <location_interface.h>
 
 namespace android {
@@ -40,20 +41,20 @@ namespace visibility_control {
 namespace V1_0 {
 namespace implementation {
 
+using ::android::sp;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
 
-static GnssVisibilityControl* spGnssVisibilityControl = nullptr;
+static GnssVisibilityControl *spGnssVisibilityControl = nullptr;
 
-static void convertGnssNfwNotification(GnssNfwNotification& in,
-    IGnssVisibilityControlCallback::NfwNotification& out);
+static void convertGnssNfwNotification(GnssNfwNotification &in,
+                                       IGnssVisibilityControlCallback::NfwNotification &out);
 
-GnssVisibilityControl::GnssVisibilityControl(Gnss* gnss) : mGnss(gnss) {
+GnssVisibilityControl::GnssVisibilityControl(Gnss *gnss) : mGnss(gnss) {
     spGnssVisibilityControl = this;
 }
 GnssVisibilityControl::~GnssVisibilityControl() {
@@ -73,9 +74,8 @@ bool GnssVisibilityControl::isInEmergencySession() {
     return false;
 }
 
-static void convertGnssNfwNotification(GnssNfwNotification& in,
-    IGnssVisibilityControlCallback::NfwNotification& out)
-{
+static void convertGnssNfwNotification(GnssNfwNotification &in,
+                                       IGnssVisibilityControlCallback::NfwNotification &out) {
     memset(&out, 0, sizeof(IGnssVisibilityControlCallback::NfwNotification));
     out.proxyAppPackageName = in.proxyAppPackageName;
     out.protocolStack = (IGnssVisibilityControlCallback::NfwProtocolStack)in.protocolStack;
@@ -88,7 +88,6 @@ static void convertGnssNfwNotification(GnssNfwNotification& in,
 }
 
 void GnssVisibilityControl::statusCb(GnssNfwNotification notification) {
-
     if (mGnssVisibilityControlCbIface != nullptr) {
         IGnssVisibilityControlCallback::NfwNotification nfwNotification;
 
@@ -105,7 +104,6 @@ void GnssVisibilityControl::statusCb(GnssNfwNotification notification) {
 }
 
 bool GnssVisibilityControl::isE911Session() {
-
     if (mGnssVisibilityControlCbIface != nullptr) {
         auto r = mGnssVisibilityControlCbIface->isInEmergencySession();
         if (!r.isOk()) {
@@ -121,8 +119,8 @@ bool GnssVisibilityControl::isE911Session() {
 }
 
 // Methods from ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControl follow.
-Return<bool> GnssVisibilityControl::enableNfwLocationAccess(const hidl_vec<::android::hardware::hidl_string>& proxyApps) {
-
+Return<bool> GnssVisibilityControl::enableNfwLocationAccess(
+        const hidl_vec<::android::hardware::hidl_string> &proxyApps) {
     if (nullptr == mGnss || nullptr == mGnss->getGnssInterface()) {
         LOC_LOGe("Null GNSS interface");
         return false;
@@ -144,8 +142,10 @@ Return<bool> GnssVisibilityControl::enableNfwLocationAccess(const hidl_vec<::and
  *
  * @param callback Handle to IGnssVisibilityControlCallback interface.
  */
-Return<bool> GnssVisibilityControl::setCallback(const ::android::sp<::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>& callback) {
-
+Return<bool> GnssVisibilityControl::setCallback(
+        const ::android::sp<
+                ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>
+                &callback) {
     if (nullptr == mGnss || nullptr == mGnss->getGnssInterface()) {
         LOC_LOGe("Null GNSS interface");
         return false;
@@ -153,8 +153,8 @@ Return<bool> GnssVisibilityControl::setCallback(const ::android::sp<::android::h
     mGnssVisibilityControlCbIface = callback;
 
     NfwCbInfo cbInfo = {};
-    cbInfo.visibilityControlCb = (void*)nfwStatusCb;
-    cbInfo.isInEmergencySession = (void*)isInEmergencySession;
+    cbInfo.visibilityControlCb = (void *)nfwStatusCb;
+    cbInfo.isInEmergencySession = (void *)isInEmergencySession;
 
     mGnss->getGnssInterface()->nfwInit(cbInfo);
 

@@ -30,15 +30,14 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_BatchingAPIClient"
 
-#include <inttypes.h>
-#include <log_util.h>
-#include <loc_cfg.h>
-
-#include "LocationUtil.h"
 #include "BatchingAPIClient.h"
 
-#include "limits.h"
+#include <inttypes.h>
+#include <loc_cfg.h>
+#include <log_util.h>
 
+#include "LocationUtil.h"
+#include "limits.h"
 
 namespace android {
 namespace hardware {
@@ -46,19 +45,18 @@ namespace gnss {
 namespace V1_0 {
 namespace implementation {
 
+using ::android::hardware::gnss::V1_0::GnssLocation;
 using ::android::hardware::gnss::V1_0::IGnssBatching;
 using ::android::hardware::gnss::V1_0::IGnssBatchingCallback;
-using ::android::hardware::gnss::V1_0::GnssLocation;
 
-static void convertBatchOption(const IGnssBatching::Options& in, LocationOptions& out,
-        LocationCapabilitiesMask mask);
+static void convertBatchOption(const IGnssBatching::Options &in, LocationOptions &out,
+                               LocationCapabilitiesMask mask);
 
-BatchingAPIClient::BatchingAPIClient(const sp<IGnssBatchingCallback>& callback) :
-    LocationAPIClientBase(),
-    mGnssBatchingCbIface(callback),
-    mDefaultId(UINT_MAX),
-    mLocationCapabilitiesMask(0)
-{
+BatchingAPIClient::BatchingAPIClient(const sp<IGnssBatchingCallback> &callback)
+    : LocationAPIClientBase(),
+      mGnssBatchingCbIface(callback),
+      mDefaultId(UINT_MAX),
+      mLocationCapabilitiesMask(0) {
     LOC_LOGD("%s]: (%p)", __FUNCTION__, &callback);
 
     LocationCallbacks locationCallbacks;
@@ -68,8 +66,8 @@ BatchingAPIClient::BatchingAPIClient(const sp<IGnssBatchingCallback>& callback) 
     locationCallbacks.trackingCb = nullptr;
     locationCallbacks.batchingCb = nullptr;
     if (mGnssBatchingCbIface != nullptr) {
-        locationCallbacks.batchingCb = [this](size_t count, Location* location,
-            BatchingOptions batchOptions) {
+        locationCallbacks.batchingCb = [this](size_t count, Location *location,
+                                              BatchingOptions batchOptions) {
             onBatchingCb(count, location, batchOptions);
         };
     }
@@ -84,21 +82,18 @@ BatchingAPIClient::BatchingAPIClient(const sp<IGnssBatchingCallback>& callback) 
     locAPISetCallbacks(locationCallbacks);
 }
 
-BatchingAPIClient::~BatchingAPIClient()
-{
+BatchingAPIClient::~BatchingAPIClient() {
     LOC_LOGD("%s]: ()", __FUNCTION__);
 }
 
-int BatchingAPIClient::getBatchSize()
-{
+int BatchingAPIClient::getBatchSize() {
     LOC_LOGD("%s]: ()", __FUNCTION__);
     return locAPIGetBatchSize();
 }
 
-int BatchingAPIClient::startSession(const IGnssBatching::Options& opts)
-{
-    LOC_LOGD("%s]: (%lld %d)", __FUNCTION__,
-            static_cast<long long>(opts.periodNanos), static_cast<uint8_t>(opts.flags));
+int BatchingAPIClient::startSession(const IGnssBatching::Options &opts) {
+    LOC_LOGD("%s]: (%lld %d)", __FUNCTION__, static_cast<long long>(opts.periodNanos),
+             static_cast<uint8_t>(opts.flags));
     int retVal = -1;
     LocationOptions options;
     convertBatchOption(opts, options, mLocationCapabilitiesMask);
@@ -112,10 +107,9 @@ int BatchingAPIClient::startSession(const IGnssBatching::Options& opts)
     return retVal;
 }
 
-int BatchingAPIClient::updateSessionOptions(const IGnssBatching::Options& opts)
-{
-    LOC_LOGD("%s]: (%lld %d)", __FUNCTION__,
-            static_cast<long long>(opts.periodNanos), static_cast<uint8_t>(opts.flags));
+int BatchingAPIClient::updateSessionOptions(const IGnssBatching::Options &opts) {
+    LOC_LOGD("%s]: (%lld %d)", __FUNCTION__, static_cast<long long>(opts.periodNanos),
+             static_cast<uint8_t>(opts.flags));
     int retVal = -1;
     LocationOptions options;
     convertBatchOption(opts, options, mLocationCapabilitiesMask);
@@ -130,8 +124,7 @@ int BatchingAPIClient::updateSessionOptions(const IGnssBatching::Options& opts)
     return retVal;
 }
 
-int BatchingAPIClient::stopSession()
-{
+int BatchingAPIClient::stopSession() {
     LOC_LOGD("%s]: ", __FUNCTION__);
     int retVal = -1;
     if (locAPIStopSession(mDefaultId) == LOCATION_ERROR_SUCCESS) {
@@ -140,27 +133,23 @@ int BatchingAPIClient::stopSession()
     return retVal;
 }
 
-void BatchingAPIClient::getBatchedLocation(int last_n_locations)
-{
+void BatchingAPIClient::getBatchedLocation(int last_n_locations) {
     LOC_LOGD("%s]: (%d)", __FUNCTION__, last_n_locations);
     locAPIGetBatchedLocations(mDefaultId, last_n_locations);
 }
 
-void BatchingAPIClient::flushBatchedLocations()
-{
+void BatchingAPIClient::flushBatchedLocations() {
     LOC_LOGD("%s]: ()", __FUNCTION__);
     locAPIGetBatchedLocations(mDefaultId, SIZE_MAX);
 }
 
-void BatchingAPIClient::onCapabilitiesCb(LocationCapabilitiesMask capabilitiesMask)
-{
+void BatchingAPIClient::onCapabilitiesCb(LocationCapabilitiesMask capabilitiesMask) {
     LOC_LOGD("%s]: (%" PRIu64 ")", __FUNCTION__, capabilitiesMask);
     mLocationCapabilitiesMask = capabilitiesMask;
 }
 
-void BatchingAPIClient::onBatchingCb(size_t count, Location* location,
-        BatchingOptions /*batchOptions*/)
-{
+void BatchingAPIClient::onBatchingCb(size_t count, Location *location,
+                                     BatchingOptions /*batchOptions*/) {
     LOC_LOGD("%s]: (count: %zu)", __FUNCTION__, count);
     if (mGnssBatchingCbIface != nullptr && count > 0) {
         hidl_vec<GnssLocation> locationVec;
@@ -170,15 +159,14 @@ void BatchingAPIClient::onBatchingCb(size_t count, Location* location,
         }
         auto r = mGnssBatchingCbIface->gnssLocationBatchCb(locationVec);
         if (!r.isOk()) {
-            LOC_LOGE("%s] Error from gnssLocationBatchCb description=%s",
-                __func__, r.description().c_str());
+            LOC_LOGE("%s] Error from gnssLocationBatchCb description=%s", __func__,
+                     r.description().c_str());
         }
     }
 }
 
-static void convertBatchOption(const IGnssBatching::Options& in, LocationOptions& out,
-        LocationCapabilitiesMask mask)
-{
+static void convertBatchOption(const IGnssBatching::Options &in, LocationOptions &out,
+                               LocationCapabilitiesMask mask) {
     memset(&out, 0, sizeof(LocationOptions));
     out.size = sizeof(LocationOptions);
     out.minInterval = (uint32_t)(in.periodNanos / 1000000L);

@@ -3,7 +3,7 @@
  * Not a Contribution
  */
 
- /* Copyright (C) 2016 The Android Open Source Project
+/* Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-
 #ifndef ANDROID_HARDWARE_GNSS_V2_0_GNSSCONFIGURATION_H
 #define ANDROID_HARDWARE_GNSS_V2_0_GNSSCONFIGURATION_H
 
@@ -31,18 +30,18 @@ namespace gnss {
 namespace V2_0 {
 namespace implementation {
 
+using ::android::sp;
+using ::android::hardware::hidl_string;
+using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::hidl_string;
-using ::android::sp;
 
 /*
  * Interface for passing GNSS configuration info from platform to HAL.
  */
 struct Gnss;
 struct GnssConfiguration : public V2_0::IGnssConfiguration {
-    GnssConfiguration(Gnss* gnss);
+    GnssConfiguration(Gnss *gnss);
     ~GnssConfiguration() = default;
 
     /*
@@ -59,16 +58,15 @@ struct GnssConfiguration : public V2_0::IGnssConfiguration {
 
     // Methods from ::android::hardware::gnss::V1_1::IGnssConfiguration follow.
     Return<bool> setBlacklist(
-            const hidl_vec<GnssConfiguration::BlacklistedSource>& blacklist) override;
+            const hidl_vec<GnssConfiguration::BlacklistedSource> &blacklist) override;
 
     // Methods from ::android::hardware::gnss::V2_0::IGnssConfiguration follow.
     Return<bool> setEsExtensionSec(uint32_t emergencyExtensionSeconds) override;
 
- private:
-    Gnss* mGnss = nullptr;
-    bool setBlacklistedSource(
-            GnssSvIdSource& copyToSource,
-            const GnssConfiguration::BlacklistedSource& copyFromSource);
+  private:
+    Gnss *mGnss = nullptr;
+    bool setBlacklistedSource(GnssSvIdSource &copyToSource,
+                              const GnssConfiguration::BlacklistedSource &copyFromSource);
 };
 
 }  // namespace implementation

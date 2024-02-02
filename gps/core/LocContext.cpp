@@ -29,42 +29,40 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_Ctx"
 
-#include <cutils/sched_policy.h>
-#include <unistd.h>
 #include <LocContext.h>
-#include <msg_q.h>
-#include <log_util.h>
+#include <cutils/sched_policy.h>
 #include <loc_log.h>
+#include <log_util.h>
+#include <msg_q.h>
+#include <unistd.h>
 
 namespace loc_core {
 
-const MsgTask* LocContext::mMsgTask = NULL;
-ContextBase* LocContext::mContext = NULL;
+const MsgTask *LocContext::mMsgTask = NULL;
+ContextBase *LocContext::mContext = NULL;
 // the name must be shorter than 15 chars
-const char* LocContext::mLocationHalName = "Loc_hal_worker";
+const char *LocContext::mLocationHalName = "Loc_hal_worker";
 #ifndef USE_GLIB
-const char* LocContext::mLBSLibName = "liblbs_core.so";
+const char *LocContext::mLBSLibName = "liblbs_core.so";
 #else
-const char* LocContext::mLBSLibName = "liblbs_core.so.1";
+const char *LocContext::mLBSLibName = "liblbs_core.so.1";
 #endif
 
 pthread_mutex_t LocContext::mGetLocContextMutex = PTHREAD_MUTEX_INITIALIZER;
 
-const MsgTask* LocContext::getMsgTask(const char* name)
-{
+const MsgTask *LocContext::getMsgTask(const char *name) {
     if (NULL == mMsgTask) {
         mMsgTask = new MsgTask(name);
     }
     return mMsgTask;
 }
 
-ContextBase* LocContext::getLocContext(const char* name)
-{
+ContextBase *LocContext::getLocContext(const char *name) {
     pthread_mutex_lock(&LocContext::mGetLocContextMutex);
     LOC_LOGD("%s:%d]: querying ContextBase with tCreator", __func__, __LINE__);
     if (NULL == mContext) {
         LOC_LOGD("%s:%d]: creating msgTask with tCreator", __func__, __LINE__);
-        const MsgTask* msgTask = getMsgTask(name);
+        const MsgTask *msgTask = getMsgTask(name);
         mContext = new LocContext(msgTask);
     }
     pthread_mutex_unlock(&LocContext::mGetLocContextMutex);
@@ -72,16 +70,12 @@ ContextBase* LocContext::getLocContext(const char* name)
     return mContext;
 }
 
-void LocContext :: injectFeatureConfig(ContextBase *curContext)
-{
-    LOC_LOGD("%s:%d]: Calling LBSProxy (%p) to inject feature config",
-             __func__, __LINE__, ((LocContext *)curContext)->mLBSProxy);
+void LocContext ::injectFeatureConfig(ContextBase *curContext) {
+    LOC_LOGD("%s:%d]: Calling LBSProxy (%p) to inject feature config", __func__, __LINE__,
+             ((LocContext *)curContext)->mLBSProxy);
     ((LocContext *)curContext)->mLBSProxy->injectFeatureConfig(curContext);
 }
 
-LocContext::LocContext(const MsgTask* msgTask) :
-    ContextBase(msgTask, 0, mLBSLibName)
-{
-}
+LocContext::LocContext(const MsgTask *msgTask) : ContextBase(msgTask, 0, mLBSLibName) {}
 
-}
+}  // namespace loc_core

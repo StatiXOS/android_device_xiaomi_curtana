@@ -29,22 +29,22 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_CtxBase"
 
-#include <dlfcn.h>
-#include <unistd.h>
 #include <ContextBase.h>
-#include <msg_q.h>
-#include <loc_target.h>
-#include <loc_pla.h>
+#include <dlfcn.h>
 #include <loc_log.h>
+#include <loc_pla.h>
+#include <loc_target.h>
+#include <msg_q.h>
+#include <unistd.h>
 
 namespace loc_core {
 
 #define SLL_LOC_API_LIB_NAME "libsynergy_loc_api.so"
 #define LOC_APIV2_0_LIB_NAME "libloc_api_v02.so"
-#define IS_SS5_HW_ENABLED  1
+#define IS_SS5_HW_ENABLED 1
 
-loc_gps_cfg_s_type ContextBase::mGps_conf {};
-loc_sap_cfg_s_type ContextBase::mSap_conf {};
+loc_gps_cfg_s_type ContextBase::mGps_conf{};
+loc_sap_cfg_s_type ContextBase::mSap_conf{};
 bool ContextBase::sIsEngineCapabilitiesKnown = false;
 uint64_t ContextBase::sSupportedMsgMask = 0;
 bool ContextBase::sGnssMeasurementSupported = false;
@@ -52,73 +52,77 @@ uint8_t ContextBase::sFeaturesSupported[MAX_FEATURE_LENGTH];
 GnssNMEARptRate ContextBase::sNmeaReportRate = GNSS_NMEA_REPORT_RATE_NHZ;
 LocationCapabilitiesMask ContextBase::sQwesFeatureMask = 0;
 
-const loc_param_s_type ContextBase::mGps_conf_table[] =
-{
-  {"GPS_LOCK",                       &mGps_conf.GPS_LOCK,                       NULL, 'n'},
-  {"SUPL_VER",                       &mGps_conf.SUPL_VER,                       NULL, 'n'},
-  {"LPP_PROFILE",                    &mGps_conf.LPP_PROFILE,                    NULL, 'n'},
-  {"A_GLONASS_POS_PROTOCOL_SELECT",  &mGps_conf.A_GLONASS_POS_PROTOCOL_SELECT,  NULL, 'n'},
-  {"LPPE_CP_TECHNOLOGY",             &mGps_conf.LPPE_CP_TECHNOLOGY,             NULL, 'n'},
-  {"LPPE_UP_TECHNOLOGY",             &mGps_conf.LPPE_UP_TECHNOLOGY,             NULL, 'n'},
-  {"AGPS_CERT_WRITABLE_MASK",        &mGps_conf.AGPS_CERT_WRITABLE_MASK,        NULL, 'n'},
-  {"SUPL_MODE",                      &mGps_conf.SUPL_MODE,                      NULL, 'n'},
-  {"SUPL_ES",                        &mGps_conf.SUPL_ES,                        NULL, 'n'},
-  {"INTERMEDIATE_POS",               &mGps_conf.INTERMEDIATE_POS,               NULL, 'n'},
-  {"ACCURACY_THRES",                 &mGps_conf.ACCURACY_THRES,                 NULL, 'n'},
-  {"NMEA_PROVIDER",                  &mGps_conf.NMEA_PROVIDER,                  NULL, 'n'},
-  {"NMEA_REPORT_RATE",               &mGps_conf.NMEA_REPORT_RATE,               NULL, 's'},
-  {"CAPABILITIES",                   &mGps_conf.CAPABILITIES,                   NULL, 'n'},
-  {"XTRA_SERVER_1",                  &mGps_conf.XTRA_SERVER_1,                  NULL, 's'},
-  {"XTRA_SERVER_2",                  &mGps_conf.XTRA_SERVER_2,                  NULL, 's'},
-  {"XTRA_SERVER_3",                  &mGps_conf.XTRA_SERVER_3,                  NULL, 's'},
-  {"USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL",
-           &mGps_conf.USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL,          NULL, 'n'},
-  {"AGPS_CONFIG_INJECT",             &mGps_conf.AGPS_CONFIG_INJECT,             NULL, 'n'},
-  {"EXTERNAL_DR_ENABLED",            &mGps_conf.EXTERNAL_DR_ENABLED,                  NULL, 'n'},
-  {"SUPL_HOST",                      &mGps_conf.SUPL_HOST,                      NULL, 's'},
-  {"SUPL_PORT",                      &mGps_conf.SUPL_PORT,                      NULL, 'n'},
-  {"MODEM_TYPE",                     &mGps_conf.MODEM_TYPE,                     NULL, 'n' },
-  {"MO_SUPL_HOST",                   &mGps_conf.MO_SUPL_HOST,                   NULL, 's' },
-  {"MO_SUPL_PORT",                   &mGps_conf.MO_SUPL_PORT,                   NULL, 'n' },
-  {"CONSTRAINED_TIME_UNCERTAINTY_ENABLED",
-           &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_ENABLED,      NULL, 'n'},
-  {"CONSTRAINED_TIME_UNCERTAINTY_THRESHOLD",
-           &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_THRESHOLD,    NULL, 'f'},
-  {"CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET",
-           &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET, NULL, 'n'},
-  {"POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED",
-           &mGps_conf.POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED, NULL, 'n'},
-  {"PROXY_APP_PACKAGE_NAME",         &mGps_conf.PROXY_APP_PACKAGE_NAME,         NULL, 's' },
-  {"CP_MTLR_ES",                     &mGps_conf.CP_MTLR_ES,                     NULL, 'n' },
-  {"GNSS_DEPLOYMENT",  &mGps_conf.GNSS_DEPLOYMENT, NULL, 'n'},
-  {"CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED",
-           &mGps_conf.CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED, NULL, 'n'},
-  {"NMEA_TAG_BLOCK_GROUPING_ENABLED", &mGps_conf.NMEA_TAG_BLOCK_GROUPING_ENABLED, NULL, 'n'},
-  {"NI_SUPL_DENY_ON_NFW_LOCKED",  &mGps_conf.NI_SUPL_DENY_ON_NFW_LOCKED, NULL, 'n'},
-  {"ENABLE_NMEA_PRINT",  &mGps_conf.ENABLE_NMEA_PRINT, NULL, 'n'}
-};
+const loc_param_s_type ContextBase::mGps_conf_table[] = {
+        {"GPS_LOCK", &mGps_conf.GPS_LOCK, NULL, 'n'},
+        {"SUPL_VER", &mGps_conf.SUPL_VER, NULL, 'n'},
+        {"LPP_PROFILE", &mGps_conf.LPP_PROFILE, NULL, 'n'},
+        {"A_GLONASS_POS_PROTOCOL_SELECT", &mGps_conf.A_GLONASS_POS_PROTOCOL_SELECT, NULL, 'n'},
+        {"LPPE_CP_TECHNOLOGY", &mGps_conf.LPPE_CP_TECHNOLOGY, NULL, 'n'},
+        {"LPPE_UP_TECHNOLOGY", &mGps_conf.LPPE_UP_TECHNOLOGY, NULL, 'n'},
+        {"AGPS_CERT_WRITABLE_MASK", &mGps_conf.AGPS_CERT_WRITABLE_MASK, NULL, 'n'},
+        {"SUPL_MODE", &mGps_conf.SUPL_MODE, NULL, 'n'},
+        {"SUPL_ES", &mGps_conf.SUPL_ES, NULL, 'n'},
+        {"INTERMEDIATE_POS", &mGps_conf.INTERMEDIATE_POS, NULL, 'n'},
+        {"ACCURACY_THRES", &mGps_conf.ACCURACY_THRES, NULL, 'n'},
+        {"NMEA_PROVIDER", &mGps_conf.NMEA_PROVIDER, NULL, 'n'},
+        {"NMEA_REPORT_RATE", &mGps_conf.NMEA_REPORT_RATE, NULL, 's'},
+        {"CAPABILITIES", &mGps_conf.CAPABILITIES, NULL, 'n'},
+        {"XTRA_SERVER_1", &mGps_conf.XTRA_SERVER_1, NULL, 's'},
+        {"XTRA_SERVER_2", &mGps_conf.XTRA_SERVER_2, NULL, 's'},
+        {"XTRA_SERVER_3", &mGps_conf.XTRA_SERVER_3, NULL, 's'},
+        {"USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL", &mGps_conf.USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL,
+         NULL, 'n'},
+        {"AGPS_CONFIG_INJECT", &mGps_conf.AGPS_CONFIG_INJECT, NULL, 'n'},
+        {"EXTERNAL_DR_ENABLED", &mGps_conf.EXTERNAL_DR_ENABLED, NULL, 'n'},
+        {"SUPL_HOST", &mGps_conf.SUPL_HOST, NULL, 's'},
+        {"SUPL_PORT", &mGps_conf.SUPL_PORT, NULL, 'n'},
+        {"MODEM_TYPE", &mGps_conf.MODEM_TYPE, NULL, 'n'},
+        {"MO_SUPL_HOST", &mGps_conf.MO_SUPL_HOST, NULL, 's'},
+        {"MO_SUPL_PORT", &mGps_conf.MO_SUPL_PORT, NULL, 'n'},
+        {"CONSTRAINED_TIME_UNCERTAINTY_ENABLED", &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_ENABLED,
+         NULL, 'n'},
+        {"CONSTRAINED_TIME_UNCERTAINTY_THRESHOLD",
+         &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_THRESHOLD, NULL, 'f'},
+        {"CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET",
+         &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET, NULL, 'n'},
+        {"POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED",
+         &mGps_conf.POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED, NULL, 'n'},
+        {"PROXY_APP_PACKAGE_NAME", &mGps_conf.PROXY_APP_PACKAGE_NAME, NULL, 's'},
+        {"CP_MTLR_ES", &mGps_conf.CP_MTLR_ES, NULL, 'n'},
+        {"GNSS_DEPLOYMENT", &mGps_conf.GNSS_DEPLOYMENT, NULL, 'n'},
+        {"CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED", &mGps_conf.CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED,
+         NULL, 'n'},
+        {"NMEA_TAG_BLOCK_GROUPING_ENABLED", &mGps_conf.NMEA_TAG_BLOCK_GROUPING_ENABLED, NULL, 'n'},
+        {"NI_SUPL_DENY_ON_NFW_LOCKED", &mGps_conf.NI_SUPL_DENY_ON_NFW_LOCKED, NULL, 'n'},
+        {"ENABLE_NMEA_PRINT", &mGps_conf.ENABLE_NMEA_PRINT, NULL, 'n'}};
 
-const loc_param_s_type ContextBase::mSap_conf_table[] =
-{
-  {"GYRO_BIAS_RANDOM_WALK",          &mSap_conf.GYRO_BIAS_RANDOM_WALK,          &mSap_conf.GYRO_BIAS_RANDOM_WALK_VALID, 'f'},
-  {"ACCEL_RANDOM_WALK_SPECTRAL_DENSITY",     &mSap_conf.ACCEL_RANDOM_WALK_SPECTRAL_DENSITY,    &mSap_conf.ACCEL_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
-  {"ANGLE_RANDOM_WALK_SPECTRAL_DENSITY",     &mSap_conf.ANGLE_RANDOM_WALK_SPECTRAL_DENSITY,    &mSap_conf.ANGLE_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
-  {"RATE_RANDOM_WALK_SPECTRAL_DENSITY",      &mSap_conf.RATE_RANDOM_WALK_SPECTRAL_DENSITY,     &mSap_conf.RATE_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
-  {"VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY",  &mSap_conf.VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY, &mSap_conf.VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
-  {"SENSOR_ACCEL_BATCHES_PER_SEC",   &mSap_conf.SENSOR_ACCEL_BATCHES_PER_SEC,   NULL, 'n'},
-  {"SENSOR_ACCEL_SAMPLES_PER_BATCH", &mSap_conf.SENSOR_ACCEL_SAMPLES_PER_BATCH, NULL, 'n'},
-  {"SENSOR_GYRO_BATCHES_PER_SEC",    &mSap_conf.SENSOR_GYRO_BATCHES_PER_SEC,    NULL, 'n'},
-  {"SENSOR_GYRO_SAMPLES_PER_BATCH",  &mSap_conf.SENSOR_GYRO_SAMPLES_PER_BATCH,  NULL, 'n'},
-  {"SENSOR_ACCEL_BATCHES_PER_SEC_HIGH",   &mSap_conf.SENSOR_ACCEL_BATCHES_PER_SEC_HIGH,   NULL, 'n'},
-  {"SENSOR_ACCEL_SAMPLES_PER_BATCH_HIGH", &mSap_conf.SENSOR_ACCEL_SAMPLES_PER_BATCH_HIGH, NULL, 'n'},
-  {"SENSOR_GYRO_BATCHES_PER_SEC_HIGH",    &mSap_conf.SENSOR_GYRO_BATCHES_PER_SEC_HIGH,    NULL, 'n'},
-  {"SENSOR_GYRO_SAMPLES_PER_BATCH_HIGH",  &mSap_conf.SENSOR_GYRO_SAMPLES_PER_BATCH_HIGH,  NULL, 'n'},
-  {"SENSOR_CONTROL_MODE",            &mSap_conf.SENSOR_CONTROL_MODE,            NULL, 'n'},
-  {"SENSOR_ALGORITHM_CONFIG_MASK",   &mSap_conf.SENSOR_ALGORITHM_CONFIG_MASK,   NULL, 'n'}
-};
+const loc_param_s_type ContextBase::mSap_conf_table[] = {
+        {"GYRO_BIAS_RANDOM_WALK", &mSap_conf.GYRO_BIAS_RANDOM_WALK,
+         &mSap_conf.GYRO_BIAS_RANDOM_WALK_VALID, 'f'},
+        {"ACCEL_RANDOM_WALK_SPECTRAL_DENSITY", &mSap_conf.ACCEL_RANDOM_WALK_SPECTRAL_DENSITY,
+         &mSap_conf.ACCEL_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
+        {"ANGLE_RANDOM_WALK_SPECTRAL_DENSITY", &mSap_conf.ANGLE_RANDOM_WALK_SPECTRAL_DENSITY,
+         &mSap_conf.ANGLE_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
+        {"RATE_RANDOM_WALK_SPECTRAL_DENSITY", &mSap_conf.RATE_RANDOM_WALK_SPECTRAL_DENSITY,
+         &mSap_conf.RATE_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
+        {"VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY", &mSap_conf.VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY,
+         &mSap_conf.VELOCITY_RANDOM_WALK_SPECTRAL_DENSITY_VALID, 'f'},
+        {"SENSOR_ACCEL_BATCHES_PER_SEC", &mSap_conf.SENSOR_ACCEL_BATCHES_PER_SEC, NULL, 'n'},
+        {"SENSOR_ACCEL_SAMPLES_PER_BATCH", &mSap_conf.SENSOR_ACCEL_SAMPLES_PER_BATCH, NULL, 'n'},
+        {"SENSOR_GYRO_BATCHES_PER_SEC", &mSap_conf.SENSOR_GYRO_BATCHES_PER_SEC, NULL, 'n'},
+        {"SENSOR_GYRO_SAMPLES_PER_BATCH", &mSap_conf.SENSOR_GYRO_SAMPLES_PER_BATCH, NULL, 'n'},
+        {"SENSOR_ACCEL_BATCHES_PER_SEC_HIGH", &mSap_conf.SENSOR_ACCEL_BATCHES_PER_SEC_HIGH, NULL,
+         'n'},
+        {"SENSOR_ACCEL_SAMPLES_PER_BATCH_HIGH", &mSap_conf.SENSOR_ACCEL_SAMPLES_PER_BATCH_HIGH,
+         NULL, 'n'},
+        {"SENSOR_GYRO_BATCHES_PER_SEC_HIGH", &mSap_conf.SENSOR_GYRO_BATCHES_PER_SEC_HIGH, NULL,
+         'n'},
+        {"SENSOR_GYRO_SAMPLES_PER_BATCH_HIGH", &mSap_conf.SENSOR_GYRO_SAMPLES_PER_BATCH_HIGH, NULL,
+         'n'},
+        {"SENSOR_CONTROL_MODE", &mSap_conf.SENSOR_CONTROL_MODE, NULL, 'n'},
+        {"SENSOR_ALGORITHM_CONFIG_MASK", &mSap_conf.SENSOR_ALGORITHM_CONFIG_MASK, NULL, 'n'}};
 
-void ContextBase::readConfig()
-{
+void ContextBase::readConfig() {
     static bool confReadDone = false;
     if (!confReadDone) {
         confReadDone = true;
@@ -157,7 +161,7 @@ void ContextBase::readConfig()
         mSap_conf.SENSOR_ACCEL_SAMPLES_PER_BATCH_HIGH = 25;
         mSap_conf.SENSOR_GYRO_BATCHES_PER_SEC_HIGH = 4;
         mSap_conf.SENSOR_GYRO_SAMPLES_PER_BATCH_HIGH = 25;
-        mSap_conf.SENSOR_CONTROL_MODE = 0; /* AUTO */
+        mSap_conf.SENSOR_CONTROL_MODE = 0;          /* AUTO */
         mSap_conf.SENSOR_ALGORITHM_CONFIG_MASK = 0; /* INS Disabled = FALSE*/
         /* Values MUST be set by OEMs in configuration for sensor-assisted
           navigation to work. There are NO default values */
@@ -210,26 +214,27 @@ void ContextBase::readConfig()
             sNmeaReportRate = GNSS_NMEA_REPORT_RATE_NHZ;
         }
         LOC_LOGI("%s] GNSS Deployment: %s", __FUNCTION__,
-                ((mGps_conf.GNSS_DEPLOYMENT == 1) ? "SS5" :
-                ((mGps_conf.GNSS_DEPLOYMENT == 2) ? "QFUSION" : "QGNSS")));
+                 ((mGps_conf.GNSS_DEPLOYMENT == 1)
+                          ? "SS5"
+                          : ((mGps_conf.GNSS_DEPLOYMENT == 2) ? "QFUSION" : "QGNSS")));
 
         switch (getTargetGnssType(loc_get_target())) {
-          case GNSS_GSS:
-          case GNSS_AUTO:
-             // For APQ targets, MSA/MSB capabilities should be reset
-             mGps_conf.CAPABILITIES &= ~(LOC_GPS_CAPABILITY_MSA | LOC_GPS_CAPABILITY_MSB);
-             break;
-          default:
-             break;
+            case GNSS_GSS:
+            case GNSS_AUTO:
+                // For APQ targets, MSA/MSB capabilities should be reset
+                mGps_conf.CAPABILITIES &= ~(LOC_GPS_CAPABILITY_MSA | LOC_GPS_CAPABILITY_MSB);
+                break;
+            default:
+                break;
         }
     }
 }
 
 uint32_t ContextBase::getCarrierCapabilities() {
-    #define carrierMSA (uint32_t)0x2
-    #define carrierMSB (uint32_t)0x1
-    #define gpsConfMSA (uint32_t)0x4
-    #define gpsConfMSB (uint32_t)0x2
+#define carrierMSA (uint32_t)0x2
+#define carrierMSB (uint32_t)0x1
+#define gpsConfMSA (uint32_t)0x4
+#define gpsConfMSB (uint32_t)0x2
     uint32_t capabilities = mGps_conf.CAPABILITIES;
     if ((mGps_conf.SUPL_MODE & carrierMSA) != carrierMSA) {
         capabilities &= ~gpsConfMSA;
@@ -243,20 +248,17 @@ uint32_t ContextBase::getCarrierCapabilities() {
     return capabilities;
 }
 
-LBSProxyBase* ContextBase::getLBSProxy(const char* libName)
-{
-    LBSProxyBase* proxy = NULL;
+LBSProxyBase *ContextBase::getLBSProxy(const char *libName) {
+    LBSProxyBase *proxy = NULL;
     LOC_LOGD("%s:%d]: getLBSProxy libname: %s\n", __func__, __LINE__, libName);
-    void* lib = dlopen(libName, RTLD_NOW);
+    void *lib = dlopen(libName, RTLD_NOW);
 
-    if ((void*)NULL != lib) {
-        getLBSProxy_t* getter = (getLBSProxy_t*)dlsym(lib, "getLBSProxy");
+    if ((void *)NULL != lib) {
+        getLBSProxy_t *getter = (getLBSProxy_t *)dlsym(lib, "getLBSProxy");
         if (NULL != getter) {
             proxy = (*getter)();
         }
-    }
-    else
-    {
+    } else {
         LOC_LOGW("%s:%d]: FAILED TO LOAD libname: %s\n", __func__, __LINE__, libName);
     }
     if (NULL == proxy) {
@@ -266,14 +268,12 @@ LBSProxyBase* ContextBase::getLBSProxy(const char* libName)
     return proxy;
 }
 
-LocApiBase* ContextBase::createLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask)
-{
-    LocApiBase* locApi = NULL;
-    const char* libname = LOC_APIV2_0_LIB_NAME;
+LocApiBase *ContextBase::createLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask) {
+    LocApiBase *locApi = NULL;
+    const char *libname = LOC_APIV2_0_LIB_NAME;
 
     // Check the target
-    if (TARGET_NO_GNSS != loc_get_target()){
-
+    if (TARGET_NO_GNSS != loc_get_target()) {
         if (NULL == (locApi = mLBSProxy->getLocApi(exMask, this))) {
             void *handle = NULL;
 
@@ -283,23 +283,21 @@ LocApiBase* ContextBase::createLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask)
 
             if ((handle = dlopen(libname, RTLD_NOW)) != NULL) {
                 LOC_LOGD("%s:%d]: %s is present", __func__, __LINE__, libname);
-                getLocApi_t* getter = (getLocApi_t*) dlsym(handle, "getLocApi");
+                getLocApi_t *getter = (getLocApi_t *)dlsym(handle, "getLocApi");
                 if (getter != NULL) {
-                    LOC_LOGD("%s:%d]: getter is not NULL of %s", __func__,
-                            __LINE__, libname);
+                    LOC_LOGD("%s:%d]: getter is not NULL of %s", __func__, __LINE__, libname);
                     locApi = (*getter)(exMask, this);
                 }
             }
             // only RPC is the option now
             else {
-                LOC_LOGD("%s:%d]: libloc_api_v02.so is NOT present. Trying RPC",
-                        __func__, __LINE__);
+                LOC_LOGD("%s:%d]: libloc_api_v02.so is NOT present. Trying RPC", __func__,
+                         __LINE__);
                 handle = dlopen("libloc_api-rpc-qc.so", RTLD_NOW);
                 if (NULL != handle) {
-                    getLocApi_t* getter = (getLocApi_t*) dlsym(handle, "getLocApi");
+                    getLocApi_t *getter = (getLocApi_t *)dlsym(handle, "getLocApi");
                     if (NULL != getter) {
-                        LOC_LOGD("%s:%d]: getter is not NULL in RPC", __func__,
-                                __LINE__);
+                        LOC_LOGD("%s:%d]: getter is not NULL in RPC", __func__, __LINE__);
                         locApi = (*getter)(exMask, this);
                     }
                 }
@@ -316,25 +314,21 @@ LocApiBase* ContextBase::createLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask)
     return locApi;
 }
 
-ContextBase::ContextBase(const MsgTask* msgTask,
-                         LOC_API_ADAPTER_EVENT_MASK_T exMask,
-                         const char* libName) :
-    mLBSProxy(getLBSProxy(libName)),
-    mMsgTask(msgTask),
-    mLocApi(createLocApi(exMask)),
-    mLocApiProxy(mLocApi->getLocApiProxy())
-{
-}
+ContextBase::ContextBase(const MsgTask *msgTask, LOC_API_ADAPTER_EVENT_MASK_T exMask,
+                         const char *libName)
+    : mLBSProxy(getLBSProxy(libName)),
+      mMsgTask(msgTask),
+      mLocApi(createLocApi(exMask)),
+      mLocApiProxy(mLocApi->getLocApiProxy()) {}
 
-void ContextBase::setEngineCapabilities(uint64_t supportedMsgMask,
-       uint8_t *featureList, bool gnssMeasurementSupported) {
-
+void ContextBase::setEngineCapabilities(uint64_t supportedMsgMask, uint8_t *featureList,
+                                        bool gnssMeasurementSupported) {
     if (ContextBase::sIsEngineCapabilitiesKnown == false) {
         ContextBase::sSupportedMsgMask = supportedMsgMask;
         ContextBase::sGnssMeasurementSupported = gnssMeasurementSupported;
         if (featureList != NULL) {
-            memcpy((void *)ContextBase::sFeaturesSupported,
-                    (void *)featureList, sizeof(ContextBase::sFeaturesSupported));
+            memcpy((void *)ContextBase::sFeaturesSupported, (void *)featureList,
+                   sizeof(ContextBase::sFeaturesSupported));
         }
 
         /* */
@@ -344,10 +338,8 @@ void ContextBase::setEngineCapabilities(uint64_t supportedMsgMask,
             if (!isSapModeKnown) {
                 /* Check if SAP is PREMIUM_ENV_AIDING in izat.conf */
                 char conf_feature_sap[LOC_MAX_PARAM_STRING];
-                loc_param_s_type izat_conf_feature_table[] =
-                {
-                    { "SAP",           &conf_feature_sap,           &isSapModeKnown, 's' }
-                };
+                loc_param_s_type izat_conf_feature_table[] = {
+                        {"SAP", &conf_feature_sap, &isSapModeKnown, 's'}};
                 UTIL_READ_CONF(LOC_PATH_IZAT_CONF, izat_conf_feature_table);
 
                 /* Disable this feature if SAP is not PREMIUM_ENV_AIDING in izat.conf */
@@ -367,18 +359,17 @@ void ContextBase::setEngineCapabilities(uint64_t supportedMsgMask,
     }
 }
 
-
-bool ContextBase::isFeatureSupported(uint8_t featureVal)
-{
+bool ContextBase::isFeatureSupported(uint8_t featureVal) {
     uint8_t arrayIndex = featureVal >> 3;
     uint8_t bitPos = featureVal & 7;
 
-    if (arrayIndex >= MAX_FEATURE_LENGTH) return false;
-    return ((ContextBase::sFeaturesSupported[arrayIndex] >> bitPos ) & 0x1);
+    if (arrayIndex >= MAX_FEATURE_LENGTH)
+        return false;
+    return ((ContextBase::sFeaturesSupported[arrayIndex] >> bitPos) & 0x1);
 }
 
 bool ContextBase::gnssConstellationConfig() {
     return sGnssMeasurementSupported;
 }
 
-}
+}  // namespace loc_core

@@ -29,19 +29,20 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_MsgTask"
 
-#include <unistd.h>
 #include <MsgTask.h>
-#include <msg_q.h>
-#include <log_util.h>
 #include <loc_log.h>
 #include <loc_pla.h>
+#include <log_util.h>
+#include <msg_q.h>
+#include <unistd.h>
 
 namespace loc_util {
 
 class MTRunnable : public LocRunnable {
-    const void* mQ;
-public:
-    inline MTRunnable(const void* q) : mQ(q) {}
+    const void *mQ;
+
+  public:
+    inline MTRunnable(const void *q) : mQ(q) {}
     virtual ~MTRunnable();
     // Overrides of LocRunnable methods
     // This method will be repeated called until it returns false; or
@@ -56,28 +57,27 @@ public:
     virtual void interrupt() override;
 };
 
-static void LocMsgDestroy(void* msg) {
-    delete (LocMsg*)msg;
+static void LocMsgDestroy(void *msg) {
+    delete (LocMsg *)msg;
 }
 
-MsgTask::MsgTask(const char* threadName) :
-    mQ(msg_q_init2()), mThread() {
+MsgTask::MsgTask(const char *threadName) : mQ(msg_q_init2()), mThread() {
     mThread.start(threadName, std::make_shared<MTRunnable>(mQ));
 }
 
-void MsgTask::sendMsg(const LocMsg* msg) const {
+void MsgTask::sendMsg(const LocMsg *msg) const {
     if (msg && this) {
-        msg_q_snd((void*)mQ, (void*)msg, LocMsgDestroy);
+        msg_q_snd((void *)mQ, (void *)msg, LocMsgDestroy);
     } else {
-        LOC_LOGE("%s: msg is %p and this is %p",
-                 __func__, msg, this);
+        LOC_LOGE("%s: msg is %p and this is %p", __func__, msg, this);
     }
 }
 
 void MsgTask::sendMsg(const std::function<void()> runnable) const {
     struct RunMsg : public LocMsg {
         const std::function<void()> mRunnable;
-    public:
+
+      public:
         inline RunMsg(const std::function<void()> runnable) : mRunnable(runnable) {}
         ~RunMsg() = default;
         inline virtual void proc() const override { mRunnable(); }
@@ -86,17 +86,17 @@ void MsgTask::sendMsg(const std::function<void()> runnable) const {
 }
 
 void MTRunnable::interrupt() {
-    msg_q_unblock((void*)mQ);
+    msg_q_unblock((void *)mQ);
 }
 
 void MTRunnable::prerun() {
     // make sure we do not run in background scheduling group
-     set_sched_policy(gettid(), SP_FOREGROUND);
+    set_sched_policy(gettid(), SP_FOREGROUND);
 }
 
 bool MTRunnable::run() {
-    LocMsg* msg;
-    msq_q_err_type result = msg_q_rcv((void*)mQ, (void **)&msg);
+    LocMsg *msg;
+    msq_q_err_type result = msg_q_rcv((void *)mQ, (void **)&msg);
     if (eMSG_Q_SUCCESS != result) {
         LOC_LOGE("%s:%d] fail receiving msg: %s\n", __func__, __LINE__,
                  loc_get_msg_q_status(result));
@@ -113,8 +113,8 @@ bool MTRunnable::run() {
 }
 
 MTRunnable::~MTRunnable() {
-    msg_q_flush((void*)mQ);
-    msg_q_destroy((void**)&mQ);
+    msg_q_flush((void *)mQ);
+    msg_q_destroy((void **)&mQ);
 }
 
-} // namespace loc_util
+}  // namespace loc_util

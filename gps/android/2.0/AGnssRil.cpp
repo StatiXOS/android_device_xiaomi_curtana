@@ -20,18 +20,21 @@
 
 #define LOG_TAG "LocSvc__AGnssRilInterface"
 
-#include <log_util.h>
+#include "AGnssRil.h"
+
+#include <DataItemConcreteTypesBase.h>
 #include <dlfcn.h>
-#include <sys/types.h>
+#include <log_util.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <sys/un.h>
+
 #include <sstream>
 #include <string>
-#include "Gnss.h"
-#include "AGnssRil.h"
-#include <DataItemConcreteTypesBase.h>
 
-typedef void* (getLocationInterface)();
+#include "Gnss.h"
+
+typedef void *(getLocationInterface)();
 
 namespace android {
 namespace hardware {
@@ -39,8 +42,7 @@ namespace gnss {
 namespace V2_0 {
 namespace implementation {
 
-
-AGnssRil::AGnssRil(Gnss* gnss) : mGnss(gnss) {
+AGnssRil::AGnssRil(Gnss *gnss) : mGnss(gnss) {
     ENTRY_LOG_CALLFLOW();
 }
 
@@ -57,10 +59,9 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
     std::string apn("");
 
     // for XTRA
-    if (nullptr != mGnss && ( nullptr != mGnss->getGnssInterface() )) {
+    if (nullptr != mGnss && (nullptr != mGnss->getGnssInterface())) {
         int8_t typeout = loc_core::TYPE_UNKNOWN;
-        switch(type)
-        {
+        switch (type) {
             case IAGnssRil::NetworkType::MOBILE:
                 typeout = loc_core::TYPE_MOBILE;
                 break;
@@ -82,32 +83,30 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
             case IAGnssRil::NetworkType::WIMAX:
                 typeout = loc_core::TYPE_WIMAX;
                 break;
-            default:
-                {
-                    int networkType = (int) type;
-                    // Handling network types not available in IAgnssRil
-                    switch(networkType)
-                    {
-                        case NetworkType_BLUETOOTH:
-                            typeout = loc_core::TYPE_BLUETOOTH;
-                            break;
-                        case NetworkType_ETHERNET:
-                            typeout = loc_core::TYPE_ETHERNET;
-                            break;
-                        case NetworkType_PROXY:
-                            typeout = loc_core::TYPE_PROXY;
-                            break;
-                        default:
-                            typeout = loc_core::TYPE_UNKNOWN;
-                    }
+            default: {
+                int networkType = (int)type;
+                // Handling network types not available in IAgnssRil
+                switch (networkType) {
+                    case NetworkType_BLUETOOTH:
+                        typeout = loc_core::TYPE_BLUETOOTH;
+                        break;
+                    case NetworkType_ETHERNET:
+                        typeout = loc_core::TYPE_ETHERNET;
+                        break;
+                    case NetworkType_PROXY:
+                        typeout = loc_core::TYPE_PROXY;
+                        break;
+                    default:
+                        typeout = loc_core::TYPE_UNKNOWN;
                 }
-                break;
+            } break;
         }
         mGnss->getGnssInterface()->updateConnectionStatus(connected, typeout, false, 0, apn);
     }
     return true;
 }
-Return<bool> AGnssRil::updateNetworkState_2_0(const V2_0::IAGnssRil::NetworkAttributes& attributes) {
+Return<bool> AGnssRil::updateNetworkState_2_0(
+        const V2_0::IAGnssRil::NetworkAttributes &attributes) {
     ENTRY_LOG_CALLFLOW();
     std::string apn = attributes.apn;
     if (nullptr != mGnss && (nullptr != mGnss->getGnssInterface())) {
@@ -122,8 +121,9 @@ Return<bool> AGnssRil::updateNetworkState_2_0(const V2_0::IAGnssRil::NetworkAttr
             roaming = false;
         }
         LOC_LOGd("apn string received is: %s", apn.c_str());
-        mGnss->getGnssInterface()->updateConnectionStatus(attributes.isConnected,
-                typeout, roaming, (NetworkHandle) attributes.networkHandle, apn);
+        mGnss->getGnssInterface()->updateConnectionStatus(attributes.isConnected, typeout, roaming,
+                                                          (NetworkHandle)attributes.networkHandle,
+                                                          apn);
     }
     return true;
 }

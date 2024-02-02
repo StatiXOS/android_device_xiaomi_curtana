@@ -35,34 +35,34 @@ class LocHeapNode {
 
     // size of of the subtree, excluding self, 1 if no subtree
     int mSize;
-    LocHeapNode* mLeft;
-    LocHeapNode* mRight;
-    LocRankable* mData;
-public:
-    inline LocHeapNode(LocRankable& data) :
-        mSize(1), mLeft(NULL), mRight(NULL), mData(&data) {}
+    LocHeapNode *mLeft;
+    LocHeapNode *mRight;
+    LocRankable *mData;
+
+  public:
+    inline LocHeapNode(LocRankable &data) : mSize(1), mLeft(NULL), mRight(NULL), mData(&data) {}
     ~LocHeapNode();
 
     // this only swaps the data of the two nodes, so no
     // detach / re-attached is necessary
-    void swap(LocHeapNode& node);
+    void swap(LocHeapNode &node);
 
-    LocRankable* detachData();
+    LocRankable *detachData();
 
     // push a node into the tree stucture, keeping sorted by rank
-    void push(LocHeapNode& node);
+    void push(LocHeapNode &node);
 
     // pop the head node out of the tree stucture. keeping sorted by rank
-    static LocHeapNode* pop(LocHeapNode*& top);
+    static LocHeapNode *pop(LocHeapNode *&top);
 
     // remove a specific node from the tree
     // returns the pointer to the node removed, which would be either the
     //         same as input (if successfully removed); or NULL (if failed).
-    static LocHeapNode* remove(LocHeapNode*& top, LocRankable& data);
+    static LocHeapNode *remove(LocHeapNode *&top, LocRankable &data);
 
     // convenience method to compare data ranking
-    inline bool outRanks(LocHeapNode& node) { return mData->outRanks(*node.mData); }
-    inline bool outRanks(LocRankable& data) { return mData->outRanks(data); }
+    inline bool outRanks(LocHeapNode &node) { return mData->outRanks(*node.mData); }
+    inline bool outRanks(LocRankable &data) { return mData->outRanks(data); }
 
     // checks if mSize is correct, AND this node is the highest ranking
     // of the entire subtree
@@ -71,8 +71,7 @@ public:
     inline int getSize() { return mSize; }
 };
 
-inline
-LocHeapNode::~LocHeapNode() {
+inline LocHeapNode::~LocHeapNode() {
     if (mLeft) {
         delete mLeft;
         mLeft = NULL;
@@ -86,16 +85,14 @@ LocHeapNode::~LocHeapNode() {
     }
 }
 
-inline
-void LocHeapNode::swap(LocHeapNode& node) {
-    LocRankable* tmpData = node.mData;
+inline void LocHeapNode::swap(LocHeapNode &node) {
+    LocRankable *tmpData = node.mData;
     node.mData = mData;
     mData = tmpData;
 }
 
-inline
-LocRankable* LocHeapNode::detachData()  {
-    LocRankable* data = mData;
+inline LocRankable *LocHeapNode::detachData() {
+    LocRankable *data = mData;
     mData = NULL;
     return data;
 }
@@ -106,7 +103,7 @@ LocRankable* LocHeapNode::detachData()  {
 // mData of tree top ranks lower than that of the incoming node,
 // mData will be swapped with that of the incoming node to ensure
 // ranking, no restructuring the container nodes.
-void LocHeapNode::push(LocHeapNode& node) {
+void LocHeapNode::push(LocHeapNode &node) {
     // ensure the current node ranks higher than in the incoming one
     if (node.outRanks(*this)) {
         swap(node);
@@ -133,23 +130,27 @@ void LocHeapNode::push(LocHeapNode& node) {
 // internal links will not be changed or restructured, except for the
 // node that is popped out.
 // If the return pointer == this, this the last node in the tree.
-LocHeapNode* LocHeapNode::pop(LocHeapNode*& top) {
+LocHeapNode *LocHeapNode::pop(LocHeapNode *&top) {
     // we know the top has the highest ranking at this point, else
     // the tree is broken. This top will be popped out.  But we need
     // a node from the left or right child, whichever ranks higher,
     // to replace the current top. This then will need to be done
     // recursively to the leaf level. So we swap the mData of the
     // current top node all the way down to the leaf level.
-    LocHeapNode* poppedNode = top;
+    LocHeapNode *poppedNode = top;
     // top is losing a node in its subtree
     top->mSize--;
     if (top->mLeft || top->mRight) {
         // if mLeft is NULL, mRight for sure is NOT NULL, take that;
         // else if mRight is NULL, mLeft for sure is NOT, take that;
         // else we take the address of whatever has higher ranking mData
-        LocHeapNode*& subTop = (NULL == top->mLeft) ? top->mRight :
-            ((NULL == top->mRight) ? top->mLeft :
-             (top->mLeft->outRanks(*(top->mRight)) ? top->mLeft : top->mRight));
+        LocHeapNode *&subTop =
+                (NULL == top->mLeft)
+                        ? top->mRight
+                        : ((NULL == top->mRight)
+                                   ? top->mLeft
+                                   : (top->mLeft->outRanks(*(top->mRight)) ? top->mLeft
+                                                                           : top->mRight));
         // swap mData, the tree top gets updated with the new data.
         top->swap(*subTop);
         // pop out from the subtree
@@ -169,10 +170,10 @@ LocHeapNode* LocHeapNode::pop(LocHeapNode*& top) {
 // data. Since this is a heap, we do recursive linear search.
 // returns the pointer to the node removed, which would be either the
 //         same as input (if successfully removed); or NULL (if failed).
-LocHeapNode* LocHeapNode::remove(LocHeapNode*& top, LocRankable& data) {
-    LocHeapNode* removedNode = NULL;
+LocHeapNode *LocHeapNode::remove(LocHeapNode *&top, LocRankable &data) {
+    LocHeapNode *removedNode = NULL;
     // this is the node, by address
-    if (&data == (LocRankable*)(top->mData)) {
+    if (&data == (LocRankable *)(top->mData)) {
         // pop this node out
         removedNode = pop(top);
     } else if (!data.outRanks(*top->mData)) {
@@ -227,8 +228,8 @@ LocHeap::~LocHeap() {
     }
 }
 
-void LocHeap::push(LocRankable& node) {
-    LocHeapNode* heapNode = new LocHeapNode(node);
+void LocHeap::push(LocRankable &node) {
+    LocHeapNode *heapNode = new LocHeapNode(node);
     if (!mTree) {
         mTree = heapNode;
     } else {
@@ -236,30 +237,30 @@ void LocHeap::push(LocRankable& node) {
     }
 }
 
-LocRankable* LocHeap::peek() {
-    LocRankable* top = NULL;
+LocRankable *LocHeap::peek() {
+    LocRankable *top = NULL;
     if (mTree) {
         top = mTree->mData;
     }
     return top;
 }
 
-LocRankable* LocHeap::pop() {
-    LocRankable* locNode = NULL;
+LocRankable *LocHeap::pop() {
+    LocRankable *locNode = NULL;
     if (mTree) {
         // mTree may become NULL after this call
-        LocHeapNode* heapNode = LocHeapNode::pop(mTree);
+        LocHeapNode *heapNode = LocHeapNode::pop(mTree);
         locNode = heapNode->detachData();
         delete heapNode;
     }
     return locNode;
 }
 
-LocRankable* LocHeap::remove(LocRankable& rankable) {
-    LocRankable* locNode = NULL;
+LocRankable *LocHeap::remove(LocRankable &rankable) {
+    LocRankable *locNode = NULL;
     if (mTree) {
         // mTree may become NULL after this call
-        LocHeapNode* heapNode = LocHeapNode::remove(mTree, rankable);
+        LocHeapNode *heapNode = LocHeapNode::remove(mTree, rankable);
         if (heapNode) {
             locNode = heapNode->detachData();
             delete heapNode;
@@ -268,7 +269,7 @@ LocRankable* LocHeap::remove(LocRankable& rankable) {
     return locNode;
 }
 
-} // namespace loc_util
+}  // namespace loc_util
 
 #ifdef __LOC_UNIT_TEST__
 bool LocHeap::checkTree() {

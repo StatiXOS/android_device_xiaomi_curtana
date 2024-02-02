@@ -31,17 +31,16 @@
 
 #include "ILocationAPI.h"
 
-class LocationAPI : public ILocationAPI
-{
-private:
+class LocationAPI : public ILocationAPI {
+  private:
     LocationAPI();
     ~LocationAPI();
 
-public:
+  public:
     /* creates an instance to LocationAPI object.
        Will return NULL if mandatory parameters are invalid or if the maximum number
        of instances have been reached */
-    static LocationAPI* createInstance(LocationCallbacks&);
+    static LocationAPI *createInstance(LocationCallbacks &);
 
     /* destroy/cleans up the instance, which should be called when LocationControlAPI object is
        no longer needed. LocationControlAPI* returned from createInstance will no longer valid
@@ -50,14 +49,14 @@ public:
        LocationControlAPI::createInstance, then the caller must ensure that the memory still remains
        valid until destroyCompleteCb is invoked.
     */
-    void destroy(locationApiDestroyCompleteCallback destroyCompleteCb=nullptr);
+    void destroy(locationApiDestroyCompleteCallback destroyCompleteCb = nullptr);
 
-    void onRemoveClientCompleteCb (LocationAdapterTypeMask adapterType);
+    void onRemoveClientCompleteCb(LocationAdapterTypeMask adapterType);
 
     /* updates/changes the callbacks that will be called.
         mandatory callbacks must be present for callbacks to be successfully updated
         no return value */
-    virtual void updateCallbacks(LocationCallbacks&) override;
+    virtual void updateCallbacks(LocationCallbacks &) override;
 
     /* ================================== TRACKING ================================== */
 
@@ -70,7 +69,7 @@ public:
                 LOCATION_ERROR_ALREADY_STARTED if a startTracking session is already in progress
                 LOCATION_ERROR_CALLBACK_MISSING if no trackingCallback was passed in createInstance
                 LOCATION_ERROR_INVALID_PARAMETER if TrackingOptions parameter is invalid */
-    virtual uint32_t startTracking(TrackingOptions&) override;
+    virtual uint32_t startTracking(TrackingOptions &) override;
 
     /* stopTracking stops a tracking session associated with id parameter.
         responseCallback returns:
@@ -83,7 +82,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if TrackingOptions parameters are invalid
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a tracking session */
-    virtual void updateTrackingOptions(uint32_t id, TrackingOptions&) override;
+    virtual void updateTrackingOptions(uint32_t id, TrackingOptions &) override;
 
     /* ================================== BATCHING ================================== */
 
@@ -102,7 +101,7 @@ public:
                 LOCATION_ERROR_CALLBACK_MISSING if no batchingCallback was passed in createInstance
                 LOCATION_ERROR_INVALID_PARAMETER if a parameter is invalid
                 LOCATION_ERROR_NOT_SUPPORTED if batching is not supported */
-    virtual uint32_t startBatching(BatchingOptions&) override;
+    virtual uint32_t startBatching(BatchingOptions &) override;
 
     /* stopBatching stops a batching session associated with id parameter.
         responseCallback returns:
@@ -115,7 +114,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if BatchingOptions parameters are invalid
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a batching session */
-    virtual void updateBatchingOptions(uint32_t id, BatchingOptions&) override;
+    virtual void updateBatchingOptions(uint32_t id, BatchingOptions &) override;
 
     /* getBatchedLocations gets a number of locations that are currently stored/batched
        on the low power processor, delivered by the batchingCallback passed in createInstance.
@@ -138,14 +137,14 @@ public:
                 LOCATION_ERROR_CALLBACK_MISSING if no geofenceBreachCallback
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
                 LOCATION_ERROR_NOT_SUPPORTED if geofence is not supported */
-    virtual uint32_t* addGeofences(size_t count, GeofenceOption*, GeofenceInfo*) override;
+    virtual uint32_t *addGeofences(size_t count, GeofenceOption *, GeofenceInfo *) override;
 
     /* removeGeofences removes any number of geofences. Caller should delete ids array after
        removeGeofences returneds.
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void removeGeofences(size_t count, uint32_t* ids) override;
+    virtual void removeGeofences(size_t count, uint32_t *ids) override;
 
     /* modifyGeofences modifies any number of geofences. Caller should delete ids array after
        modifyGeofences returns.
@@ -153,7 +152,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid */
-    virtual void modifyGeofences(size_t count, uint32_t* ids, GeofenceOption* options) override;
+    virtual void modifyGeofences(size_t count, uint32_t *ids, GeofenceOption *options) override;
 
     /* pauseGeofences pauses any number of geofences, which is similar to removeGeofences,
        only that they can be resumed at any time. Caller should delete ids array after
@@ -161,22 +160,22 @@ public:
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void pauseGeofences(size_t count, uint32_t* ids) override;
+    virtual void pauseGeofences(size_t count, uint32_t *ids) override;
 
     /* resumeGeofences resumes any number of geofences that are currently paused. Caller should
        delete ids array after resumeGeofences returns.
         collectiveResponseCallback returns:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id is not associated with a geofence session */
-    virtual void resumeGeofences(size_t count, uint32_t* ids) override;
+    virtual void resumeGeofences(size_t count, uint32_t *ids) override;
 
     /* ================================== GNSS ====================================== */
 
-     /* gnssNiResponse is called in response to a gnssNiCallback.
-        responseCallback returns:
-                LOCATION_ERROR_SUCCESS if session was successful
-                LOCATION_ERROR_INVALID_PARAMETER if any parameters in GnssNiResponse are invalid
-                LOCATION_ERROR_ID_UNKNOWN if id does not match a gnssNiCallback */
+    /* gnssNiResponse is called in response to a gnssNiCallback.
+       responseCallback returns:
+               LOCATION_ERROR_SUCCESS if session was successful
+               LOCATION_ERROR_INVALID_PARAMETER if any parameters in GnssNiResponse are invalid
+               LOCATION_ERROR_ID_UNKNOWN if id does not match a gnssNiCallback */
     virtual void gnssNiResponse(uint32_t id, GnssNiResponse response) override;
 
     /* ================================== NETWORK PROVIDER =========================== */
@@ -188,30 +187,29 @@ public:
     virtual void disableNetworkProvider();
 
     /* startNetworkLocation start a single shot network location request */
-    virtual void startNetworkLocation(trackingCallback* callback);
+    virtual void startNetworkLocation(trackingCallback *callback);
 
     /* stopNetworkLocation stop any ongoing network location request */
-    virtual void stopNetworkLocation(trackingCallback* callback);
+    virtual void stopNetworkLocation(trackingCallback *callback);
 };
 
 typedef struct {
-    size_t size; // set to sizeof(LocationControlCallbacks)
-    responseCallback responseCb;                     // mandatory
-    collectiveResponseCallback collectiveResponseCb; // mandatory
-    gnssConfigCallback gnssConfigCb;                 // optional
+    size_t size;                                      // set to sizeof(LocationControlCallbacks)
+    responseCallback responseCb;                      // mandatory
+    collectiveResponseCallback collectiveResponseCb;  // mandatory
+    gnssConfigCallback gnssConfigCb;                  // optional
 } LocationControlCallbacks;
 
-class LocationControlAPI : public ILocationControlAPI
-{
-private:
+class LocationControlAPI : public ILocationControlAPI {
+  private:
     LocationControlAPI();
     ~LocationControlAPI();
 
-public:
+  public:
     /* creates an instance to LocationControlAPI object.
        Will return NULL if mandatory parameters are invalid or if the maximum number
        of instances have been reached. Only once instance allowed */
-    static LocationControlAPI* createInstance(LocationControlCallbacks&);
+    static LocationControlAPI *createInstance(LocationControlCallbacks &);
 
     /* destroy/cleans up the instance, which should be called when LocationControlAPI object is
        no longer needed. LocationControlAPI* returned from createInstance will no longer valid
@@ -253,7 +251,7 @@ public:
 
       PLEASE NOTE: It is caller's resposibility to FREE the memory of the return value.
                    The memory must be freed by delete [].*/
-    virtual uint32_t* gnssUpdateConfig(const GnssConfig& config) override;
+    virtual uint32_t *gnssUpdateConfig(const GnssConfig &config) override;
 
     /* gnssGetConfig fetches the current constellation and SV configuration
        on the GNSS engine.
@@ -271,7 +269,7 @@ public:
 
       PLEASE NOTE: It is caller's resposibility to FREE the memory of the return value.
                    The memory must be freed by delete [].*/
-    uint32_t* gnssGetConfig(GnssConfigFlagsMask mask);
+    uint32_t *gnssGetConfig(GnssConfigFlagsMask mask);
 
     /* delete specific gnss aiding data for testing, which returns a session id
        that will be returned in responseCallback to match command with response.
@@ -280,7 +278,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
                 LOCATION_ERROR_NOT_SUPPORTED if build is not userdebug */
-    virtual uint32_t gnssDeleteAidingData(GnssAidingData& data) override;
+    virtual uint32_t gnssDeleteAidingData(GnssAidingData &data) override;
 
     /** @brief
         Configure the constellation and SVs to be used by the GNSS engine on
@@ -302,9 +300,8 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
-    virtual uint32_t configConstellations(
-            const GnssSvTypeConfig& constellationEnablementConfig,
-            const GnssSvIdConfig&   blacklistSvConfig) override;
+    virtual uint32_t configConstellations(const GnssSvTypeConfig &constellationEnablementConfig,
+                                          const GnssSvIdConfig &blacklistSvConfig) override;
 
     /** @brief
         Configure the secondary band of constellations to be used by
@@ -322,7 +319,7 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
     virtual uint32_t configConstellationSecondaryBand(
-            const GnssSvTypeConfig& secondaryBandConfig) override;
+            const GnssSvTypeConfig &secondaryBandConfig) override;
 
     /** @brief
         Enable or disable the constrained time uncertainty feature.
@@ -356,9 +353,8 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters
                 are invalid
     */
-    virtual uint32_t configConstrainedTimeUncertainty(
-            bool enable, float tuncThreshold = 0.0,
-            uint32_t energyBudget = 0) override;
+    virtual uint32_t configConstrainedTimeUncertainty(bool enable, float tuncThreshold = 0.0,
+                                                      uint32_t energyBudget = 0) override;
 
     /** @brief
         Enable or disable position assisted clock estimator feature.
@@ -377,31 +373,31 @@ public:
     */
     virtual uint32_t configPositionAssistedClockEstimator(bool enable) override;
 
-        /** @brief
-        Sets the lever arm parameters for the vehicle.
+    /** @brief
+    Sets the lever arm parameters for the vehicle.
 
-        @param
-        configInfo: lever arm configuration info regarding below two
-        types of lever arm info:
-        a: GNSS Antenna w.r.t the origin at the IMU e.g.: inertial
-        measurement unit.
-        b: lever arm parameters regarding the OPF (output frame)
-        w.r.t the origin (at the GPS Antenna). Vehicle manufacturers
-        prefer the position output to be tied to a specific point in
-        the vehicle rather than where the antenna is placed
-        (midpoint of the rear axle is typical).
+    @param
+    configInfo: lever arm configuration info regarding below two
+    types of lever arm info:
+    a: GNSS Antenna w.r.t the origin at the IMU e.g.: inertial
+    measurement unit.
+    b: lever arm parameters regarding the OPF (output frame)
+    w.r.t the origin (at the GPS Antenna). Vehicle manufacturers
+    prefer the position output to be tied to a specific point in
+    the vehicle rather than where the antenna is placed
+    (midpoint of the rear axle is typical).
 
-        Caller can choose types of lever arm info to configure via the
-        leverMarkTypeMask.
+    Caller can choose types of lever arm info to configure via the
+    leverMarkTypeMask.
 
-        @return
-        A session id that will be returned in responseCallback to
-        match command with response. This effect is global for all
-        clients of LocationAPI responseCallback returns:
-                LOCATION_ERROR_SUCCESS if successful
-                LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
-    */
-    virtual uint32_t configLeverArm(const LeverArmConfigInfo& configInfo) override;
+    @return
+    A session id that will be returned in responseCallback to
+    match command with response. This effect is global for all
+    clients of LocationAPI responseCallback returns:
+            LOCATION_ERROR_SUCCESS if successful
+            LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
+*/
+    virtual uint32_t configLeverArm(const LeverArmConfigInfo &configInfo) override;
 
     /** @brief
         Configure the robust location setting.
@@ -455,57 +451,57 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
     */
     virtual uint32_t configDeadReckoningEngineParams(
-            const DeadReckoningEngineConfig& dreConfig) override;
+            const DeadReckoningEngineConfig &dreConfig) override;
 
-        /** @brief
-        This API is used to instruct the specified engine to be in
-        the pause/resume state. <br/>
+    /** @brief
+    This API is used to instruct the specified engine to be in
+    the pause/resume state. <br/>
 
-        When the engine is placed in paused state, the engine will
-        stop. If there is an on-going session, engine will no longer
-        produce fixes. In the paused state, calling API to delete
-        aiding data from the paused engine may not have effect.
-        Request to delete Aiding data shall be issued after
-        engine resume. <br/>
+    When the engine is placed in paused state, the engine will
+    stop. If there is an on-going session, engine will no longer
+    produce fixes. In the paused state, calling API to delete
+    aiding data from the paused engine may not have effect.
+    Request to delete Aiding data shall be issued after
+    engine resume. <br/>
 
-        Currently, only DRE engine will support pause/resume
-        request. responseCb() will return not supported when request
-        is made to pause/resume none-DRE engine. <br/>
+    Currently, only DRE engine will support pause/resume
+    request. responseCb() will return not supported when request
+    is made to pause/resume none-DRE engine. <br/>
 
-        Request to pause/resume DRE engine can be made with or
-        without an on-going session. With QDR engine, on resume, GNSS
-        position & heading re-acquisition is needed for DR engine to
-        engage. If DR engine is already in the requested state, the
-        request will be no-op.  <br/>
+    Request to pause/resume DRE engine can be made with or
+    without an on-going session. With QDR engine, on resume, GNSS
+    position & heading re-acquisition is needed for DR engine to
+    engage. If DR engine is already in the requested state, the
+    request will be no-op.  <br/>
 
-        @param
-        engType: the engine that is instructed to change its run
-        state. <br/>
+    @param
+    engType: the engine that is instructed to change its run
+    state. <br/>
 
-        engState: the new engine run state that the engine is
-        instructed to be in. <br/>
+    engState: the new engine run state that the engine is
+    instructed to be in. <br/>
 
-        @return
-        A session id that will be returned in responseCallback to
-        match command with response. This effect is global for all
-        clients of LocationAPI responseCallback returns:
-                LOCATION_ERROR_SUCCESS if successful
-                LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
-    */
+    @return
+    A session id that will be returned in responseCallback to
+    match command with response. This effect is global for all
+    clients of LocationAPI responseCallback returns:
+            LOCATION_ERROR_SUCCESS if successful
+            LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
+*/
     virtual uint32_t configEngineRunState(PositioningEngineMask engType,
                                           LocEngineRunState engState) override;
 
-      /** @brief
-        Set the EULA opt-in status from system user. This is used as consent to
-        use network-based positioning.
+    /** @brief
+      Set the EULA opt-in status from system user. This is used as consent to
+      use network-based positioning.
 
-        @param
-        userConsnt: user agrees to use GTP service or not.
+      @param
+      userConsnt: user agrees to use GTP service or not.
 
-        @return
-        A session id that will be returned in responseCallback to
-        match command with response.
-    */
+      @return
+      A session id that will be returned in responseCallback to
+      match command with response.
+  */
     virtual uint32_t setOptInStatus(bool userConsent);
 };
 

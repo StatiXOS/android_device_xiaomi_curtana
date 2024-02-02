@@ -30,6 +30,7 @@
 #define __LOC_THREAD__
 
 #include <stddef.h>
+
 #include <memory>
 
 using std::shared_ptr;
@@ -39,7 +40,7 @@ namespace loc_util {
 // abstract class to be implemented by client to provide a runnable class
 // which gets scheduled by LocThread
 class LocRunnable {
-public:
+  public:
     inline LocRunnable() = default;
     inline virtual ~LocRunnable() = default;
 
@@ -68,8 +69,9 @@ class LocThreadDelegate;
 // A utility class to create a thread and run LocRunnable
 // caller passes in.
 class LocThread {
-    LocThreadDelegate* mThread;
-public:
+    LocThreadDelegate *mThread;
+
+  public:
     inline LocThread() : mThread(NULL) {}
     inline virtual ~LocThread() { stop(); }
 
@@ -83,7 +85,7 @@ public:
     //          returns true. Else it is client's responsibility
     //          to delete the object
     // Returns 0 if success; false if failure.
-    bool start(const char* threadName, shared_ptr<LocRunnable> runnable);
+    bool start(const char *threadName, shared_ptr<LocRunnable> runnable);
 
     void stop();
 
@@ -91,5 +93,5 @@ public:
     inline bool isRunning() { return NULL != mThread; }
 };
 
-} // loc_util
-#endif //__LOC_THREAD__
+}  // namespace loc_util
+#endif  //__LOC_THREAD__

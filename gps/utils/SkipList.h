@@ -31,38 +31,41 @@
 #define LOC_SKIP_LIST_H
 
 #include <stdlib.h>
+
+#include <algorithm>
+#include <iostream>
 #include <list>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 using namespace std;
 
 namespace loc_util {
 
-template <typename T,
-         template<typename elem, typename Allocator = std::allocator<elem>> class container = list>
+template <typename T, template <typename elem, typename Allocator = std::allocator<elem>>
+                      class container = list>
 class SkipNode {
-public:
+  public:
     typedef typename container<SkipNode<T, container>>::iterator NodeIterator;
 
     int mLevel;
     T mData;
     NodeIterator mNextInLevel;
 
-    SkipNode(int level, T& data): mLevel(level), mData(data) {}
+    SkipNode(int level, T &data) : mLevel(level), mData(data) {}
 };
 
 template <typename T>
 class SkipList {
     using NodeIterator = typename SkipNode<T>::NodeIterator;
-private:
+
+  private:
     list<SkipNode<T>> mMainList;
     vector<NodeIterator> mHeadVec;
     vector<NodeIterator> mTailVec;
-public:
+
+  public:
     SkipList(int totalLevels);
-    void append(T& data, int level);
+    void append(T &data, int level);
     void pop(int level);
     void pop();
     T front(int level);
@@ -73,12 +76,12 @@ public:
 };
 
 template <typename T>
-SkipList<T>::SkipList(int totalLevels): mHeadVec(totalLevels, mMainList.end()),
-        mTailVec(totalLevels, mMainList.end()) {}
+SkipList<T>::SkipList(int totalLevels)
+    : mHeadVec(totalLevels, mMainList.end()), mTailVec(totalLevels, mMainList.end()) {}
 
 template <typename T>
-void SkipList<T>::append(T& data, int level) {
-    if ( level < 0 || level >= mHeadVec.size()) {
+void SkipList<T>::append(T &data, int level) {
+    if (level < 0 || level >= mHeadVec.size()) {
         return;
     }
 
@@ -136,9 +139,8 @@ void SkipList<T>::flush() {
 template <typename T>
 list<pair<T, int>> SkipList<T>::dump() {
     list<pair<T, int>> li;
-    for_each(mMainList.begin(), mMainList.end(), [&](SkipNode<T> &item) {
-        li.push_back(make_pair(item.mData, item.mLevel));
-    });
+    for_each(mMainList.begin(), mMainList.end(),
+             [&](SkipNode<T> &item) { li.push_back(make_pair(item.mData, item.mLevel)); });
     return li;
 }
 
@@ -153,6 +155,6 @@ list<pair<T, int>> SkipList<T>::dump(int level) {
     return li;
 }
 
-}
+}  // namespace loc_util
 
 #endif

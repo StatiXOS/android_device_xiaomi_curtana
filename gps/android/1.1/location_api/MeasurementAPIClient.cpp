@@ -30,11 +30,12 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_MeasurementAPIClient"
 
-#include <log_util.h>
+#include "MeasurementAPIClient.h"
+
 #include <loc_cfg.h>
+#include <log_util.h>
 
 #include "LocationUtil.h"
-#include "MeasurementAPIClient.h"
 
 namespace android {
 namespace hardware {
@@ -45,31 +46,26 @@ namespace implementation {
 using ::android::hardware::gnss::V1_0::IGnssMeasurement;
 using ::android::hardware::gnss::V1_1::IGnssMeasurementCallback;
 
-static void convertGnssData(GnssMeasurementsNotification& in,
-        V1_0::IGnssMeasurementCallback::GnssData& out);
-static void convertGnssData_1_1(GnssMeasurementsNotification& in,
-        IGnssMeasurementCallback::GnssData& out);
-static void convertGnssMeasurement(GnssMeasurementsData& in,
-        V1_0::IGnssMeasurementCallback::GnssMeasurement& out);
-static void convertGnssClock(GnssMeasurementsClock& in, IGnssMeasurementCallback::GnssClock& out);
+static void convertGnssData(GnssMeasurementsNotification &in,
+                            V1_0::IGnssMeasurementCallback::GnssData &out);
+static void convertGnssData_1_1(GnssMeasurementsNotification &in,
+                                IGnssMeasurementCallback::GnssData &out);
+static void convertGnssMeasurement(GnssMeasurementsData &in,
+                                   V1_0::IGnssMeasurementCallback::GnssMeasurement &out);
+static void convertGnssClock(GnssMeasurementsClock &in, IGnssMeasurementCallback::GnssClock &out);
 
-MeasurementAPIClient::MeasurementAPIClient() :
-    mGnssMeasurementCbIface(nullptr),
-    mGnssMeasurementCbIface_1_1(nullptr),
-    mTracking(false)
-{
+MeasurementAPIClient::MeasurementAPIClient()
+    : mGnssMeasurementCbIface(nullptr), mGnssMeasurementCbIface_1_1(nullptr), mTracking(false) {
     LOC_LOGD("%s]: ()", __FUNCTION__);
 }
 
-MeasurementAPIClient::~MeasurementAPIClient()
-{
+MeasurementAPIClient::~MeasurementAPIClient() {
     LOC_LOGD("%s]: ()", __FUNCTION__);
 }
 
 // for GpsInterface
-Return<IGnssMeasurement::GnssMeasurementStatus>
-MeasurementAPIClient::measurementSetCallback(const sp<V1_0::IGnssMeasurementCallback>& callback)
-{
+Return<IGnssMeasurement::GnssMeasurementStatus> MeasurementAPIClient::measurementSetCallback(
+        const sp<V1_0::IGnssMeasurementCallback> &callback) {
     LOC_LOGD("%s]: (%p)", __FUNCTION__, &callback);
 
     mMutex.lock();
@@ -79,13 +75,11 @@ MeasurementAPIClient::measurementSetCallback(const sp<V1_0::IGnssMeasurementCall
     return startTracking();
 }
 
-Return<IGnssMeasurement::GnssMeasurementStatus>
-MeasurementAPIClient::measurementSetCallback_1_1(
-        const sp<IGnssMeasurementCallback>& callback,
-        GnssPowerMode powerMode, uint32_t timeBetweenMeasurement)
-{
-    LOC_LOGD("%s]: (%p) (powermode: %d) (tbm: %d)",
-            __FUNCTION__, &callback, (int)powerMode, timeBetweenMeasurement);
+Return<IGnssMeasurement::GnssMeasurementStatus> MeasurementAPIClient::measurementSetCallback_1_1(
+        const sp<IGnssMeasurementCallback> &callback, GnssPowerMode powerMode,
+        uint32_t timeBetweenMeasurement) {
+    LOC_LOGD("%s]: (%p) (powermode: %d) (tbm: %d)", __FUNCTION__, &callback, (int)powerMode,
+             timeBetweenMeasurement);
 
     mMutex.lock();
     mGnssMeasurementCbIface_1_1 = callback;
@@ -94,10 +88,8 @@ MeasurementAPIClient::measurementSetCallback_1_1(
     return startTracking(powerMode, timeBetweenMeasurement);
 }
 
-Return<IGnssMeasurement::GnssMeasurementStatus>
-MeasurementAPIClient::startTracking(
-        GnssPowerMode powerMode, uint32_t timeBetweenMeasurement)
-{
+Return<IGnssMeasurement::GnssMeasurementStatus> MeasurementAPIClient::startTracking(
+        GnssPowerMode powerMode, uint32_t timeBetweenMeasurement) {
     LocationCallbacks locationCallbacks;
     memset(&locationCallbacks, 0, sizeof(LocationCallbacks));
     locationCallbacks.size = sizeof(LocationCallbacks);
@@ -114,9 +106,9 @@ MeasurementAPIClient::startTracking(
     locationCallbacks.gnssMeasurementsCb = nullptr;
     if (mGnssMeasurementCbIface_1_1 != nullptr || mGnssMeasurementCbIface != nullptr) {
         locationCallbacks.gnssMeasurementsCb =
-            [this](GnssMeasurementsNotification gnssMeasurementsNotification) {
-                onGnssMeasurementsCb(gnssMeasurementsNotification);
-            };
+                [this](GnssMeasurementsNotification gnssMeasurementsNotification) {
+                    onGnssMeasurementsCb(gnssMeasurementsNotification);
+                };
     }
 
     locAPISetCallbacks(locationCallbacks);
@@ -146,10 +138,9 @@ void MeasurementAPIClient::measurementClose() {
 
 // callbacks
 void MeasurementAPIClient::onGnssMeasurementsCb(
-        GnssMeasurementsNotification gnssMeasurementsNotification)
-{
-    LOC_LOGD("%s]: (count: %zu active: %d)",
-            __FUNCTION__, gnssMeasurementsNotification.count, mTracking);
+        GnssMeasurementsNotification gnssMeasurementsNotification) {
+    LOC_LOGD("%s]: (count: %zu active: %d)", __FUNCTION__, gnssMeasurementsNotification.count,
+             mTracking);
     if (mTracking) {
         mMutex.lock();
         sp<V1_0::IGnssMeasurementCallback> gnssMeasurementCbIface = nullptr;
@@ -166,24 +157,23 @@ void MeasurementAPIClient::onGnssMeasurementsCb(
             convertGnssData_1_1(gnssMeasurementsNotification, gnssData);
             auto r = gnssMeasurementCbIface_1_1->gnssMeasurementCb(gnssData);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssMeasurementCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssMeasurementCb description=%s", __func__,
+                         r.description().c_str());
             }
         } else if (gnssMeasurementCbIface != nullptr) {
             V1_0::IGnssMeasurementCallback::GnssData gnssData;
             convertGnssData(gnssMeasurementsNotification, gnssData);
             auto r = gnssMeasurementCbIface->GnssMeasurementCb(gnssData);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from GnssMeasurementCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from GnssMeasurementCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }
 }
 
-static void convertGnssMeasurement(GnssMeasurementsData& in,
-        V1_0::IGnssMeasurementCallback::GnssMeasurement& out)
-{
+static void convertGnssMeasurement(GnssMeasurementsData &in,
+                                   V1_0::IGnssMeasurementCallback::GnssMeasurement &out) {
     memset(&out, 0, sizeof(IGnssMeasurementCallback::GnssMeasurement));
     if (in.flags & GNSS_MEASUREMENTS_DATA_SIGNAL_TO_NOISE_RATIO_BIT)
         out.flags |= IGnssMeasurementCallback::GnssMeasurementFlags::HAS_SNR;
@@ -226,7 +216,7 @@ static void convertGnssMeasurement(GnssMeasurementsData& in,
         out.state |= IGnssMeasurementCallback::GnssMeasurementState::STATE_GAL_E1C_2ND_CODE_LOCK;
     if (in.stateMask & GNSS_MEASUREMENTS_STATE_GAL_E1B_PAGE_SYNC_BIT)
         out.state |= IGnssMeasurementCallback::GnssMeasurementState::STATE_GAL_E1B_PAGE_SYNC;
-    if (in.stateMask &  GNSS_MEASUREMENTS_STATE_SBAS_SYNC_BIT)
+    if (in.stateMask & GNSS_MEASUREMENTS_STATE_SBAS_SYNC_BIT)
         out.state |= IGnssMeasurementCallback::GnssMeasurementState::STATE_SBAS_SYNC;
     out.receivedSvTimeInNs = in.receivedSvTimeNs;
     out.receivedSvTimeUncertaintyInNs = in.receivedSvTimeUncertaintyNs;
@@ -235,33 +225,32 @@ static void convertGnssMeasurement(GnssMeasurementsData& in,
     out.pseudorangeRateUncertaintyMps = in.pseudorangeRateUncertaintyMps;
     if (in.adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_VALID_BIT)
         out.accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_VALID;
+                IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_VALID;
     if (in.adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_RESET_BIT)
         out.accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_RESET;
+                IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_RESET;
     if (in.adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_CYCLE_SLIP_BIT)
         out.accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_CYCLE_SLIP;
+                IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_CYCLE_SLIP;
     out.accumulatedDeltaRangeM = in.adrMeters;
     out.accumulatedDeltaRangeUncertaintyM = in.adrUncertaintyMeters;
     out.carrierFrequencyHz = in.carrierFrequencyHz;
     out.carrierCycles = in.carrierCycles;
     out.carrierPhase = in.carrierPhase;
     out.carrierPhaseUncertainty = in.carrierPhaseUncertainty;
-    uint8_t indicator =
-        static_cast<uint8_t>(IGnssMeasurementCallback::GnssMultipathIndicator::INDICATOR_UNKNOWN);
+    uint8_t indicator = static_cast<uint8_t>(
+            IGnssMeasurementCallback::GnssMultipathIndicator::INDICATOR_UNKNOWN);
     if (in.multipathIndicator & GNSS_MEASUREMENTS_MULTIPATH_INDICATOR_PRESENT)
         indicator |= IGnssMeasurementCallback::GnssMultipathIndicator::INDICATOR_PRESENT;
     if (in.multipathIndicator & GNSS_MEASUREMENTS_MULTIPATH_INDICATOR_NOT_PRESENT)
         indicator |= IGnssMeasurementCallback::GnssMultipathIndicator::INDICATIOR_NOT_PRESENT;
     out.multipathIndicator =
-        static_cast<IGnssMeasurementCallback::GnssMultipathIndicator>(indicator);
+            static_cast<IGnssMeasurementCallback::GnssMultipathIndicator>(indicator);
     out.snrDb = in.signalToNoiseRatioDb;
     out.agcLevelDb = in.agcLevelDb;
 }
 
-static void convertGnssClock(GnssMeasurementsClock& in, IGnssMeasurementCallback::GnssClock& out)
-{
+static void convertGnssClock(GnssMeasurementsClock &in, IGnssMeasurementCallback::GnssClock &out) {
     memset(&out, 0, sizeof(IGnssMeasurementCallback::GnssClock));
     if (in.flags & GNSS_MEASUREMENTS_CLOCK_FLAGS_LEAP_SECOND_BIT)
         out.gnssClockFlags |= IGnssMeasurementCallback::GnssClockFlags::HAS_LEAP_SECOND;
@@ -288,13 +277,12 @@ static void convertGnssClock(GnssMeasurementsClock& in, IGnssMeasurementCallback
     out.hwClockDiscontinuityCount = in.hwClockDiscontinuityCount;
 }
 
-static void convertGnssData(GnssMeasurementsNotification& in,
-        V1_0::IGnssMeasurementCallback::GnssData& out)
-{
+static void convertGnssData(GnssMeasurementsNotification &in,
+                            V1_0::IGnssMeasurementCallback::GnssData &out) {
     out.measurementCount = in.count;
     if (out.measurementCount > static_cast<uint32_t>(V1_0::GnssMax::SVS_COUNT)) {
-        LOC_LOGW("%s]: Too many measurement %u. Clamps to %d.",
-                __FUNCTION__,  out.measurementCount, V1_0::GnssMax::SVS_COUNT);
+        LOC_LOGW("%s]: Too many measurement %u. Clamps to %d.", __FUNCTION__, out.measurementCount,
+                 V1_0::GnssMax::SVS_COUNT);
         out.measurementCount = static_cast<uint32_t>(V1_0::GnssMax::SVS_COUNT);
     }
     for (size_t i = 0; i < out.measurementCount; i++) {
@@ -303,24 +291,27 @@ static void convertGnssData(GnssMeasurementsNotification& in,
     convertGnssClock(in.clock, out.clock);
 }
 
-static void convertGnssData_1_1(GnssMeasurementsNotification& in,
-        IGnssMeasurementCallback::GnssData& out)
-{
+static void convertGnssData_1_1(GnssMeasurementsNotification &in,
+                                IGnssMeasurementCallback::GnssData &out) {
     out.measurements.resize(in.count);
     for (size_t i = 0; i < in.count; i++) {
         convertGnssMeasurement(in.measurements[i], out.measurements[i].v1_0);
-        if (in.measurements[i].adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_VALID_BIT)
+        if (in.measurements[i].adrStateMask &
+            GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_VALID_BIT)
             out.measurements[i].accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_VALID;
-        if (in.measurements[i].adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_RESET_BIT)
+                    IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_VALID;
+        if (in.measurements[i].adrStateMask &
+            GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_RESET_BIT)
             out.measurements[i].accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_RESET;
-        if (in.measurements[i].adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_CYCLE_SLIP_BIT)
+                    IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_RESET;
+        if (in.measurements[i].adrStateMask &
+            GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_CYCLE_SLIP_BIT)
             out.measurements[i].accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_CYCLE_SLIP;
-        if (in.measurements[i].adrStateMask & GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_HALF_CYCLE_RESOLVED_BIT)
-            out.measurements[i].accumulatedDeltaRangeState |=
-            IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_HALF_CYCLE_RESOLVED;
+                    IGnssMeasurementCallback::GnssAccumulatedDeltaRangeState::ADR_STATE_CYCLE_SLIP;
+        if (in.measurements[i].adrStateMask &
+            GNSS_MEASUREMENTS_ACCUMULATED_DELTA_RANGE_STATE_HALF_CYCLE_RESOLVED_BIT)
+            out.measurements[i].accumulatedDeltaRangeState |= IGnssMeasurementCallback::
+                    GnssAccumulatedDeltaRangeState::ADR_STATE_HALF_CYCLE_RESOLVED;
     }
     convertGnssClock(in.clock, out.clock);
 }

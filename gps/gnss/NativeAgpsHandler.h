@@ -29,36 +29,38 @@
 #ifndef NATIVEAGPSHANDLER_H
 #define NATIVEAGPSHANDLER_H
 
-#include <cinttypes>
-#include <string.h>
-#include <gps_extended_c.h>
-#include <IDataItemObserver.h>
 #include <IDataItemCore.h>
+#include <IDataItemObserver.h>
 #include <IOsObserver.h>
+#include <gps_extended_c.h>
+#include <string.h>
+
+#include <cinttypes>
 
 using namespace std;
-using loc_core::IOsObserver;
-using loc_core::IDataItemObserver;
 using loc_core::IDataItemCore;
+using loc_core::IDataItemObserver;
+using loc_core::IOsObserver;
 
 class GnssAdapter;
 
 class NativeAgpsHandler : public IDataItemObserver {
-public:
-    NativeAgpsHandler(IOsObserver* sysStatObs, GnssAdapter& adapter);
+  public:
+    NativeAgpsHandler(IOsObserver *sysStatObs, GnssAdapter &adapter);
     ~NativeAgpsHandler();
     AgpsCbInfo getAgpsCbInfo();
     // IDataItemObserver overrides
-    virtual void notify(const list<IDataItemCore*>& dlist);
-    inline virtual void getName(string& name);
-private:
-    static NativeAgpsHandler* sLocalHandle;
+    virtual void notify(const list<IDataItemCore *> &dlist);
+    inline virtual void getName(string &name);
+
+  private:
+    static NativeAgpsHandler *sLocalHandle;
     static void agnssStatusIpV4Cb(AGnssExtStatusIpV4 statusInfo);
     void processATLRequestRelease(AGnssExtStatusIpV4 statusInfo);
-    IOsObserver* mSystemStatusObsrvr;
+    IOsObserver *mSystemStatusObsrvr;
     bool mConnected;
     string mApn;
-    GnssAdapter& mAdapter;
+    GnssAdapter &mAdapter;
 };
 
-#endif // NATIVEAGPSHANDLER_H
+#endif  // NATIVEAGPSHANDLER_H

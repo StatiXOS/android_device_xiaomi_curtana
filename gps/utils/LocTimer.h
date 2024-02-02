@@ -30,8 +30,8 @@
 #ifndef __LOC_TIMER_CPP_H__
 #define __LOC_TIMER_CPP_H__
 
-#include <stddef.h>
 #include <loc_pla.h>
+#include <stddef.h>
 
 namespace loc_util {
 
@@ -41,16 +41,15 @@ class LocSharedLock;
 
 // LocTimer client must extend this class and implementthe callback.
 // start() / stop() methods are to arm / disarm timer.
-class LocTimer
-{
-    LocTimerDelegate* mTimer;
-    LocSharedLock* mLock;
+class LocTimer {
+    LocTimerDelegate *mTimer;
+    LocSharedLock *mLock;
     // don't really want mLock to be manipulated by clients, yet LocTimer
     // has to have a reference to the lock so that the delete of LocTimer
     // and LocTimerDelegate can work together on their share resources.
     friend class LocTimerDelegate;
 
-public:
+  public:
     LocTimer();
     virtual ~LocTimer();
 
@@ -73,6 +72,6 @@ public:
     virtual void timeOutCallback() = 0;
 };
 
-} // namespace loc_util
+}  // namespace loc_util
 
-#endif //__LOC_DELAY_H__
+#endif  //__LOC_DELAY_H__

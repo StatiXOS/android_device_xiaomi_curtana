@@ -30,11 +30,10 @@
 #ifndef BATCHING_API_CLINET_H
 #define BATCHING_API_CLINET_H
 
+#include <LocationAPIClientBase.h>
 #include <android/hardware/gnss/1.0/IGnssBatching.h>
 #include <android/hardware/gnss/1.0/IGnssBatchingCallback.h>
 #include <pthread.h>
-
-#include <LocationAPIClientBase.h>
 
 namespace android {
 namespace hardware {
@@ -42,13 +41,12 @@ namespace gnss {
 namespace V1_1 {
 namespace implementation {
 
-class BatchingAPIClient : public LocationAPIClientBase
-{
-public:
-    BatchingAPIClient(const sp<V1_0::IGnssBatchingCallback>& callback);
+class BatchingAPIClient : public LocationAPIClientBase {
+  public:
+    BatchingAPIClient(const sp<V1_0::IGnssBatchingCallback> &callback);
     int getBatchSize();
-    int startSession(const V1_0::IGnssBatching::Options& options);
-    int updateSessionOptions(const V1_0::IGnssBatching::Options& options);
+    int startSession(const V1_0::IGnssBatching::Options &options);
+    int updateSessionOptions(const V1_0::IGnssBatching::Options &options);
     int stopSession();
     void getBatchedLocation(int last_n_locations);
     void flushBatchedLocations();
@@ -57,9 +55,9 @@ public:
 
     // callbacks
     void onCapabilitiesCb(LocationCapabilitiesMask capabilitiesMask) final;
-    void onBatchingCb(size_t count, Location* location, BatchingOptions batchOptions) final;
+    void onBatchingCb(size_t count, Location *location, BatchingOptions batchOptions) final;
 
-private:
+  private:
     ~BatchingAPIClient();
 
     sp<V1_0::IGnssBatchingCallback> mGnssBatchingCbIface;
@@ -72,4 +70,4 @@ private:
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-#endif // BATCHING_API_CLINET_H
+#endif  // BATCHING_API_CLINET_H

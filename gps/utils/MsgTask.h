@@ -29,8 +29,9 @@
 #ifndef __MSG_TASK__
 #define __MSG_TASK__
 
-#include <functional>
 #include <LocThread.h>
+
+#include <functional>
 
 namespace loc_util {
 
@@ -42,15 +43,16 @@ struct LocMsg {
 };
 
 class MsgTask {
-    const void* mQ;
+    const void *mQ;
     LocThread mThread;
-public:
+
+  public:
     ~MsgTask() = default;
-    MsgTask(const char* threadName = NULL);
-    void sendMsg(const LocMsg* msg) const;
+    MsgTask(const char *threadName = NULL);
+    void sendMsg(const LocMsg *msg) const;
     void sendMsg(const std::function<void()> runnable) const;
 };
 
-} //
+}  // namespace loc_util
 
-#endif //__MSG_TASK__
+#endif  //__MSG_TASK__

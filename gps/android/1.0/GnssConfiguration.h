@@ -3,7 +3,7 @@
  * Not a Contribution
  */
 
- /* Copyright (C) 2016 The Android Open Source Project
+/* Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-
 #ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSCONFIGURATION_H
 #define ANDROID_HARDWARE_GNSS_V1_0_GNSSCONFIGURATION_H
 
@@ -31,19 +30,19 @@ namespace gnss {
 namespace V1_0 {
 namespace implementation {
 
-using ::android::hardware::gnss::V1_0::IGnssConfiguration;
+using ::android::sp;
+using ::android::hardware::hidl_string;
+using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::hidl_string;
-using ::android::sp;
+using ::android::hardware::gnss::V1_0::IGnssConfiguration;
 
 /*
  * Interface for passing GNSS configuration info from platform to HAL.
  */
 struct Gnss;
 struct GnssConfiguration : public IGnssConfiguration {
-    GnssConfiguration(Gnss* gnss);
+    GnssConfiguration(Gnss *gnss);
     ~GnssConfiguration() = default;
 
     /*
@@ -58,8 +57,8 @@ struct GnssConfiguration : public IGnssConfiguration {
     Return<bool> setEmergencySuplPdn(bool enable) override;
     Return<bool> setGpsLock(uint8_t lock) override;
 
- private:
-    Gnss* mGnss = nullptr;
+  private:
+    Gnss *mGnss = nullptr;
 };
 
 }  // namespace implementation

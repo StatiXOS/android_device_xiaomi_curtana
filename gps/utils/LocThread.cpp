@@ -26,17 +26,18 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-#include <sys/prctl.h>
 #include <LocThread.h>
+#include <loc_pla.h>
 #include <string.h>
+#include <sys/prctl.h>
+
 #include <string>
 #include <thread>
-#include <loc_pla.h>
 
-using std::weak_ptr;
 using std::shared_ptr;
-using std::thread;
 using std::string;
+using std::thread;
+using std::weak_ptr;
 
 namespace loc_util {
 
@@ -45,20 +46,21 @@ class LocThreadDelegate {
     weak_ptr<LocRunnable> mRunnable;
     thread mThread;
     LocThreadDelegate(const string tName, shared_ptr<LocRunnable> r);
-public:
+
+  public:
     ~LocThreadDelegate() {
         shared_ptr<LocRunnable> runnable = mRunnable.lock();
         if (nullptr != runnable) {
             runnable->interrupt();
         }
     }
-    inline static LocThreadDelegate* create(const char* tName, shared_ptr<LocRunnable> runnable);
+    inline static LocThreadDelegate *create(const char *tName, shared_ptr<LocRunnable> runnable);
 };
 
 const char LocThreadDelegate::defaultThreadName[] = "LocThread";
 
-LocThreadDelegate* LocThreadDelegate::create(const char* tName, shared_ptr<LocRunnable> runnable) {
-    LocThreadDelegate* threadDelegate = nullptr;
+LocThreadDelegate *LocThreadDelegate::create(const char *tName, shared_ptr<LocRunnable> runnable) {
+    LocThreadDelegate *threadDelegate = nullptr;
 
     if (nullptr != runnable) {
         if (!tName) {
@@ -77,21 +79,18 @@ LocThreadDelegate* LocThreadDelegate::create(const char* tName, shared_ptr<LocRu
     return threadDelegate;
 }
 
-LocThreadDelegate::LocThreadDelegate(const string tName, shared_ptr<LocRunnable> runnable) :
-        mRunnable(runnable),
-        mThread([tName, runnable] {
-                prctl(PR_SET_NAME, tName.c_str(), 0, 0, 0);
-                runnable->prerun();
-                while (runnable->run());
-                runnable->postrun();
-            }) {
-
+LocThreadDelegate::LocThreadDelegate(const string tName, shared_ptr<LocRunnable> runnable)
+    : mRunnable(runnable), mThread([tName, runnable] {
+          prctl(PR_SET_NAME, tName.c_str(), 0, 0, 0);
+          runnable->prerun();
+          while (runnable->run())
+              ;
+          runnable->postrun();
+      }) {
     mThread.detach();
 }
 
-
-
-bool LocThread::start(const char* tName, shared_ptr<LocRunnable> runnable) {
+bool LocThread::start(const char *tName, shared_ptr<LocRunnable> runnable) {
     bool success = false;
     if (!mThread) {
         mThread = LocThreadDelegate::create(tName, runnable);
@@ -108,4 +107,4 @@ void LocThread::stop() {
     }
 }
 
-} // loc_util
+}  // namespace loc_util

@@ -28,10 +28,10 @@
  */
 
 #include <LocationUtil.h>
-#include <log_util.h>
-#include <inttypes.h>
 #include <gps_extended_c.h>
+#include <inttypes.h>
 #include <loc_misc_utils.h>
+#include <log_util.h>
 
 namespace android {
 namespace hardware {
@@ -39,13 +39,12 @@ namespace gnss {
 namespace V2_0 {
 namespace implementation {
 
-using ::android::hardware::gnss::V2_0::GnssLocation;
+using ::android::hardware::gnss::V1_0::GnssLocationFlags;
 using ::android::hardware::gnss::V2_0::ElapsedRealtimeFlags;
 using ::android::hardware::gnss::V2_0::GnssConstellationType;
-using ::android::hardware::gnss::V1_0::GnssLocationFlags;
+using ::android::hardware::gnss::V2_0::GnssLocation;
 
-void convertGnssLocation(Location& in, V1_0::GnssLocation& out)
-{
+void convertGnssLocation(Location &in, V1_0::GnssLocation &out) {
     memset(&out, 0, sizeof(V1_0::GnssLocation));
     if (in.flags & LOCATION_HAS_LAT_LONG_BIT) {
         out.gnssLocationFlags |= GnssLocationFlags::HAS_LAT_LONG;
@@ -84,8 +83,7 @@ void convertGnssLocation(Location& in, V1_0::GnssLocation& out)
     out.timestamp = static_cast<V1_0::GnssUtcTime>(in.timestamp);
 }
 
-void convertGnssLocation(Location& in, V2_0::GnssLocation& out)
-{
+void convertGnssLocation(Location &in, V2_0::GnssLocation &out) {
     memset(&out, 0, sizeof(V2_0::GnssLocation));
     convertGnssLocation(in, out.v1_0);
 
@@ -94,16 +92,17 @@ void convertGnssLocation(Location& in, V2_0::GnssLocation& out)
         out.elapsedRealtime.timestampNs = in.elapsedRealTime;
         out.elapsedRealtime.flags |= ElapsedRealtimeFlags::HAS_TIME_UNCERTAINTY_NS;
         out.elapsedRealtime.timeUncertaintyNs = in.elapsedRealTimeUnc;
-        LOC_LOGd("out.elapsedRealtime.timestampNs=%" PRIi64 ""
-                 " out.elapsedRealtime.timeUncertaintyNs=%" PRIi64 ""
+        LOC_LOGd("out.elapsedRealtime.timestampNs=%" PRIi64
+                 ""
+                 " out.elapsedRealtime.timeUncertaintyNs=%" PRIi64
+                 ""
                  " out.elapsedRealtime.flags=0x%X",
-                 out.elapsedRealtime.timestampNs,
-                 out.elapsedRealtime.timeUncertaintyNs, out.elapsedRealtime.flags);
+                 out.elapsedRealtime.timestampNs, out.elapsedRealtime.timeUncertaintyNs,
+                 out.elapsedRealtime.flags);
     }
 }
 
-void convertGnssLocation(const V1_0::GnssLocation& in, Location& out)
-{
+void convertGnssLocation(const V1_0::GnssLocation &in, Location &out) {
     memset(&out, 0, sizeof(out));
     if (in.gnssLocationFlags & GnssLocationFlags::HAS_LAT_LONG) {
         out.flags |= LOCATION_HAS_LAT_LONG_BIT;
@@ -142,15 +141,13 @@ void convertGnssLocation(const V1_0::GnssLocation& in, Location& out)
     out.timestamp = static_cast<uint64_t>(in.timestamp);
 }
 
-void convertGnssLocation(const V2_0::GnssLocation& in, Location& out)
-{
+void convertGnssLocation(const V2_0::GnssLocation &in, Location &out) {
     memset(&out, 0, sizeof(out));
     convertGnssLocation(in.v1_0, out);
 }
 
-void convertGnssConstellationType(GnssSvType& in, V1_0::GnssConstellationType& out)
-{
-    switch(in) {
+void convertGnssConstellationType(GnssSvType &in, V1_0::GnssConstellationType &out) {
+    switch (in) {
         case GNSS_SV_TYPE_GPS:
             out = V1_0::GnssConstellationType::GPS;
             break;
@@ -176,9 +173,8 @@ void convertGnssConstellationType(GnssSvType& in, V1_0::GnssConstellationType& o
     }
 }
 
-void convertGnssConstellationType(GnssSvType& in, V2_0::GnssConstellationType& out)
-{
-    switch(in) {
+void convertGnssConstellationType(GnssSvType &in, V2_0::GnssConstellationType &out) {
+    switch (in) {
         case GNSS_SV_TYPE_GPS:
             out = V2_0::GnssConstellationType::GPS;
             break;
@@ -207,8 +203,7 @@ void convertGnssConstellationType(GnssSvType& in, V2_0::GnssConstellationType& o
     }
 }
 
-void convertGnssSvid(GnssSv& in, int16_t& out)
-{
+void convertGnssSvid(GnssSv &in, int16_t &out) {
     switch (in.type) {
         case GNSS_SV_TYPE_GPS:
             out = in.svId;
@@ -217,9 +212,9 @@ void convertGnssSvid(GnssSv& in, int16_t& out)
             out = in.svId;
             break;
         case GNSS_SV_TYPE_GLONASS:
-            if (!isGloSlotUnknown(in.svId)) { // OSN is known
+            if (!isGloSlotUnknown(in.svId)) {  // OSN is known
                 out = in.svId - GLO_SV_PRN_MIN + 1;
-            } else { // OSN is not known, report FCN
+            } else {  // OSN is not known, report FCN
                 out = in.gloFrequency + 92;
             }
             break;
@@ -241,8 +236,7 @@ void convertGnssSvid(GnssSv& in, int16_t& out)
     }
 }
 
-void convertGnssSvid(GnssMeasurementsData& in, int16_t& out)
-{
+void convertGnssSvid(GnssMeasurementsData &in, int16_t &out) {
     switch (in.svType) {
         case GNSS_SV_TYPE_GPS:
             out = in.svId;
@@ -251,9 +245,9 @@ void convertGnssSvid(GnssMeasurementsData& in, int16_t& out)
             out = in.svId;
             break;
         case GNSS_SV_TYPE_GLONASS:
-            if (!isGloSlotUnknown(in.svId)) { // OSN is known
+            if (!isGloSlotUnknown(in.svId)) {  // OSN is known
                 out = in.svId - GLO_SV_PRN_MIN + 1;
-            } else { // OSN is not known, report FCN
+            } else {  // OSN is not known, report FCN
                 out = in.gloFrequency + 92;
             }
             break;
@@ -275,9 +269,8 @@ void convertGnssSvid(GnssMeasurementsData& in, int16_t& out)
     }
 }
 
-void convertGnssEphemerisType(GnssEphemerisType& in, GnssDebug::SatelliteEphemerisType& out)
-{
-    switch(in) {
+void convertGnssEphemerisType(GnssEphemerisType &in, GnssDebug::SatelliteEphemerisType &out) {
+    switch (in) {
         case GNSS_EPH_TYPE_EPHEMERIS:
             out = GnssDebug::SatelliteEphemerisType::EPHEMERIS;
             break;
@@ -291,9 +284,8 @@ void convertGnssEphemerisType(GnssEphemerisType& in, GnssDebug::SatelliteEphemer
     }
 }
 
-void convertGnssEphemerisSource(GnssEphemerisSource& in, GnssDebug::SatelliteEphemerisSource& out)
-{
-    switch(in) {
+void convertGnssEphemerisSource(GnssEphemerisSource &in, GnssDebug::SatelliteEphemerisSource &out) {
+    switch (in) {
         case GNSS_EPH_SOURCE_DEMODULATED:
             out = GnssDebug::SatelliteEphemerisSource::DEMODULATED;
             break;
@@ -311,9 +303,8 @@ void convertGnssEphemerisSource(GnssEphemerisSource& in, GnssDebug::SatelliteEph
     }
 }
 
-void convertGnssEphemerisHealth(GnssEphemerisHealth& in, GnssDebug::SatelliteEphemerisHealth& out)
-{
-    switch(in) {
+void convertGnssEphemerisHealth(GnssEphemerisHealth &in, GnssDebug::SatelliteEphemerisHealth &out) {
+    switch (in) {
         case GNSS_EPH_HEALTH_GOOD:
             out = GnssDebug::SatelliteEphemerisHealth::GOOD;
             break;

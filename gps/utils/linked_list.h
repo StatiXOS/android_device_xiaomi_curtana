@@ -36,23 +36,22 @@ extern "C" {
 #include <stdlib.h>
 
 /** Linked List Return Codes */
-typedef enum
-{
-  eLINKED_LIST_SUCCESS                             = 0,
-     /**< Request was successful. */
-  eLINKED_LIST_FAILURE_GENERAL                     = -1,
-     /**< Failed because of a general failure. */
-  eLINKED_LIST_INVALID_PARAMETER                   = -2,
-     /**< Failed because the request contained invalid parameters. */
-  eLINKED_LIST_INVALID_HANDLE                      = -3,
-     /**< Failed because an invalid handle was specified. */
-  eLINKED_LIST_UNAVAILABLE_RESOURCE                = -4,
-     /**< Failed because an there were not enough resources. */
-  eLINKED_LIST_INSUFFICIENT_BUFFER                 = -5,
-     /**< Failed because an the supplied buffer was too small. */
-  eLINKED_LIST_EMPTY                               = -6
-     /**< Failed because list is empty. */
-}linked_list_err_type;
+typedef enum {
+    eLINKED_LIST_SUCCESS = 0,
+    /**< Request was successful. */
+    eLINKED_LIST_FAILURE_GENERAL = -1,
+    /**< Failed because of a general failure. */
+    eLINKED_LIST_INVALID_PARAMETER = -2,
+    /**< Failed because the request contained invalid parameters. */
+    eLINKED_LIST_INVALID_HANDLE = -3,
+    /**< Failed because an invalid handle was specified. */
+    eLINKED_LIST_UNAVAILABLE_RESOURCE = -4,
+    /**< Failed because an there were not enough resources. */
+    eLINKED_LIST_INSUFFICIENT_BUFFER = -5,
+    /**< Failed because an the supplied buffer was too small. */
+    eLINKED_LIST_EMPTY = -6
+    /**< Failed because list is empty. */
+} linked_list_err_type;
 
 /*===========================================================================
 FUNCTION    linked_list_init
@@ -72,7 +71,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_init(void** list_data);
+linked_list_err_type linked_list_init(void **list_data);
 
 /*===========================================================================
 FUNCTION    linked_list_destroy
@@ -92,7 +91,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_destroy(void** list_data);
+linked_list_err_type linked_list_destroy(void **list_data);
 
 /*===========================================================================
 FUNCTION    linked_list_add
@@ -117,7 +116,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_add(void* list_data, void *data_obj, void (*dealloc)(void*));
+linked_list_err_type linked_list_add(void *list_data, void *data_obj, void (*dealloc)(void *));
 
 /*===========================================================================
 FUNCTION    linked_list_remove
@@ -139,7 +138,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_remove(void* list_data, void **data_obj);
+linked_list_err_type linked_list_remove(void *list_data, void **data_obj);
 
 /*===========================================================================
 FUNCTION    linked_list_empty
@@ -161,7 +160,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-int linked_list_empty(void* list_data);
+int linked_list_empty(void *list_data);
 
 /*===========================================================================
 FUNCTION    linked_list_flush
@@ -182,7 +181,7 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_flush(void* list_data);
+linked_list_err_type linked_list_flush(void *list_data);
 
 /*===========================================================================
 FUNCTION    linked_list_search
@@ -208,9 +207,9 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-linked_list_err_type linked_list_search(void* list_data, void **data_p,
-                                        bool (*equal)(void* data_0, void* data),
-                                        void* data_0, bool rm_if_found);
+linked_list_err_type linked_list_search(void *list_data, void **data_p,
+                                        bool (*equal)(void *data_0, void *data), void *data_0,
+                                        bool rm_if_found);
 
 #ifdef __cplusplus
 }

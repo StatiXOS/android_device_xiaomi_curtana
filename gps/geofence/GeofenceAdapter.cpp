@@ -29,17 +29,17 @@
 #define LOG_TAG "LocSvc_GeofenceAdapter"
 
 #include <GeofenceAdapter.h>
-#include "loc_log.h"
 #include <log_util.h>
+
 #include <string>
+
+#include "loc_log.h"
 
 using namespace loc_core;
 
-GeofenceAdapter::GeofenceAdapter() :
-    LocAdapterBase(0,
-                   LocContext::getLocContext(LocContext::mLocationHalName),
-                   true /*isMaster*/, nullptr, true)
-{
+GeofenceAdapter::GeofenceAdapter()
+    : LocAdapterBase(0, LocContext::getLocContext(LocContext::mLocationHalName), true /*isMaster*/,
+                     nullptr, true) {
     LOC_LOGD("%s]: Constructor", __func__);
 
     // at last step, let us inform adapater base that we are done
@@ -47,41 +47,36 @@ GeofenceAdapter::GeofenceAdapter() :
     doneInit();
 }
 
-void
-GeofenceAdapter::stopClientSessions(LocationAPI* client)
-{
+void GeofenceAdapter::stopClientSessions(LocationAPI *client) {
     LOC_LOGD("%s]: client %p", __func__, client);
-
 
     for (auto it = mGeofenceIds.begin(); it != mGeofenceIds.end();) {
         uint32_t hwId = it->second;
         GeofenceKey key(it->first);
         if (client == key.client) {
             it = mGeofenceIds.erase(it);
-            mLocApi->removeGeofence(hwId, key.id,
-                    new LocApiResponse(*getContext(),
-                    [this, hwId] (LocationError err) {
-                if (LOCATION_ERROR_SUCCESS == err) {
-                    auto it2 = mGeofences.find(hwId);
-                    if (it2 != mGeofences.end()) {
-                        mGeofences.erase(it2);
-                    } else {
-                        LOC_LOGE("%s]:geofence item to erase not found. hwId %u", __func__, hwId);
-                    }
-                }
-            }));
+            mLocApi->removeGeofence(
+                    hwId, key.id,
+                    new LocApiResponse(*getContext(), [this, hwId](LocationError err) {
+                        if (LOCATION_ERROR_SUCCESS == err) {
+                            auto it2 = mGeofences.find(hwId);
+                            if (it2 != mGeofences.end()) {
+                                mGeofences.erase(it2);
+                            } else {
+                                LOC_LOGE("%s]:geofence item to erase not found. hwId %u", __func__,
+                                         hwId);
+                            }
+                        }
+                    }));
             continue;
         }
-        ++it; // increment only when not erasing an iterator
+        ++it;  // increment only when not erasing an iterator
     }
-
 }
 
-void
-GeofenceAdapter::updateClientsEventMask()
-{
+void GeofenceAdapter::updateClientsEventMask() {
     LOC_API_ADAPTER_EVENT_MASK_T mask = 0;
-    for (auto it=mClientData.begin(); it != mClientData.end(); ++it) {
+    for (auto it = mClientData.begin(); it != mClientData.end(); ++it) {
         if (it->second.geofenceBreachCb != nullptr) {
             mask |= LOC_API_ADAPTER_BIT_BATCHED_GENFENCE_BREACH_REPORT;
             mask |= LOC_API_ADAPTER_BIT_REPORT_GENFENCE_DWELL;
@@ -93,9 +88,8 @@ GeofenceAdapter::updateClientsEventMask()
     updateEvtMask(mask, LOC_REGISTRATION_MASK_SET);
 }
 
-LocationError
-GeofenceAdapter::getHwIdFromClient(LocationAPI* client, uint32_t clientId, uint32_t& hwId)
-{
+LocationError GeofenceAdapter::getHwIdFromClient(LocationAPI *client, uint32_t clientId,
+                                                 uint32_t &hwId) {
     GeofenceKey key(client, clientId);
     auto it = mGeofenceIds.find(key);
     if (it != mGeofenceIds.end()) {
@@ -105,9 +99,7 @@ GeofenceAdapter::getHwIdFromClient(LocationAPI* client, uint32_t clientId, uint3
     return LOCATION_ERROR_ID_UNKNOWN;
 }
 
-LocationError
-GeofenceAdapter::getGeofenceKeyFromHwId(uint32_t hwId, GeofenceKey& key)
-{
+LocationError GeofenceAdapter::getGeofenceKeyFromHwId(uint32_t hwId, GeofenceKey &key) {
     auto it = mGeofences.find(hwId);
     if (it != mGeofences.end()) {
         key = it->second.key;
@@ -116,19 +108,15 @@ GeofenceAdapter::getGeofenceKeyFromHwId(uint32_t hwId, GeofenceKey& key)
     return LOCATION_ERROR_ID_UNKNOWN;
 }
 
-void
-GeofenceAdapter::handleEngineUpEvent()
-{
+void GeofenceAdapter::handleEngineUpEvent() {
     struct MsgSSREvent : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        inline MsgSSREvent(GeofenceAdapter& adapter) :
-            LocMsg(),
-            mAdapter(adapter) {}
+        GeofenceAdapter &mAdapter;
+        inline MsgSSREvent(GeofenceAdapter &adapter) : LocMsg(), mAdapter(adapter) {}
         virtual void proc() const {
             mAdapter.setEngineCapabilitiesKnown(true);
             mAdapter.broadcastCapabilities(mAdapter.getCapabilities());
             mAdapter.restartGeofences();
-            for (auto msg: mAdapter.mPendingMsgs) {
+            for (auto msg : mAdapter.mPendingMsgs) {
                 mAdapter.sendMsg(msg);
             }
             mAdapter.mPendingMsgs.clear();
@@ -138,9 +126,7 @@ GeofenceAdapter::handleEngineUpEvent()
     sendMsg(new MsgSSREvent(*this));
 }
 
-void
-GeofenceAdapter::restartGeofences()
-{
+void GeofenceAdapter::restartGeofences() {
     if (mGeofences.empty()) {
         return;
     }
@@ -151,39 +137,36 @@ GeofenceAdapter::restartGeofences()
 
     for (auto it = oldGeofences.begin(); it != oldGeofences.end(); it++) {
         GeofenceObject object = it->second;
-        GeofenceOption options = {sizeof(GeofenceOption),
-                                   object.breachMask,
-                                   object.responsiveness,
-                                   object.dwellTime};
-        GeofenceInfo info = {sizeof(GeofenceInfo),
-                             object.latitude,
-                             object.longitude,
+        GeofenceOption options = {sizeof(GeofenceOption), object.breachMask, object.responsiveness,
+                                  object.dwellTime};
+        GeofenceInfo info = {sizeof(GeofenceInfo), object.latitude, object.longitude,
                              object.radius};
-        mLocApi->addGeofence(object.key.id,
-                              options,
-                              info,
-                              new LocApiResponseData<LocApiGeofenceData>(*getContext(),
-                [this, object, options, info] (LocationError err, LocApiGeofenceData data) {
-            if (LOCATION_ERROR_SUCCESS == err) {
-                if (true == object.paused) {
-                    mLocApi->pauseGeofence(data.hwId, object.key.id,
-                            new LocApiResponse(*getContext(), [] (LocationError err __unused) {}));
-                }
-                saveGeofenceItem(object.key.client, object.key.id, data.hwId, options, info);
-            }
-        }));
+        mLocApi->addGeofence(
+                object.key.id, options, info,
+                new LocApiResponseData<LocApiGeofenceData>(
+                        *getContext(),
+                        [this, object, options, info](LocationError err, LocApiGeofenceData data) {
+                            if (LOCATION_ERROR_SUCCESS == err) {
+                                if (true == object.paused) {
+                                    mLocApi->pauseGeofence(
+                                            data.hwId, object.key.id,
+                                            new LocApiResponse(*getContext(),
+                                                               [](LocationError err __unused) {}));
+                                }
+                                saveGeofenceItem(object.key.client, object.key.id, data.hwId,
+                                                 options, info);
+                            }
+                        }));
     }
 }
 
-void
-GeofenceAdapter::reportResponse(LocationAPI* client, size_t count, LocationError* errs,
-        uint32_t* ids)
-{
+void GeofenceAdapter::reportResponse(LocationAPI *client, size_t count, LocationError *errs,
+                                     uint32_t *ids) {
     IF_LOC_LOGD {
         std::string idsString = "[";
         std::string errsString = "[";
         if (NULL != ids && NULL != errs) {
-            for (size_t i=0; i < count; ++i) {
+            for (size_t i = 0; i < count; ++i) {
                 idsString += std::to_string(ids[i]) + " ";
                 errsString += std::to_string(errs[i]) + " ";
             }
@@ -191,8 +174,8 @@ GeofenceAdapter::reportResponse(LocationAPI* client, size_t count, LocationError
         idsString += "]";
         errsString += "]";
 
-        LOC_LOGD("%s]: client %p ids %s errs %s",
-                 __func__, client, idsString.c_str(), errsString.c_str());
+        LOC_LOGD("%s]: client %p ids %s errs %s", __func__, client, idsString.c_str(),
+                 errsString.c_str());
     }
 
     auto it = mClientData.find(client);
@@ -203,73 +186,71 @@ GeofenceAdapter::reportResponse(LocationAPI* client, size_t count, LocationError
     }
 }
 
-uint32_t*
-GeofenceAdapter::addGeofencesCommand(LocationAPI* client, size_t count, GeofenceOption* options,
-        GeofenceInfo* infos)
-{
+uint32_t *GeofenceAdapter::addGeofencesCommand(LocationAPI *client, size_t count,
+                                               GeofenceOption *options, GeofenceInfo *infos) {
     LOC_LOGD("%s]: client %p count %zu", __func__, client, count);
 
     struct MsgAddGeofences : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        LocApiBase& mApi;
-        LocationAPI* mClient;
+        GeofenceAdapter &mAdapter;
+        LocApiBase &mApi;
+        LocationAPI *mClient;
         size_t mCount;
-        uint32_t* mIds;
-        GeofenceOption* mOptions;
-        GeofenceInfo* mInfos;
-        inline MsgAddGeofences(GeofenceAdapter& adapter,
-                               LocApiBase& api,
-                               LocationAPI* client,
-                               size_t count,
-                               uint32_t* ids,
-                               GeofenceOption* options,
-                               GeofenceInfo* infos) :
-            LocMsg(),
-            mAdapter(adapter),
-            mApi(api),
-            mClient(client),
-            mCount(count),
-            mIds(ids),
-            mOptions(options),
-            mInfos(infos) {}
+        uint32_t *mIds;
+        GeofenceOption *mOptions;
+        GeofenceInfo *mInfos;
+        inline MsgAddGeofences(GeofenceAdapter &adapter, LocApiBase &api, LocationAPI *client,
+                               size_t count, uint32_t *ids, GeofenceOption *options,
+                               GeofenceInfo *infos)
+            : LocMsg(),
+              mAdapter(adapter),
+              mApi(api),
+              mClient(client),
+              mCount(count),
+              mIds(ids),
+              mOptions(options),
+              mInfos(infos) {}
         inline virtual void proc() const {
-            LocationError* errs = new LocationError[mCount];
+            LocationError *errs = new LocationError[mCount];
             if (nullptr == errs) {
                 LOC_LOGE("%s]: new failed to allocate errs", __func__);
                 return;
             }
-            for (size_t i=0; i < mCount; ++i) {
+            for (size_t i = 0; i < mCount; ++i) {
                 if (NULL == mIds || NULL == mOptions || NULL == mInfos) {
                     errs[i] = LOCATION_ERROR_INVALID_PARAMETER;
                 } else {
-                    mApi.addToCallQueue(new LocApiResponse(*mAdapter.getContext(),
+                    mApi.addToCallQueue(new LocApiResponse(
+                            *mAdapter.getContext(),
                             [&mAdapter = mAdapter, mCount = mCount, mClient = mClient,
-                            mOptions = mOptions, mInfos = mInfos, mIds = mIds, &mApi = mApi,
-                            errs, i] (LocationError err __unused) {
-                        mApi.addGeofence(mIds[i], mOptions[i], mInfos[i],
-                        new LocApiResponseData<LocApiGeofenceData>(*mAdapter.getContext(),
-                        [&mAdapter = mAdapter, mOptions = mOptions, mClient = mClient,
-                        mCount = mCount, mIds = mIds, mInfos = mInfos, errs, i]
-                        (LocationError err, LocApiGeofenceData data) {
-                            if (LOCATION_ERROR_SUCCESS == err) {
-                                mAdapter.saveGeofenceItem(mClient,
-                                mIds[i],
-                                data.hwId,
-                                mOptions[i],
-                                mInfos[i]);
-                            }
-                            errs[i] = err;
+                             mOptions = mOptions, mInfos = mInfos, mIds = mIds, &mApi = mApi, errs,
+                             i](LocationError err __unused) {
+                                mApi.addGeofence(
+                                        mIds[i], mOptions[i], mInfos[i],
+                                        new LocApiResponseData<LocApiGeofenceData>(
+                                                *mAdapter.getContext(),
+                                                [&mAdapter = mAdapter, mOptions = mOptions,
+                                                 mClient = mClient, mCount = mCount, mIds = mIds,
+                                                 mInfos = mInfos, errs,
+                                                 i](LocationError err, LocApiGeofenceData data) {
+                                                    if (LOCATION_ERROR_SUCCESS == err) {
+                                                        mAdapter.saveGeofenceItem(
+                                                                mClient, mIds[i], data.hwId,
+                                                                mOptions[i], mInfos[i]);
+                                                    }
+                                                    errs[i] = err;
 
-                            // Send aggregated response on last item and cleanup
-                            if (i == mCount-1) {
-                                mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                                delete[] errs;
-                                delete[] mIds;
-                                delete[] mOptions;
-                                delete[] mInfos;
-                            }
-                        }));
-                    }));
+                                                    // Send aggregated response on last item and
+                                                    // cleanup
+                                                    if (i == mCount - 1) {
+                                                        mAdapter.reportResponse(mClient, mCount,
+                                                                                errs, mIds);
+                                                        delete[] errs;
+                                                        delete[] mIds;
+                                                        delete[] mOptions;
+                                                        delete[] mInfos;
+                                                    }
+                                                }));
+                            }));
                 }
             }
         }
@@ -278,17 +259,17 @@ GeofenceAdapter::addGeofencesCommand(LocationAPI* client, size_t count, Geofence
     if (0 == count) {
         return NULL;
     }
-    uint32_t* ids = new uint32_t[count];
+    uint32_t *ids = new uint32_t[count];
     if (nullptr == ids) {
         LOC_LOGE("%s]: new failed to allocate ids", __func__);
         return NULL;
     }
     if (NULL != ids) {
-        for (size_t i=0; i < count; ++i) {
+        for (size_t i = 0; i < count; ++i) {
             ids[i] = generateSessionId();
         }
     }
-    GeofenceOption* optionsCopy;
+    GeofenceOption *optionsCopy;
     if (options == NULL) {
         optionsCopy = NULL;
     } else {
@@ -299,7 +280,7 @@ GeofenceAdapter::addGeofencesCommand(LocationAPI* client, size_t count, Geofence
         }
         COPY_IF_NOT_NULL(optionsCopy, options, count);
     }
-    GeofenceInfo* infosCopy;
+    GeofenceInfo *infosCopy;
     if (infos == NULL) {
         infosCopy = NULL;
     } else {
@@ -315,66 +296,62 @@ GeofenceAdapter::addGeofencesCommand(LocationAPI* client, size_t count, Geofence
     return ids;
 }
 
-void
-GeofenceAdapter::removeGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids)
-{
+void GeofenceAdapter::removeGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids) {
     LOC_LOGD("%s]: client %p count %zu", __func__, client, count);
 
     struct MsgRemoveGeofences : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        LocApiBase& mApi;
-        LocationAPI* mClient;
+        GeofenceAdapter &mAdapter;
+        LocApiBase &mApi;
+        LocationAPI *mClient;
         size_t mCount;
-        uint32_t* mIds;
-        inline MsgRemoveGeofences(GeofenceAdapter& adapter,
-                                  LocApiBase& api,
-                                  LocationAPI* client,
-                                  size_t count,
-                                  uint32_t* ids) :
-            LocMsg(),
-            mAdapter(adapter),
-            mApi(api),
-            mClient(client),
-            mCount(count),
-            mIds(ids) {}
-        inline virtual void proc() const  {
-            LocationError* errs = new LocationError[mCount];
+        uint32_t *mIds;
+        inline MsgRemoveGeofences(GeofenceAdapter &adapter, LocApiBase &api, LocationAPI *client,
+                                  size_t count, uint32_t *ids)
+            : LocMsg(), mAdapter(adapter), mApi(api), mClient(client), mCount(count), mIds(ids) {}
+        inline virtual void proc() const {
+            LocationError *errs = new LocationError[mCount];
             if (nullptr == errs) {
                 LOC_LOGE("%s]: new failed to allocate errs", __func__);
                 return;
             }
-            for (size_t i=0; i < mCount; ++i) {
-                mApi.addToCallQueue(new LocApiResponse(*mAdapter.getContext(),
+            for (size_t i = 0; i < mCount; ++i) {
+                mApi.addToCallQueue(new LocApiResponse(
+                        *mAdapter.getContext(),
                         [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                        &mApi = mApi, errs, i] (LocationError err __unused) {
-                    uint32_t hwId = 0;
-                    errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
-                    if (LOCATION_ERROR_SUCCESS == errs[i]) {
-                        mApi.removeGeofence(hwId, mIds[i],
-                        new LocApiResponse(*mAdapter.getContext(),
-                        [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                        hwId, errs, i] (LocationError err ) {
-                            if (LOCATION_ERROR_SUCCESS == err) {
-                                mAdapter.removeGeofenceItem(hwId);
-                            }
-                            errs[i] = err;
+                         &mApi = mApi, errs, i](LocationError err __unused) {
+                            uint32_t hwId = 0;
+                            errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
+                            if (LOCATION_ERROR_SUCCESS == errs[i]) {
+                                mApi.removeGeofence(
+                                        hwId, mIds[i],
+                                        new LocApiResponse(
+                                                *mAdapter.getContext(),
+                                                [&mAdapter = mAdapter, mCount = mCount,
+                                                 mClient = mClient, mIds = mIds, hwId, errs,
+                                                 i](LocationError err) {
+                                                    if (LOCATION_ERROR_SUCCESS == err) {
+                                                        mAdapter.removeGeofenceItem(hwId);
+                                                    }
+                                                    errs[i] = err;
 
-                            // Send aggregated response on last item and cleanup
-                            if (i == mCount-1) {
-                                mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                                delete[] errs;
-                                delete[] mIds;
+                                                    // Send aggregated response on last item and
+                                                    // cleanup
+                                                    if (i == mCount - 1) {
+                                                        mAdapter.reportResponse(mClient, mCount,
+                                                                                errs, mIds);
+                                                        delete[] errs;
+                                                        delete[] mIds;
+                                                    }
+                                                }));
+                            } else {
+                                // Send aggregated response on last item and cleanup
+                                if (i == mCount - 1) {
+                                    mAdapter.reportResponse(mClient, mCount, errs, mIds);
+                                    delete[] errs;
+                                    delete[] mIds;
+                                }
                             }
                         }));
-                    } else {
-                        // Send aggregated response on last item and cleanup
-                        if (i == mCount-1) {
-                            mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                            delete[] errs;
-                            delete[] mIds;
-                        }
-                    }
-                }));
             }
         }
     };
@@ -382,7 +359,7 @@ GeofenceAdapter::removeGeofencesCommand(LocationAPI* client, size_t count, uint3
     if (0 == count) {
         return;
     }
-    uint32_t* idsCopy = new uint32_t[count];
+    uint32_t *idsCopy = new uint32_t[count];
     if (nullptr == idsCopy) {
         LOC_LOGE("%s]: new failed to allocate idsCopy", __func__);
         return;
@@ -391,65 +368,62 @@ GeofenceAdapter::removeGeofencesCommand(LocationAPI* client, size_t count, uint3
     sendMsg(new MsgRemoveGeofences(*this, *mLocApi, client, count, idsCopy));
 }
 
-void
-GeofenceAdapter::pauseGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids)
-{
+void GeofenceAdapter::pauseGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids) {
     LOC_LOGD("%s]: client %p count %zu", __func__, client, count);
 
     struct MsgPauseGeofences : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        LocApiBase& mApi;
-        LocationAPI* mClient;
+        GeofenceAdapter &mAdapter;
+        LocApiBase &mApi;
+        LocationAPI *mClient;
         size_t mCount;
-        uint32_t* mIds;
-        inline MsgPauseGeofences(GeofenceAdapter& adapter,
-                                 LocApiBase& api,
-                                 LocationAPI* client,
-                                 size_t count,
-                                 uint32_t* ids) :
-            LocMsg(),
-            mAdapter(adapter),
-            mApi(api),
-            mClient(client),
-            mCount(count),
-            mIds(ids) {}
-        inline virtual void proc() const  {
-            LocationError* errs = new LocationError[mCount];
+        uint32_t *mIds;
+        inline MsgPauseGeofences(GeofenceAdapter &adapter, LocApiBase &api, LocationAPI *client,
+                                 size_t count, uint32_t *ids)
+            : LocMsg(), mAdapter(adapter), mApi(api), mClient(client), mCount(count), mIds(ids) {}
+        inline virtual void proc() const {
+            LocationError *errs = new LocationError[mCount];
             if (nullptr == errs) {
                 LOC_LOGE("%s]: new failed to allocate errs", __func__);
                 return;
             }
-            for (size_t i=0; i < mCount; ++i) {
-                mApi.addToCallQueue(new LocApiResponse(*mAdapter.getContext(),
+            for (size_t i = 0; i < mCount; ++i) {
+                mApi.addToCallQueue(new LocApiResponse(
+                        *mAdapter.getContext(),
                         [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                        &mApi = mApi, errs, i] (LocationError err __unused) {
-                    uint32_t hwId = 0;
-                    errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
-                    if (LOCATION_ERROR_SUCCESS == errs[i]) {
-                        mApi.pauseGeofence(hwId, mIds[i], new LocApiResponse(*mAdapter.getContext(),
-                        [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                        hwId, errs, i] (LocationError err ) {
-                            if (LOCATION_ERROR_SUCCESS == err) {
-                                mAdapter.pauseGeofenceItem(hwId);
-                            }
-                            errs[i] = err;
+                         &mApi = mApi, errs, i](LocationError err __unused) {
+                            uint32_t hwId = 0;
+                            errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
+                            if (LOCATION_ERROR_SUCCESS == errs[i]) {
+                                mApi.pauseGeofence(
+                                        hwId, mIds[i],
+                                        new LocApiResponse(*mAdapter.getContext(),
+                                                           [&mAdapter = mAdapter, mCount = mCount,
+                                                            mClient = mClient, mIds = mIds, hwId,
+                                                            errs, i](LocationError err) {
+                                                               if (LOCATION_ERROR_SUCCESS == err) {
+                                                                   mAdapter.pauseGeofenceItem(hwId);
+                                                               }
+                                                               errs[i] = err;
 
-                            // Send aggregated response on last item and cleanup
-                            if (i == mCount-1) {
-                                mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                                delete[] errs;
-                                delete[] mIds;
+                                                               // Send aggregated response on last
+                                                               // item and cleanup
+                                                               if (i == mCount - 1) {
+                                                                   mAdapter.reportResponse(
+                                                                           mClient, mCount, errs,
+                                                                           mIds);
+                                                                   delete[] errs;
+                                                                   delete[] mIds;
+                                                               }
+                                                           }));
+                            } else {
+                                // Send aggregated response on last item and cleanup
+                                if (i == mCount - 1) {
+                                    mAdapter.reportResponse(mClient, mCount, errs, mIds);
+                                    delete[] errs;
+                                    delete[] mIds;
+                                }
                             }
                         }));
-                    } else {
-                        // Send aggregated response on last item and cleanup
-                        if (i == mCount-1) {
-                            mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                            delete[] errs;
-                            delete[] mIds;
-                        }
-                    }
-                }));
             }
         }
     };
@@ -457,7 +431,7 @@ GeofenceAdapter::pauseGeofencesCommand(LocationAPI* client, size_t count, uint32
     if (0 == count) {
         return;
     }
-    uint32_t* idsCopy = new uint32_t[count];
+    uint32_t *idsCopy = new uint32_t[count];
     if (nullptr == idsCopy) {
         LOC_LOGE("%s]: new failed to allocate idsCopy", __func__);
         return;
@@ -466,66 +440,62 @@ GeofenceAdapter::pauseGeofencesCommand(LocationAPI* client, size_t count, uint32
     sendMsg(new MsgPauseGeofences(*this, *mLocApi, client, count, idsCopy));
 }
 
-void
-GeofenceAdapter::resumeGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids)
-{
+void GeofenceAdapter::resumeGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids) {
     LOC_LOGD("%s]: client %p count %zu", __func__, client, count);
 
     struct MsgResumeGeofences : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        LocApiBase& mApi;
-        LocationAPI* mClient;
+        GeofenceAdapter &mAdapter;
+        LocApiBase &mApi;
+        LocationAPI *mClient;
         size_t mCount;
-        uint32_t* mIds;
-        inline MsgResumeGeofences(GeofenceAdapter& adapter,
-                                  LocApiBase& api,
-                                  LocationAPI* client,
-                                  size_t count,
-                                  uint32_t* ids) :
-            LocMsg(),
-            mAdapter(adapter),
-            mApi(api),
-            mClient(client),
-            mCount(count),
-            mIds(ids) {}
-        inline virtual void proc() const  {
-            LocationError* errs = new LocationError[mCount];
+        uint32_t *mIds;
+        inline MsgResumeGeofences(GeofenceAdapter &adapter, LocApiBase &api, LocationAPI *client,
+                                  size_t count, uint32_t *ids)
+            : LocMsg(), mAdapter(adapter), mApi(api), mClient(client), mCount(count), mIds(ids) {}
+        inline virtual void proc() const {
+            LocationError *errs = new LocationError[mCount];
             if (nullptr == errs) {
                 LOC_LOGE("%s]: new failed to allocate errs", __func__);
                 return;
             }
-            for (size_t i=0; i < mCount; ++i) {
-                mApi.addToCallQueue(new LocApiResponse(*mAdapter.getContext(),
+            for (size_t i = 0; i < mCount; ++i) {
+                mApi.addToCallQueue(new LocApiResponse(
+                        *mAdapter.getContext(),
                         [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                        &mApi = mApi, errs, i] (LocationError err __unused) {
-                    uint32_t hwId = 0;
-                    errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
-                    if (LOCATION_ERROR_SUCCESS == errs[i]) {
-                        mApi.resumeGeofence(hwId, mIds[i],
-                                new LocApiResponse(*mAdapter.getContext(),
-                                [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, hwId,
-                                errs, mIds = mIds, i] (LocationError err ) {
-                            if (LOCATION_ERROR_SUCCESS == err) {
-                                errs[i] = err;
+                         &mApi = mApi, errs, i](LocationError err __unused) {
+                            uint32_t hwId = 0;
+                            errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
+                            if (LOCATION_ERROR_SUCCESS == errs[i]) {
+                                mApi.resumeGeofence(
+                                        hwId, mIds[i],
+                                        new LocApiResponse(
+                                                *mAdapter.getContext(),
+                                                [&mAdapter = mAdapter, mCount = mCount,
+                                                 mClient = mClient, hwId, errs, mIds = mIds,
+                                                 i](LocationError err) {
+                                                    if (LOCATION_ERROR_SUCCESS == err) {
+                                                        errs[i] = err;
 
-                                mAdapter.resumeGeofenceItem(hwId);
+                                                        mAdapter.resumeGeofenceItem(hwId);
+                                                        // Send aggregated response on last item and
+                                                        // cleanup
+                                                        if (i == mCount - 1) {
+                                                            mAdapter.reportResponse(mClient, mCount,
+                                                                                    errs, mIds);
+                                                            delete[] errs;
+                                                            delete[] mIds;
+                                                        }
+                                                    }
+                                                }));
+                            } else {
                                 // Send aggregated response on last item and cleanup
-                                if (i == mCount-1) {
+                                if (i == mCount - 1) {
                                     mAdapter.reportResponse(mClient, mCount, errs, mIds);
                                     delete[] errs;
                                     delete[] mIds;
                                 }
                             }
                         }));
-                    } else {
-                        // Send aggregated response on last item and cleanup
-                        if (i == mCount-1) {
-                            mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                            delete[] errs;
-                            delete[] mIds;
-                        }
-                    }
-                }));
             }
         }
     };
@@ -533,7 +503,7 @@ GeofenceAdapter::resumeGeofencesCommand(LocationAPI* client, size_t count, uint3
     if (0 == count) {
         return;
     }
-    uint32_t* idsCopy = new uint32_t[count];
+    uint32_t *idsCopy = new uint32_t[count];
     if (nullptr == idsCopy) {
         LOC_LOGE("%s]: new failed to allocate idsCopy", __func__);
         return;
@@ -542,76 +512,78 @@ GeofenceAdapter::resumeGeofencesCommand(LocationAPI* client, size_t count, uint3
     sendMsg(new MsgResumeGeofences(*this, *mLocApi, client, count, idsCopy));
 }
 
-void
-GeofenceAdapter::modifyGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids,
-        GeofenceOption* options)
-{
+void GeofenceAdapter::modifyGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids,
+                                             GeofenceOption *options) {
     LOC_LOGD("%s]: client %p count %zu", __func__, client, count);
 
     struct MsgModifyGeofences : public LocMsg {
-        GeofenceAdapter& mAdapter;
-        LocApiBase& mApi;
-        LocationAPI* mClient;
+        GeofenceAdapter &mAdapter;
+        LocApiBase &mApi;
+        LocationAPI *mClient;
         size_t mCount;
-        uint32_t* mIds;
-        GeofenceOption* mOptions;
-        inline MsgModifyGeofences(GeofenceAdapter& adapter,
-                                  LocApiBase& api,
-                                  LocationAPI* client,
-                                  size_t count,
-                                  uint32_t* ids,
-                                  GeofenceOption* options) :
-            LocMsg(),
-            mAdapter(adapter),
-            mApi(api),
-            mClient(client),
-            mCount(count),
-            mIds(ids),
-            mOptions(options) {}
-        inline virtual void proc() const  {
-            LocationError* errs = new LocationError[mCount];
+        uint32_t *mIds;
+        GeofenceOption *mOptions;
+        inline MsgModifyGeofences(GeofenceAdapter &adapter, LocApiBase &api, LocationAPI *client,
+                                  size_t count, uint32_t *ids, GeofenceOption *options)
+            : LocMsg(),
+              mAdapter(adapter),
+              mApi(api),
+              mClient(client),
+              mCount(count),
+              mIds(ids),
+              mOptions(options) {}
+        inline virtual void proc() const {
+            LocationError *errs = new LocationError[mCount];
             if (nullptr == errs) {
                 LOC_LOGE("%s]: new failed to allocate errs", __func__);
                 return;
             }
-            for (size_t i=0; i < mCount; ++i) {
+            for (size_t i = 0; i < mCount; ++i) {
                 if (NULL == mIds || NULL == mOptions) {
                     errs[i] = LOCATION_ERROR_INVALID_PARAMETER;
                 } else {
-                    mApi.addToCallQueue(new LocApiResponse(*mAdapter.getContext(),
+                    mApi.addToCallQueue(new LocApiResponse(
+                            *mAdapter.getContext(),
                             [&mAdapter = mAdapter, mCount = mCount, mClient = mClient, mIds = mIds,
-                            &mApi = mApi, mOptions = mOptions, errs, i] (LocationError err __unused) {
-                        uint32_t hwId = 0;
-                        errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
-                        if (LOCATION_ERROR_SUCCESS == errs[i]) {
-                            mApi.modifyGeofence(hwId, mIds[i], mOptions[i],
-                                    new LocApiResponse(*mAdapter.getContext(),
-                                    [&mAdapter = mAdapter, mCount = mCount, mClient = mClient,
-                                    mIds = mIds, mOptions = mOptions, hwId, errs, i]
-                                    (LocationError err ) {
-                                if (LOCATION_ERROR_SUCCESS == err) {
-                                    errs[i] = err;
+                             &mApi = mApi, mOptions = mOptions, errs,
+                             i](LocationError err __unused) {
+                                uint32_t hwId = 0;
+                                errs[i] = mAdapter.getHwIdFromClient(mClient, mIds[i], hwId);
+                                if (LOCATION_ERROR_SUCCESS == errs[i]) {
+                                    mApi.modifyGeofence(
+                                            hwId, mIds[i], mOptions[i],
+                                            new LocApiResponse(
+                                                    *mAdapter.getContext(),
+                                                    [&mAdapter = mAdapter, mCount = mCount,
+                                                     mClient = mClient, mIds = mIds,
+                                                     mOptions = mOptions, hwId, errs,
+                                                     i](LocationError err) {
+                                                        if (LOCATION_ERROR_SUCCESS == err) {
+                                                            errs[i] = err;
 
-                                    mAdapter.modifyGeofenceItem(hwId, mOptions[i]);
-                                }
-                                // Send aggregated response on last item and cleanup
-                                if (i == mCount-1) {
-                                    mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                                    delete[] errs;
-                                    delete[] mIds;
-                                    delete[] mOptions;
+                                                            mAdapter.modifyGeofenceItem(
+                                                                    hwId, mOptions[i]);
+                                                        }
+                                                        // Send aggregated response on last item and
+                                                        // cleanup
+                                                        if (i == mCount - 1) {
+                                                            mAdapter.reportResponse(mClient, mCount,
+                                                                                    errs, mIds);
+                                                            delete[] errs;
+                                                            delete[] mIds;
+                                                            delete[] mOptions;
+                                                        }
+                                                    }));
+                                } else {
+                                    // Send aggregated response on last item and cleanup
+                                    if (i == mCount - 1) {
+                                        mAdapter.reportResponse(mClient, mCount, errs, mIds);
+                                        delete[] errs;
+                                        delete[] mIds;
+                                        delete[] mOptions;
+                                    }
                                 }
                             }));
-                        } else {
-                            // Send aggregated response on last item and cleanup
-                            if (i == mCount-1) {
-                                mAdapter.reportResponse(mClient, mCount, errs, mIds);
-                                delete[] errs;
-                                delete[] mIds;
-                                delete[] mOptions;
-                            }
-                        }
-                    }));
                 }
             }
         }
@@ -620,13 +592,13 @@ GeofenceAdapter::modifyGeofencesCommand(LocationAPI* client, size_t count, uint3
     if (0 == count) {
         return;
     }
-    uint32_t* idsCopy = new uint32_t[count];
+    uint32_t *idsCopy = new uint32_t[count];
     if (nullptr == idsCopy) {
         LOC_LOGE("%s]: new failed to allocate idsCopy", __func__);
         return;
     }
     COPY_IF_NOT_NULL(idsCopy, ids, count);
-    GeofenceOption* optionsCopy;
+    GeofenceOption *optionsCopy;
     if (options == NULL) {
         optionsCopy = NULL;
     } else {
@@ -641,10 +613,8 @@ GeofenceAdapter::modifyGeofencesCommand(LocationAPI* client, size_t count, uint3
     sendMsg(new MsgModifyGeofences(*this, *mLocApi, client, count, idsCopy, optionsCopy));
 }
 
-void
-GeofenceAdapter::saveGeofenceItem(LocationAPI* client, uint32_t clientId, uint32_t hwId,
-        const GeofenceOption& options, const GeofenceInfo& info)
-{
+void GeofenceAdapter::saveGeofenceItem(LocationAPI *client, uint32_t clientId, uint32_t hwId,
+                                       const GeofenceOption &options, const GeofenceInfo &info) {
     LOC_LOGD("%s]: hwId %u client %p clientId %u", __func__, hwId, client, clientId);
     GeofenceKey key(client, clientId);
     GeofenceObject object = {key,
@@ -660,9 +630,7 @@ GeofenceAdapter::saveGeofenceItem(LocationAPI* client, uint32_t clientId, uint32
     dump();
 }
 
-void
-GeofenceAdapter::removeGeofenceItem(uint32_t hwId)
-{
+void GeofenceAdapter::removeGeofenceItem(uint32_t hwId) {
     GeofenceKey key;
     LocationError err = getGeofenceKeyFromHwId(hwId, key);
     if (LOCATION_ERROR_SUCCESS != err) {
@@ -685,9 +653,7 @@ GeofenceAdapter::removeGeofenceItem(uint32_t hwId)
     }
 }
 
-void
-GeofenceAdapter::pauseGeofenceItem(uint32_t hwId)
-{
+void GeofenceAdapter::pauseGeofenceItem(uint32_t hwId) {
     auto it = mGeofences.find(hwId);
     if (it != mGeofences.end()) {
         it->second.paused = true;
@@ -697,9 +663,7 @@ GeofenceAdapter::pauseGeofenceItem(uint32_t hwId)
     }
 }
 
-void
-GeofenceAdapter::resumeGeofenceItem(uint32_t hwId)
-{
+void GeofenceAdapter::resumeGeofenceItem(uint32_t hwId) {
     auto it = mGeofences.find(hwId);
     if (it != mGeofences.end()) {
         it->second.paused = false;
@@ -709,9 +673,7 @@ GeofenceAdapter::resumeGeofenceItem(uint32_t hwId)
     }
 }
 
-void
-GeofenceAdapter::modifyGeofenceItem(uint32_t hwId, const GeofenceOption& options)
-{
+void GeofenceAdapter::modifyGeofenceItem(uint32_t hwId, const GeofenceOption &options) {
     auto it = mGeofences.find(hwId);
     if (it != mGeofences.end()) {
         it->second.breachMask = options.breachTypeMask;
@@ -723,78 +685,64 @@ GeofenceAdapter::modifyGeofenceItem(uint32_t hwId, const GeofenceOption& options
     }
 }
 
-
-void
-GeofenceAdapter::geofenceBreachEvent(size_t count, uint32_t* hwIds, Location& location,
-        GeofenceBreachType breachType, uint64_t timestamp)
-{
-
+void GeofenceAdapter::geofenceBreachEvent(size_t count, uint32_t *hwIds, Location &location,
+                                          GeofenceBreachType breachType, uint64_t timestamp) {
     IF_LOC_LOGD {
         std::string idsString = "[";
         if (NULL != hwIds) {
-            for (size_t i=0; i < count; ++i) {
+            for (size_t i = 0; i < count; ++i) {
                 idsString += std::to_string(hwIds[i]) + " ";
             }
         }
         idsString += "]";
-        LOC_LOGD("%s]: breachType %u count %zu ids %s",
-                 __func__, breachType, count, idsString.c_str());
+        LOC_LOGD("%s]: breachType %u count %zu ids %s", __func__, breachType, count,
+                 idsString.c_str());
     }
 
     if (0 == count || NULL == hwIds)
         return;
 
     struct MsgGeofenceBreach : public LocMsg {
-        GeofenceAdapter& mAdapter;
+        GeofenceAdapter &mAdapter;
         size_t mCount;
-        uint32_t* mHwIds;
+        uint32_t *mHwIds;
         Location mLocation;
         GeofenceBreachType mBreachType;
         uint64_t mTimestamp;
-        inline MsgGeofenceBreach(GeofenceAdapter& adapter,
-                                 size_t count,
-                                 uint32_t* hwIds,
-                                 Location& location,
-                                 GeofenceBreachType breachType,
-                                 uint64_t timestamp) :
-            LocMsg(),
-            mAdapter(adapter),
-            mCount(count),
-            mHwIds(new uint32_t[count]),
-            mLocation(location),
-            mBreachType(breachType),
-            mTimestamp(timestamp)
-        {
+        inline MsgGeofenceBreach(GeofenceAdapter &adapter, size_t count, uint32_t *hwIds,
+                                 Location &location, GeofenceBreachType breachType,
+                                 uint64_t timestamp)
+            : LocMsg(),
+              mAdapter(adapter),
+              mCount(count),
+              mHwIds(new uint32_t[count]),
+              mLocation(location),
+              mBreachType(breachType),
+              mTimestamp(timestamp) {
             if (nullptr == mHwIds) {
                 LOC_LOGE("%s]: new failed to allocate mHwIds", __func__);
                 return;
             }
             COPY_IF_NOT_NULL(mHwIds, hwIds, mCount);
         }
-        inline virtual ~MsgGeofenceBreach() {
-            delete[] mHwIds;
-        }
+        inline virtual ~MsgGeofenceBreach() { delete[] mHwIds; }
         inline virtual void proc() const {
             mAdapter.geofenceBreach(mCount, mHwIds, mLocation, mBreachType, mTimestamp);
         }
     };
 
     sendMsg(new MsgGeofenceBreach(*this, count, hwIds, location, breachType, timestamp));
-
 }
 
-void
-GeofenceAdapter::geofenceBreach(size_t count, uint32_t* hwIds, const Location& location,
-        GeofenceBreachType breachType, uint64_t timestamp)
-{
-
+void GeofenceAdapter::geofenceBreach(size_t count, uint32_t *hwIds, const Location &location,
+                                     GeofenceBreachType breachType, uint64_t timestamp) {
     for (auto it = mClientData.begin(); it != mClientData.end(); ++it) {
-        uint32_t* clientIds = new uint32_t[count];
+        uint32_t *clientIds = new uint32_t[count];
         if (nullptr == clientIds) {
             return;
         }
         uint32_t index = 0;
-        for (size_t i=0; i < count; ++i) {
+        for (size_t i = 0; i < count; ++i) {
             GeofenceKey key;
             LocationError err = getGeofenceKeyFromHwId(hwIds[i], key);
             if (LOCATION_ERROR_SUCCESS == err) {
@@ -817,54 +765,41 @@ GeofenceAdapter::geofenceBreach(size_t count, uint32_t* hwIds, const Location& l
     }
 }
 
-void
-GeofenceAdapter::geofenceStatusEvent(GeofenceStatusAvailable available)
-{
+void GeofenceAdapter::geofenceStatusEvent(GeofenceStatusAvailable available) {
     LOC_LOGD("%s]: available %u ", __func__, available);
 
     struct MsgGeofenceStatus : public LocMsg {
-        GeofenceAdapter& mAdapter;
+        GeofenceAdapter &mAdapter;
         GeofenceStatusAvailable mAvailable;
-        inline MsgGeofenceStatus(GeofenceAdapter& adapter,
-                                 GeofenceStatusAvailable available) :
-            LocMsg(),
-            mAdapter(adapter),
-            mAvailable(available) {}
-        inline virtual void proc() const {
-            mAdapter.geofenceStatus(mAvailable);
-        }
+        inline MsgGeofenceStatus(GeofenceAdapter &adapter, GeofenceStatusAvailable available)
+            : LocMsg(), mAdapter(adapter), mAvailable(available) {}
+        inline virtual void proc() const { mAdapter.geofenceStatus(mAvailable); }
     };
 
     sendMsg(new MsgGeofenceStatus(*this, available));
 }
 
-void
-GeofenceAdapter::geofenceStatus(GeofenceStatusAvailable available)
-{
+void GeofenceAdapter::geofenceStatus(GeofenceStatusAvailable available) {
     for (auto it = mClientData.begin(); it != mClientData.end(); ++it) {
         if (it->second.geofenceStatusCb != nullptr) {
-            GeofenceStatusNotification notify = {sizeof(GeofenceStatusNotification),
-                                                 available,
+            GeofenceStatusNotification notify = {sizeof(GeofenceStatusNotification), available,
                                                  LOCATION_TECHNOLOGY_TYPE_GNSS};
             it->second.geofenceStatusCb(notify);
         }
     }
 }
 
-void
-GeofenceAdapter::dump()
-{
+void GeofenceAdapter::dump() {
     IF_LOC_LOGV {
         LOC_LOGV(
-            "HAL | hwId  | mask | respon | latitude | longitude | radius | paused |  Id  | client");
+                "HAL | hwId  | mask | respon | latitude | longitude | radius | paused |  Id  | "
+                "client");
         for (auto it = mGeofences.begin(); it != mGeofences.end(); ++it) {
             uint32_t hwId = it->first;
             GeofenceObject object = it->second;
-            LOC_LOGV("    | %5u | %4u | %6u | %8.2f | %9.2f | %6.2f | %6u | %04x | %p ",
-                    hwId, object.breachMask, object.responsiveness,
-                    object.latitude, object.longitude, object.radius,
-                    object.paused, object.key.id, object.key.client);
+            LOC_LOGV("    | %5u | %4u | %6u | %8.2f | %9.2f | %6.2f | %6u | %04x | %p ", hwId,
+                     object.breachMask, object.responsiveness, object.latitude, object.longitude,
+                     object.radius, object.paused, object.key.id, object.key.client);
         }
     }
 }
-

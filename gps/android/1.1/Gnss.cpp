@@ -21,17 +21,19 @@
 #define LOG_TAG "LocSvc_GnssInterface"
 #define LOG_NDEBUG 0
 
-#include <fstream>
-#include <log_util.h>
-#include <dlfcn.h>
-#include <cutils/properties.h>
 #include "Gnss.h"
+
 #include <LocationUtil.h>
+#include <cutils/properties.h>
+#include <dlfcn.h>
+#include <log_util.h>
+
+#include <fstream>
 
 #include "battery_listener.h"
 #include "loc_misc_utils.h"
 
-typedef const GnssInterface* (getLocationInterface)();
+typedef const GnssInterface *(getLocationInterface)();
 
 #define IMAGES_INFO_FILE "/sys/devices/soc0/images"
 #define DELIMITER ";"
@@ -54,14 +56,14 @@ static std::string getVersionString() {
 
     std::ifstream in(IMAGES_INFO_FILE);
     std::string s;
-    while(getline(in, s)) {
+    while (getline(in, s)) {
         std::size_t found = s.find("CRM:");
         if (std::string::npos == found) {
             continue;
         }
 
         // skip over space characters after "CRM:"
-        const char* substr = s.c_str();
+        const char *substr = s.c_str();
         found += 4;
         while (0 != substr[found] && isspace(substr[found])) {
             found++;
@@ -80,9 +82,9 @@ static std::string getVersionString() {
     return version;
 }
 
-void Gnss::GnssDeathRecipient::serviceDied(uint64_t cookie, const wp<IBase>& who) {
-    LOC_LOGE("%s] service died. cookie: %llu, who: %p",
-            __FUNCTION__, static_cast<unsigned long long>(cookie), &who);
+void Gnss::GnssDeathRecipient::serviceDied(uint64_t cookie, const wp<IBase> &who) {
+    LOC_LOGE("%s] service died. cookie: %llu, who: %p", __FUNCTION__,
+             static_cast<unsigned long long>(cookie), &who);
     if (mGnss != nullptr) {
         mGnss->getGnssInterface()->resetNetworkInfo();
         mGnss->stop();
@@ -118,7 +120,7 @@ Gnss::~Gnss() {
     sGnss = nullptr;
 }
 
-GnssAPIClient* Gnss::getApi() {
+GnssAPIClient *Gnss::getApi() {
     if (mApi == nullptr && (mGnssCbIface != nullptr || mGnssNiCbIface != nullptr)) {
         mApi = new GnssAPIClient(mGnssCbIface, mGnssNiCbIface);
         if (mApi == nullptr) {
@@ -132,7 +134,7 @@ GnssAPIClient* Gnss::getApi() {
             // clear size to invalid mPendingConfig
             mPendingConfig.size = 0;
             if (mPendingConfig.assistanceServer.hostName != nullptr) {
-                free((void*)mPendingConfig.assistanceServer.hostName);
+                free((void *)mPendingConfig.assistanceServer.hostName);
             }
         }
     }
@@ -142,23 +144,23 @@ GnssAPIClient* Gnss::getApi() {
     return mApi;
 }
 
-const GnssInterface* Gnss::getGnssInterface() {
+const GnssInterface *Gnss::getGnssInterface() {
     static bool getGnssInterfaceFailed = false;
     if (nullptr == mGnssInterface && !getGnssInterfaceFailed) {
-        void * libHandle = nullptr;
-        getLocationInterface* getter = (getLocationInterface*)
-                dlGetSymFromLib(libHandle, "libgnss.so", "getGnssInterface");
+        void *libHandle = nullptr;
+        getLocationInterface *getter = (getLocationInterface *)dlGetSymFromLib(
+                libHandle, "libgnss.so", "getGnssInterface");
 
         if (nullptr == getter) {
             getGnssInterfaceFailed = true;
         } else {
-            mGnssInterface = (const GnssInterface*)(*getter)();
+            mGnssInterface = (const GnssInterface *)(*getter)();
         }
     }
     return mGnssInterface;
 }
 
-Return<bool> Gnss::setCallback(const sp<V1_0::IGnssCallback>& callback)  {
+Return<bool> Gnss::setCallback(const sp<V1_0::IGnssCallback> &callback) {
     ENTRY_LOG_CALLFLOW();
     if (mGnssCbIface != nullptr) {
         mGnssCbIface->unlinkToDeath(mGnssDeathRecipient);
@@ -168,7 +170,7 @@ Return<bool> Gnss::setCallback(const sp<V1_0::IGnssCallback>& callback)  {
         mGnssCbIface->linkToDeath(mGnssDeathRecipient, 0 /*cookie*/);
     }
 
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api != nullptr) {
         api->gnssUpdateCallbacks(mGnssCbIface, mGnssNiCbIface);
         api->gnssEnable(LOCATION_TECHNOLOGY_TYPE_GNSS);
@@ -177,19 +179,19 @@ Return<bool> Gnss::setCallback(const sp<V1_0::IGnssCallback>& callback)  {
     return true;
 }
 
-Return<bool> Gnss::setGnssNiCb(const sp<IGnssNiCallback>& callback) {
+Return<bool> Gnss::setGnssNiCb(const sp<IGnssNiCallback> &callback) {
     ENTRY_LOG_CALLFLOW();
     mGnssNiCbIface = callback;
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api != nullptr) {
         api->gnssUpdateCallbacks(mGnssCbIface, mGnssNiCbIface);
     }
     return true;
 }
 
-Return<bool> Gnss::updateConfiguration(GnssConfig& gnssConfig) {
+Return<bool> Gnss::updateConfiguration(GnssConfig &gnssConfig) {
     ENTRY_LOG_CALLFLOW();
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
         api->gnssConfigurationUpdate(gnssConfig);
     } else if (gnssConfig.flags != 0) {
@@ -209,9 +211,9 @@ Return<bool> Gnss::updateConfiguration(GnssConfig& gnssConfig) {
             mPendingConfig.assistanceServer.size = sizeof(GnssConfigSetAssistanceServer);
             mPendingConfig.assistanceServer.type = gnssConfig.assistanceServer.type;
             if (mPendingConfig.assistanceServer.hostName != nullptr) {
-                free((void*)mPendingConfig.assistanceServer.hostName);
+                free((void *)mPendingConfig.assistanceServer.hostName);
                 mPendingConfig.assistanceServer.hostName =
-                    strdup(gnssConfig.assistanceServer.hostName);
+                        strdup(gnssConfig.assistanceServer.hostName);
             }
             mPendingConfig.assistanceServer.port = gnssConfig.assistanceServer.port;
         }
@@ -251,27 +253,27 @@ Return<bool> Gnss::updateConfiguration(GnssConfig& gnssConfig) {
     return true;
 }
 
-Return<bool> Gnss::start()  {
+Return<bool> Gnss::start() {
     ENTRY_LOG_CALLFLOW();
     bool retVal = false;
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
         retVal = api->gnssStart();
     }
     return retVal;
 }
 
-Return<bool> Gnss::stop()  {
+Return<bool> Gnss::stop() {
     ENTRY_LOG_CALLFLOW();
     bool retVal = false;
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
         retVal = api->gnssStop();
     }
     return retVal;
 }
 
-Return<void> Gnss::cleanup()  {
+Return<void> Gnss::cleanup() {
     ENTRY_LOG_CALLFLOW();
 
     if (mApi != nullptr) {
@@ -281,11 +283,10 @@ Return<void> Gnss::cleanup()  {
     return Void();
 }
 
-Return<bool> Gnss::injectLocation(double latitudeDegrees,
-                                  double longitudeDegrees,
-                                  float accuracyMeters)  {
+Return<bool> Gnss::injectLocation(double latitudeDegrees, double longitudeDegrees,
+                                  float accuracyMeters) {
     ENTRY_LOG_CALLFLOW();
-    const GnssInterface* gnssInterface = getGnssInterface();
+    const GnssInterface *gnssInterface = getGnssInterface();
     if (nullptr != gnssInterface) {
         gnssInterface->injectLocation(latitudeDegrees, longitudeDegrees, accuracyMeters);
         return true;
@@ -294,14 +295,13 @@ Return<bool> Gnss::injectLocation(double latitudeDegrees,
     }
 }
 
-Return<bool> Gnss::injectTime(int64_t timeMs, int64_t timeReferenceMs,
-                              int32_t uncertaintyMs) {
+Return<bool> Gnss::injectTime(int64_t timeMs, int64_t timeReferenceMs, int32_t uncertaintyMs) {
     return true;
 }
 
-Return<void> Gnss::deleteAidingData(V1_0::IGnss::GnssAidingData aidingDataFlags)  {
+Return<void> Gnss::deleteAidingData(V1_0::IGnss::GnssAidingData aidingDataFlags) {
     ENTRY_LOG_CALLFLOW();
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
         api->gnssDeleteAidingData(aidingDataFlags);
     }
@@ -310,26 +310,25 @@ Return<void> Gnss::deleteAidingData(V1_0::IGnss::GnssAidingData aidingDataFlags)
 
 Return<bool> Gnss::setPositionMode(V1_0::IGnss::GnssPositionMode mode,
                                    V1_0::IGnss::GnssPositionRecurrence recurrence,
-                                   uint32_t minIntervalMs,
-                                   uint32_t preferredAccuracyMeters,
-                                   uint32_t preferredTimeMs)  {
+                                   uint32_t minIntervalMs, uint32_t preferredAccuracyMeters,
+                                   uint32_t preferredTimeMs) {
     ENTRY_LOG_CALLFLOW();
     bool retVal = false;
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
-        retVal = api->gnssSetPositionMode(mode, recurrence, minIntervalMs,
-                preferredAccuracyMeters, preferredTimeMs);
+        retVal = api->gnssSetPositionMode(mode, recurrence, minIntervalMs, preferredAccuracyMeters,
+                                          preferredTimeMs);
     }
     return retVal;
 }
 
-Return<sp<V1_0::IAGnss>> Gnss::getExtensionAGnss()  {
+Return<sp<V1_0::IAGnss>> Gnss::getExtensionAGnss() {
     ENTRY_LOG_CALLFLOW();
     mAGnssIface = new AGnss(this);
     return mAGnssIface;
 }
 
-Return<sp<V1_0::IGnssNi>> Gnss::getExtensionGnssNi()  {
+Return<sp<V1_0::IGnssNi>> Gnss::getExtensionGnssNi() {
     ENTRY_LOG_CALLFLOW();
     mGnssNi = new GnssNi(this);
     return mGnssNi;
@@ -342,19 +341,19 @@ Return<sp<V1_0::IGnssMeasurement>> Gnss::getExtensionGnssMeasurement() {
     return mGnssMeasurement;
 }
 
-Return<sp<V1_0::IGnssConfiguration>> Gnss::getExtensionGnssConfiguration()  {
+Return<sp<V1_0::IGnssConfiguration>> Gnss::getExtensionGnssConfiguration() {
     ENTRY_LOG_CALLFLOW();
     mGnssConfig = new GnssConfiguration(this);
     return mGnssConfig;
 }
 
-Return<sp<V1_0::IGnssGeofencing>> Gnss::getExtensionGnssGeofencing()  {
+Return<sp<V1_0::IGnssGeofencing>> Gnss::getExtensionGnssGeofencing() {
     ENTRY_LOG_CALLFLOW();
     mGnssGeofencingIface = new GnssGeofencing();
     return mGnssGeofencingIface;
 }
 
-Return<sp<V1_0::IGnssBatching>> Gnss::getExtensionGnssBatching()  {
+Return<sp<V1_0::IGnssBatching>> Gnss::getExtensionGnssBatching() {
     mGnssBatching = new GnssBatching();
     return mGnssBatching;
 }
@@ -371,13 +370,13 @@ Return<sp<V1_0::IAGnssRil>> Gnss::getExtensionAGnssRil() {
 }
 
 // Methods from ::android::hardware::gnss::V1_1::IGnss follow.
-Return<bool> Gnss::setCallback_1_1(const sp<V1_1::IGnssCallback>& callback) {
+Return<bool> Gnss::setCallback_1_1(const sp<V1_1::IGnssCallback> &callback) {
     ENTRY_LOG_CALLFLOW();
     callback->gnssNameCb(getVersionString());
     mGnssCbIface_1_1 = callback;
-    const GnssInterface* gnssInterface = getGnssInterface();
+    const GnssInterface *gnssInterface = getGnssInterface();
     if (nullptr != gnssInterface) {
-        OdcpiRequestCallback cb = [this](const OdcpiRequestInfo& odcpiRequest) {
+        OdcpiRequestCallback cb = [this](const OdcpiRequestInfo &odcpiRequest) {
             odcpiRequestCb(odcpiRequest);
         };
         gnssInterface->odcpiInit(cb, OdcpiPrioritytype::ODCPI_HANDLER_PRIORITY_LOW);
@@ -386,19 +385,16 @@ Return<bool> Gnss::setCallback_1_1(const sp<V1_1::IGnssCallback>& callback) {
 }
 
 Return<bool> Gnss::setPositionMode_1_1(V1_0::IGnss::GnssPositionMode mode,
-        V1_0::IGnss::GnssPositionRecurrence recurrence,
-        uint32_t minIntervalMs,
-        uint32_t preferredAccuracyMeters,
-        uint32_t preferredTimeMs,
-        bool lowPowerMode) {
+                                       V1_0::IGnss::GnssPositionRecurrence recurrence,
+                                       uint32_t minIntervalMs, uint32_t preferredAccuracyMeters,
+                                       uint32_t preferredTimeMs, bool lowPowerMode) {
     ENTRY_LOG_CALLFLOW();
     bool retVal = false;
-    GnssAPIClient* api = getApi();
+    GnssAPIClient *api = getApi();
     if (api) {
-        GnssPowerMode powerMode = lowPowerMode?
-                GNSS_POWER_MODE_M4 : GNSS_POWER_MODE_M2;
-        retVal = api->gnssSetPositionMode(mode, recurrence, minIntervalMs,
-                preferredAccuracyMeters, preferredTimeMs, powerMode, minIntervalMs);
+        GnssPowerMode powerMode = lowPowerMode ? GNSS_POWER_MODE_M4 : GNSS_POWER_MODE_M2;
+        retVal = api->gnssSetPositionMode(mode, recurrence, minIntervalMs, preferredAccuracyMeters,
+                                          preferredTimeMs, powerMode, minIntervalMs);
     }
     return retVal;
 }
@@ -417,9 +413,9 @@ Return<sp<V1_1::IGnssConfiguration>> Gnss::getExtensionGnssConfiguration_1_1() {
     return mGnssConfig;
 }
 
-Return<bool> Gnss::injectBestLocation(const GnssLocation& gnssLocation) {
+Return<bool> Gnss::injectBestLocation(const GnssLocation &gnssLocation) {
     ENTRY_LOG_CALLFLOW();
-    const GnssInterface* gnssInterface = getGnssInterface();
+    const GnssInterface *gnssInterface = getGnssInterface();
     if (nullptr != gnssInterface) {
         Location location = {};
         convertGnssLocation(gnssLocation, location);
@@ -428,7 +424,7 @@ Return<bool> Gnss::injectBestLocation(const GnssLocation& gnssLocation) {
     return true;
 }
 
-void Gnss::odcpiRequestCb(const OdcpiRequestInfo& request) {
+void Gnss::odcpiRequestCb(const OdcpiRequestInfo &request) {
     ENTRY_LOG_CALLFLOW();
     if (ODCPI_REQUEST_TYPE_STOP == request.type) {
         return;
@@ -449,9 +445,9 @@ void Gnss::odcpiRequestCb(const OdcpiRequestInfo& request) {
     }
 }
 
-V1_0::IGnss* HIDL_FETCH_IGnss(const char* hal) {
+V1_0::IGnss *HIDL_FETCH_IGnss(const char *hal) {
     ENTRY_LOG_CALLFLOW();
-    V1_0::IGnss* iface = nullptr;
+    V1_0::IGnss *iface = nullptr;
     iface = new Gnss();
     if (iface == nullptr) {
         LOC_LOGE("%s]: failed to get %s", __FUNCTION__, hal);

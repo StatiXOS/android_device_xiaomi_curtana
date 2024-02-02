@@ -76,4 +76,4 @@ typedef enum e_DataItemId {
     MAX_DATA_ITEM_ID_1_1,
 } DataItemId;
 
-#endif // #ifndef __DATAITEMID_H__
+#endif  // #ifndef __DATAITEMID_H__
