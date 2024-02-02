@@ -31,11 +31,11 @@ namespace gnss {
 namespace V2_1 {
 namespace implementation {
 
+using ::android::sp;
+using ::android::hardware::hidl_string;
+using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::hidl_string;
-using ::android::sp;
 
 struct Gnss;
 /*
@@ -46,33 +46,37 @@ struct Gnss;
  * IAGnssiRilCallback interface to be passed into the conventional implementation of the GNSS HAL.
  */
 struct AGnssRil : public V2_0::IAGnssRil {
-    AGnssRil(Gnss* gnss);
+    AGnssRil(Gnss *gnss);
     ~AGnssRil();
 
     /*
      * Methods from ::android::hardware::gnss::V1_0::IAGnssRil follow.
      * These declarations were generated from IAGnssRil.hal.
      */
-    Return<void> setCallback(const sp<V1_0::IAGnssRilCallback>& /*callback*/) override {
+    Return<void> setCallback(const sp<V1_0::IAGnssRilCallback> & /*callback*/) override {
         return Void();
     }
-    Return<void> setRefLocation(const V1_0::IAGnssRil::AGnssRefLocation& /*agnssReflocation*/) override {
+    Return<void> setRefLocation(
+            const V1_0::IAGnssRil::AGnssRefLocation & /*agnssReflocation*/) override {
         return Void();
     }
-    Return<bool> setSetId(V1_0::IAGnssRil::SetIDType /*type*/, const hidl_string& /*setid*/) override {
+    Return<bool> setSetId(V1_0::IAGnssRil::SetIDType /*type*/,
+                          const hidl_string & /*setid*/) override {
         return false;
     }
     Return<bool> updateNetworkAvailability(bool /*available*/,
-                                    const hidl_string& /*apn*/) override {
+                                           const hidl_string & /*apn*/) override {
         return false;
     }
-    Return<bool> updateNetworkState(bool connected, V1_0::IAGnssRil::NetworkType type, bool roaming) override;
+    Return<bool> updateNetworkState(bool connected, V1_0::IAGnssRil::NetworkType type,
+                                    bool roaming) override;
 
     // Methods from ::android::hardware::gnss::V2_0::IAGnssRil follow
-    Return<bool> updateNetworkState_2_0(const V2_0::IAGnssRil::NetworkAttributes& attributes) override;
+    Return<bool> updateNetworkState_2_0(
+            const V2_0::IAGnssRil::NetworkAttributes &attributes) override;
 
- private:
-    Gnss* mGnss = nullptr;
+  private:
+    Gnss *mGnss = nullptr;
 };
 
 }  // namespace implementation

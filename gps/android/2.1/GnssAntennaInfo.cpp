@@ -28,10 +28,12 @@
  */
 #define LOG_TAG "LocSvc_GnssAntennaInfoInterface"
 
-#include <log_util.h>
-#include "Gnss.h"
 #include "GnssAntennaInfo.h"
+
 #include <android/hardware/gnss/1.0/types.h>
+#include <log_util.h>
+
+#include "Gnss.h"
 
 namespace android {
 namespace hardware {
@@ -39,15 +41,16 @@ namespace gnss {
 namespace V2_1 {
 namespace implementation {
 
-static GnssAntennaInfo* spGnssAntennaInfo = nullptr;
+static GnssAntennaInfo *spGnssAntennaInfo = nullptr;
 
-static void convertGnssAntennaInfo(std::vector<GnssAntennaInformation>& in,
-        hidl_vec<IGnssAntennaInfoCallback::GnssAntennaInfo>& antennaInfos);
+static void convertGnssAntennaInfo(
+        std::vector<GnssAntennaInformation> &in,
+        hidl_vec<IGnssAntennaInfoCallback::GnssAntennaInfo> &antennaInfos);
 
 void GnssAntennaInfo::GnssAntennaInfoDeathRecipient::serviceDied(uint64_t cookie,
-                                                                 const wp<IBase>& who) {
-    LOC_LOGE("%s] service died. cookie: %llu, who: %p",
-            __FUNCTION__, static_cast<unsigned long long>(cookie), &who);
+                                                                 const wp<IBase> &who) {
+    LOC_LOGE("%s] service died. cookie: %llu, who: %p", __FUNCTION__,
+             static_cast<unsigned long long>(cookie), &who);
     // we do nothing here
     // Gnss::GnssDeathRecipient will stop the session
     // However, we need to inform the adapter that the service has died
@@ -63,9 +66,8 @@ void GnssAntennaInfo::GnssAntennaInfoDeathRecipient::serviceDied(uint64_t cookie
     spGnssAntennaInfo->mGnss->getGnssInterface()->antennaInfoClose();
 }
 
-static void convertGnssAntennaInfo(std::vector<GnssAntennaInformation>& in,
-        hidl_vec<IGnssAntennaInfoCallback::GnssAntennaInfo>& out) {
-
+static void convertGnssAntennaInfo(std::vector<GnssAntennaInformation> &in,
+                                   hidl_vec<IGnssAntennaInfoCallback::GnssAntennaInfo> &out) {
     uint32_t vecSize, numberOfRows, numberOfColumns;
     vecSize = in.size();
     out.resize(vecSize);
@@ -99,8 +101,8 @@ static void convertGnssAntennaInfo(std::vector<GnssAntennaInformation>& in,
         out[i].phaseCenterVariationCorrectionUncertaintyMillimeters.resize(numberOfRows);
         for (uint32_t j = 0; j < numberOfRows; j++) {
             numberOfColumns = in[i].phaseCenterVariationCorrectionUncertaintyMillimeters[j].size();
-            out[i].phaseCenterVariationCorrectionUncertaintyMillimeters[j].
-                    row.resize(numberOfColumns);
+            out[i].phaseCenterVariationCorrectionUncertaintyMillimeters[j].row.resize(
+                    numberOfColumns);
             for (uint32_t k = 0; k < numberOfColumns; k++) {
                 out[i].phaseCenterVariationCorrectionUncertaintyMillimeters[j].row[k] =
                         in[i].phaseCenterVariationCorrectionUncertaintyMillimeters[j][k];
@@ -130,7 +132,7 @@ static void convertGnssAntennaInfo(std::vector<GnssAntennaInformation>& in,
     }
 }
 
-GnssAntennaInfo::GnssAntennaInfo(Gnss* gnss) : mGnss(gnss) {
+GnssAntennaInfo::GnssAntennaInfo(Gnss *gnss) : mGnss(gnss) {
     mGnssAntennaInfoDeathRecipient = new GnssAntennaInfoDeathRecipient(this);
     spGnssAntennaInfo = this;
 }
@@ -140,8 +142,8 @@ GnssAntennaInfo::~GnssAntennaInfo() {
 }
 
 // Methods from ::android::hardware::gnss::V2_1::IGnssAntennaInfo follow.
-Return<GnssAntennaInfo::GnssAntennaInfoStatus>
-        GnssAntennaInfo::setCallback(const sp<IGnssAntennaInfoCallback>& callback)  {
+Return<GnssAntennaInfo::GnssAntennaInfoStatus> GnssAntennaInfo::setCallback(
+        const sp<IGnssAntennaInfoCallback> &callback) {
     uint32_t retValue;
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);
@@ -152,14 +154,17 @@ Return<GnssAntennaInfo::GnssAntennaInfoStatus>
     retValue = mGnss->getGnssInterface()->antennaInfoInit(aiGnssAntennaInfoCb);
 
     switch (retValue) {
-    case ANTENNA_INFO_SUCCESS: return GnssAntennaInfoStatus::SUCCESS;
-    case ANTENNA_INFO_ERROR_ALREADY_INIT: return GnssAntennaInfoStatus::ERROR_ALREADY_INIT;
-    case ANTENNA_INFO_ERROR_GENERIC:
-    default: return GnssAntennaInfoStatus::ERROR_GENERIC;
+        case ANTENNA_INFO_SUCCESS:
+            return GnssAntennaInfoStatus::SUCCESS;
+        case ANTENNA_INFO_ERROR_ALREADY_INIT:
+            return GnssAntennaInfoStatus::ERROR_ALREADY_INIT;
+        case ANTENNA_INFO_ERROR_GENERIC:
+        default:
+            return GnssAntennaInfoStatus::ERROR_GENERIC;
     }
 }
 
-Return<void> GnssAntennaInfo::close(void)  {
+Return<void> GnssAntennaInfo::close(void) {
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);
         return Void();
@@ -170,16 +175,15 @@ Return<void> GnssAntennaInfo::close(void)  {
     return Void();
 }
 
-void GnssAntennaInfo::aiGnssAntennaInfoCb
-        (std::vector<GnssAntennaInformation> gnssAntennaInformations) {
+void GnssAntennaInfo::aiGnssAntennaInfoCb(
+        std::vector<GnssAntennaInformation> gnssAntennaInformations) {
     if (nullptr != spGnssAntennaInfo) {
         spGnssAntennaInfo->gnssAntennaInfoCb(gnssAntennaInformations);
     }
 }
 
-void GnssAntennaInfo::gnssAntennaInfoCb
-        (std::vector<GnssAntennaInformation> gnssAntennaInformations) {
-
+void GnssAntennaInfo::gnssAntennaInfoCb(
+        std::vector<GnssAntennaInformation> gnssAntennaInformations) {
     if (mGnssAntennaInfoCbIface != nullptr) {
         hidl_vec<IGnssAntennaInfoCallback::GnssAntennaInfo> antennaInfos;
 

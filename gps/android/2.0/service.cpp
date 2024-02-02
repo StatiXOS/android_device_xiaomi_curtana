@@ -22,6 +22,7 @@
 
 #include <android/hardware/gnss/2.0/IGnss.h>
 #include <hidl/LegacySupport.h>
+
 #include "loc_cfg.h"
 #include "loc_misc_utils.h"
 
@@ -36,20 +37,19 @@ extern "C" {
 using android::hardware::gnss::V2_0::IGnss;
 
 using android::hardware::configureRpcThreadpool;
-using android::hardware::registerPassthroughServiceImplementation;
 using android::hardware::joinRpcThreadpool;
+using android::hardware::registerPassthroughServiceImplementation;
 
-using android::status_t;
 using android::OK;
+using android::status_t;
 
-typedef int vendorEnhancedServiceMain(int /* argc */, char* /* argv */ []);
+typedef int vendorEnhancedServiceMain(int /* argc */, char * /* argv */[]);
 
 int main() {
-
     ALOGI("%s", __FUNCTION__);
 
     int vendorInfo = getVendorEnhancedInfo();
-    bool vendorEnhanced = ( 1 == vendorInfo || 3 == vendorInfo );
+    bool vendorEnhanced = (1 == vendorInfo || 3 == vendorInfo);
     setVendorEnhanced(vendorEnhanced);
 
 #ifdef ARCH_ARM_32
@@ -60,18 +60,19 @@ int main() {
 
     status = registerPassthroughServiceImplementation<IGnss>();
     if (status == OK) {
-    #ifdef LOC_HIDL_VERSION
-        #define VENDOR_ENHANCED_LIB "vendor.qti.gnss@" LOC_HIDL_VERSION "-service.so"
+#ifdef LOC_HIDL_VERSION
+#define VENDOR_ENHANCED_LIB "vendor.qti.gnss@" LOC_HIDL_VERSION "-service.so"
 
-        void* libHandle = NULL;
-        vendorEnhancedServiceMain* vendorEnhancedMainMethod = (vendorEnhancedServiceMain*)
-                dlGetSymFromLib(libHandle, VENDOR_ENHANCED_LIB, "main");
+        void *libHandle = NULL;
+        vendorEnhancedServiceMain *vendorEnhancedMainMethod =
+                (vendorEnhancedServiceMain *)dlGetSymFromLib(libHandle, VENDOR_ENHANCED_LIB,
+                                                             "main");
         if (NULL != vendorEnhancedMainMethod) {
             (*vendorEnhancedMainMethod)(0, NULL);
         }
-    #else
+#else
         ALOGI("LOC_HIDL_VERSION not defined.");
-    #endif
+#endif
         joinRpcThreadpool();
     } else {
         ALOGE("Error while registering IGnss 2.0 service: %d", status);

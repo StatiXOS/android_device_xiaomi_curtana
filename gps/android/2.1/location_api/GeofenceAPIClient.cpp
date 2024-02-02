@@ -30,11 +30,12 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_GeofenceApiClient"
 
-#include <log_util.h>
+#include "GeofenceAPIClient.h"
+
 #include <loc_cfg.h>
+#include <log_util.h>
 
 #include "LocationUtil.h"
-#include "GeofenceAPIClient.h"
 
 namespace android {
 namespace hardware {
@@ -42,13 +43,11 @@ namespace gnss {
 namespace V2_1 {
 namespace implementation {
 
-using ::android::hardware::gnss::V1_0::IGnssGeofenceCallback;
 using ::android::hardware::gnss::V1_0::GnssLocation;
+using ::android::hardware::gnss::V1_0::IGnssGeofenceCallback;
 
-GeofenceAPIClient::GeofenceAPIClient(const sp<IGnssGeofenceCallback>& callback) :
-    LocationAPIClientBase(),
-    mGnssGeofencingCbIface(callback)
-{
+GeofenceAPIClient::GeofenceAPIClient(const sp<IGnssGeofenceCallback> &callback)
+    : LocationAPIClientBase(), mGnssGeofencingCbIface(callback) {
     LOC_LOGD("%s]: (%p)", __FUNCTION__, &callback);
 
     LocationCallbacks locationCallbacks;
@@ -61,14 +60,14 @@ GeofenceAPIClient::GeofenceAPIClient(const sp<IGnssGeofenceCallback>& callback) 
     locationCallbacks.geofenceBreachCb = nullptr;
     if (mGnssGeofencingCbIface != nullptr) {
         locationCallbacks.geofenceBreachCb =
-            [this](GeofenceBreachNotification geofenceBreachNotification) {
-                onGeofenceBreachCb(geofenceBreachNotification);
-            };
+                [this](GeofenceBreachNotification geofenceBreachNotification) {
+                    onGeofenceBreachCb(geofenceBreachNotification);
+                };
 
         locationCallbacks.geofenceStatusCb =
-            [this](GeofenceStatusNotification geofenceStatusNotification) {
-                onGeofenceStatusCb(geofenceStatusNotification);
-            };
+                [this](GeofenceStatusNotification geofenceStatusNotification) {
+                    onGeofenceStatusCb(geofenceStatusNotification);
+                };
     }
 
     locationCallbacks.gnssLocationInfoCb = nullptr;
@@ -81,12 +80,13 @@ GeofenceAPIClient::GeofenceAPIClient(const sp<IGnssGeofenceCallback>& callback) 
 }
 
 void GeofenceAPIClient::geofenceAdd(uint32_t geofence_id, double latitude, double longitude,
-        double radius_meters, int32_t last_transition, int32_t monitor_transitions,
-        uint32_t notification_responsiveness_ms, uint32_t unknown_timer_ms)
-{
-    LOC_LOGD("%s]: (%d %f %f %f %d %d %d %d)", __FUNCTION__,
-            geofence_id, latitude, longitude, radius_meters,
-            last_transition, monitor_transitions, notification_responsiveness_ms, unknown_timer_ms);
+                                    double radius_meters, int32_t last_transition,
+                                    int32_t monitor_transitions,
+                                    uint32_t notification_responsiveness_ms,
+                                    uint32_t unknown_timer_ms) {
+    LOC_LOGD("%s]: (%d %f %f %f %d %d %d %d)", __FUNCTION__, geofence_id, latitude, longitude,
+             radius_meters, last_transition, monitor_transitions, notification_responsiveness_ms,
+             unknown_timer_ms);
 
     GeofenceOption options;
     memset(&options, 0, sizeof(GeofenceOption));
@@ -94,7 +94,7 @@ void GeofenceAPIClient::geofenceAdd(uint32_t geofence_id, double latitude, doubl
     if (monitor_transitions & IGnssGeofenceCallback::GeofenceTransition::ENTERED)
         options.breachTypeMask |= GEOFENCE_BREACH_ENTER_BIT;
     if (monitor_transitions & IGnssGeofenceCallback::GeofenceTransition::EXITED)
-        options.breachTypeMask |=  GEOFENCE_BREACH_EXIT_BIT;
+        options.breachTypeMask |= GEOFENCE_BREACH_EXIT_BIT;
     options.responsiveness = notification_responsiveness_ms;
 
     GeofenceInfo data;
@@ -109,38 +109,33 @@ void GeofenceAPIClient::geofenceAdd(uint32_t geofence_id, double latitude, doubl
     }
 }
 
-void GeofenceAPIClient::geofencePause(uint32_t geofence_id)
-{
+void GeofenceAPIClient::geofencePause(uint32_t geofence_id) {
     LOC_LOGD("%s]: (%d)", __FUNCTION__, geofence_id);
     locAPIPauseGeofences(1, &geofence_id);
 }
 
-void GeofenceAPIClient::geofenceResume(uint32_t geofence_id, int32_t monitor_transitions)
-{
+void GeofenceAPIClient::geofenceResume(uint32_t geofence_id, int32_t monitor_transitions) {
     LOC_LOGD("%s]: (%d %d)", __FUNCTION__, geofence_id, monitor_transitions);
     GeofenceBreachTypeMask mask = 0;
     if (monitor_transitions & IGnssGeofenceCallback::GeofenceTransition::ENTERED)
         mask |= GEOFENCE_BREACH_ENTER_BIT;
     if (monitor_transitions & IGnssGeofenceCallback::GeofenceTransition::EXITED)
-        mask |=  GEOFENCE_BREACH_EXIT_BIT;
+        mask |= GEOFENCE_BREACH_EXIT_BIT;
     locAPIResumeGeofences(1, &geofence_id, &mask);
 }
 
-void GeofenceAPIClient::geofenceRemove(uint32_t geofence_id)
-{
+void GeofenceAPIClient::geofenceRemove(uint32_t geofence_id) {
     LOC_LOGD("%s]: (%d)", __FUNCTION__, geofence_id);
     locAPIRemoveGeofences(1, &geofence_id);
 }
 
-void GeofenceAPIClient::geofenceRemoveAll()
-{
+void GeofenceAPIClient::geofenceRemoveAll() {
     LOC_LOGD("%s]", __FUNCTION__);
     // TODO locAPIRemoveAllGeofences();
 }
 
 // callbacks
-void GeofenceAPIClient::onGeofenceBreachCb(GeofenceBreachNotification geofenceBreachNotification)
-{
+void GeofenceAPIClient::onGeofenceBreachCb(GeofenceBreachNotification geofenceBreachNotification) {
     LOC_LOGD("%s]: (%d)", __FUNCTION__, geofenceBreachNotification.count);
     if (mGnssGeofencingCbIface != nullptr) {
         for (size_t i = 0; i < geofenceBreachNotification.count; i++) {
@@ -162,19 +157,18 @@ void GeofenceAPIClient::onGeofenceBreachCb(GeofenceBreachNotification geofenceBr
                     geofenceBreachNotification.ids[i], gnssLocation, transition,
                     static_cast<V1_0::GnssUtcTime>(geofenceBreachNotification.timestamp));
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssGeofenceTransitionCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssGeofenceTransitionCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }
 }
 
-void GeofenceAPIClient::onGeofenceStatusCb(GeofenceStatusNotification geofenceStatusNotification)
-{
+void GeofenceAPIClient::onGeofenceStatusCb(GeofenceStatusNotification geofenceStatusNotification) {
     LOC_LOGD("%s]: (%d)", __FUNCTION__, geofenceStatusNotification.available);
     if (mGnssGeofencingCbIface != nullptr) {
         IGnssGeofenceCallback::GeofenceAvailability status =
-            IGnssGeofenceCallback::GeofenceAvailability::UNAVAILABLE;
+                IGnssGeofenceCallback::GeofenceAvailability::UNAVAILABLE;
         if (geofenceStatusNotification.available == GEOFENCE_STATUS_AVAILABILE_YES) {
             status = IGnssGeofenceCallback::GeofenceAvailability::AVAILABLE;
         }
@@ -182,87 +176,83 @@ void GeofenceAPIClient::onGeofenceStatusCb(GeofenceStatusNotification geofenceSt
         memset(&gnssLocation, 0, sizeof(GnssLocation));
         auto r = mGnssGeofencingCbIface->gnssGeofenceStatusCb(status, gnssLocation);
         if (!r.isOk()) {
-            LOC_LOGE("%s] Error from gnssGeofenceStatusCb description=%s",
-                __func__, r.description().c_str());
+            LOC_LOGE("%s] Error from gnssGeofenceStatusCb description=%s", __func__,
+                     r.description().c_str());
         }
     }
 }
 
-void GeofenceAPIClient::onAddGeofencesCb(size_t count, LocationError* errors, uint32_t* ids)
-{
+void GeofenceAPIClient::onAddGeofencesCb(size_t count, LocationError *errors, uint32_t *ids) {
     LOC_LOGD("%s]: (%zu)", __FUNCTION__, count);
     if (mGnssGeofencingCbIface != nullptr) {
         for (size_t i = 0; i < count; i++) {
             IGnssGeofenceCallback::GeofenceStatus status =
-                IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
+                    IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
             if (errors[i] == LOCATION_ERROR_SUCCESS)
                 status = IGnssGeofenceCallback::GeofenceStatus::OPERATION_SUCCESS;
             else if (errors[i] == LOCATION_ERROR_ID_EXISTS)
                 status = IGnssGeofenceCallback::GeofenceStatus::ERROR_ID_EXISTS;
             auto r = mGnssGeofencingCbIface->gnssGeofenceAddCb(ids[i], status);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssGeofenceAddCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssGeofenceAddCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }
 }
 
-void GeofenceAPIClient::onRemoveGeofencesCb(size_t count, LocationError* errors, uint32_t* ids)
-{
+void GeofenceAPIClient::onRemoveGeofencesCb(size_t count, LocationError *errors, uint32_t *ids) {
     LOC_LOGD("%s]: (%zu)", __FUNCTION__, count);
     if (mGnssGeofencingCbIface != nullptr) {
         for (size_t i = 0; i < count; i++) {
             IGnssGeofenceCallback::GeofenceStatus status =
-                IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
+                    IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
             if (errors[i] == LOCATION_ERROR_SUCCESS)
                 status = IGnssGeofenceCallback::GeofenceStatus::OPERATION_SUCCESS;
             else if (errors[i] == LOCATION_ERROR_ID_UNKNOWN)
                 status = IGnssGeofenceCallback::GeofenceStatus::ERROR_ID_UNKNOWN;
             auto r = mGnssGeofencingCbIface->gnssGeofenceRemoveCb(ids[i], status);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssGeofenceRemoveCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssGeofenceRemoveCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }
 }
 
-void GeofenceAPIClient::onPauseGeofencesCb(size_t count, LocationError* errors, uint32_t* ids)
-{
+void GeofenceAPIClient::onPauseGeofencesCb(size_t count, LocationError *errors, uint32_t *ids) {
     LOC_LOGD("%s]: (%zu)", __FUNCTION__, count);
     if (mGnssGeofencingCbIface != nullptr) {
         for (size_t i = 0; i < count; i++) {
             IGnssGeofenceCallback::GeofenceStatus status =
-                IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
+                    IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
             if (errors[i] == LOCATION_ERROR_SUCCESS)
                 status = IGnssGeofenceCallback::GeofenceStatus::OPERATION_SUCCESS;
             else if (errors[i] == LOCATION_ERROR_ID_UNKNOWN)
                 status = IGnssGeofenceCallback::GeofenceStatus::ERROR_ID_UNKNOWN;
             auto r = mGnssGeofencingCbIface->gnssGeofencePauseCb(ids[i], status);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssGeofencePauseCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssGeofencePauseCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }
 }
 
-void GeofenceAPIClient::onResumeGeofencesCb(size_t count, LocationError* errors, uint32_t* ids)
-{
+void GeofenceAPIClient::onResumeGeofencesCb(size_t count, LocationError *errors, uint32_t *ids) {
     LOC_LOGD("%s]: (%zu)", __FUNCTION__, count);
     if (mGnssGeofencingCbIface != nullptr) {
         for (size_t i = 0; i < count; i++) {
             IGnssGeofenceCallback::GeofenceStatus status =
-                IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
+                    IGnssGeofenceCallback::GeofenceStatus::ERROR_GENERIC;
             if (errors[i] == LOCATION_ERROR_SUCCESS)
                 status = IGnssGeofenceCallback::GeofenceStatus::OPERATION_SUCCESS;
             else if (errors[i] == LOCATION_ERROR_ID_UNKNOWN)
                 status = IGnssGeofenceCallback::GeofenceStatus::ERROR_ID_UNKNOWN;
             auto r = mGnssGeofencingCbIface->gnssGeofenceResumeCb(ids[i], status);
             if (!r.isOk()) {
-                LOC_LOGE("%s] Error from gnssGeofenceResumeCb description=%s",
-                    __func__, r.description().c_str());
+                LOC_LOGE("%s] Error from gnssGeofenceResumeCb description=%s", __func__,
+                         r.description().c_str());
             }
         }
     }

@@ -31,11 +31,11 @@
 #define ANDROID_HARDWARE_GNSS_V1_0_GnssVisibilityControl_H
 
 #include <android/hardware/gnss/visibility_control/1.0/IGnssVisibilityControl.h>
+#include <gps_extended_c.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
-
-#include <gps_extended_c.h>
 #include <location_interface.h>
+
 #include "Gnss.h"
 
 namespace android {
@@ -45,27 +45,32 @@ namespace visibility_control {
 namespace V1_0 {
 namespace implementation {
 
+using ::android::sp;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
 using ::android::hardware::gnss::V2_0::implementation::Gnss;
 
 struct GnssVisibilityControl : public IGnssVisibilityControl {
-    GnssVisibilityControl(Gnss* gnss);
+    GnssVisibilityControl(Gnss *gnss);
     ~GnssVisibilityControl();
 
-    // Methods from ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControl follow.
-    Return<bool> enableNfwLocationAccess(const hidl_vec<::android::hardware::hidl_string>& proxyApps) override;
+    // Methods from ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControl
+    // follow.
+    Return<bool> enableNfwLocationAccess(
+            const hidl_vec<::android::hardware::hidl_string> &proxyApps) override;
     /**
      * Registers the callback for HAL implementation to use.
      *
      * @param callback Handle to IGnssVisibilityControlCallback interface.
      */
-    Return<bool> setCallback(const ::android::sp<::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>& callback) override;
+    Return<bool>
+    setCallback(const ::android::sp<
+                ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>
+                        &callback) override;
 
     void statusCb(GnssNfwNotification notification);
     bool isE911Session();
@@ -74,11 +79,10 @@ struct GnssVisibilityControl : public IGnssVisibilityControl {
     static void nfwStatusCb(GnssNfwNotification notification);
     static bool isInEmergencySession();
 
-private:
-    Gnss* mGnss = nullptr;
+  private:
+    Gnss *mGnss = nullptr;
     sp<IGnssVisibilityControlCallback> mGnssVisibilityControlCbIface = nullptr;
 };
-
 
 }  // namespace implementation
 }  // namespace V1_0

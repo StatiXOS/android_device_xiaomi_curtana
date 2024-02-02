@@ -32,33 +32,33 @@
 #include <LocAdapterBase.h>
 #include <LocContext.h>
 #include <LocationAPI.h>
+
 #include <map>
 
 using namespace loc_core;
 
-#define COPY_IF_NOT_NULL(dest, src, len) do { \
-    if (NULL!=dest && NULL!=src) { \
-        for (size_t i=0; i<len; ++i) { \
-            dest[i] = src[i]; \
-        } \
-    } \
-} while (0)
+#define COPY_IF_NOT_NULL(dest, src, len)       \
+    do {                                       \
+        if (NULL != dest && NULL != src) {     \
+            for (size_t i = 0; i < len; ++i) { \
+                dest[i] = src[i];              \
+            }                                  \
+        }                                      \
+    } while (0)
 
 typedef struct GeofenceKey {
-    LocationAPI* client;
+    LocationAPI *client;
     uint32_t id;
-    inline GeofenceKey() :
-        client(NULL), id(0) {}
-    inline GeofenceKey(LocationAPI* _client, uint32_t _id) :
-        client(_client), id(_id) {}
+    inline GeofenceKey() : client(NULL), id(0) {}
+    inline GeofenceKey(LocationAPI *_client, uint32_t _id) : client(_client), id(_id) {}
 } GeofenceKey;
-inline bool operator <(GeofenceKey const& left, GeofenceKey const& right) {
+inline bool operator<(GeofenceKey const &left, GeofenceKey const &right) {
     return left.id < right.id || (left.id == right.id && left.client < right.client);
 }
-inline bool operator ==(GeofenceKey const& left, GeofenceKey const& right) {
+inline bool operator==(GeofenceKey const &left, GeofenceKey const &right) {
     return left.id == right.id && left.client == right.client;
 }
-inline bool operator !=(GeofenceKey const& left, GeofenceKey const& right) {
+inline bool operator!=(GeofenceKey const &left, GeofenceKey const &right) {
     return left.id != right.id || left.client != right.client;
 }
 typedef struct {
@@ -71,23 +71,20 @@ typedef struct {
     double radius;
     bool paused;
 } GeofenceObject;
-typedef std::map<uint32_t, GeofenceObject> GeofencesMap; //map of hwId to GeofenceObject
-typedef std::map<GeofenceKey, uint32_t> GeofenceIdMap; //map of GeofenceKey to hwId
+typedef std::map<uint32_t, GeofenceObject> GeofencesMap;  // map of hwId to GeofenceObject
+typedef std::map<GeofenceKey, uint32_t> GeofenceIdMap;    // map of GeofenceKey to hwId
 
 class GeofenceAdapter : public LocAdapterBase {
-
     /* ==== GEOFENCES ====================================================================== */
-    GeofencesMap mGeofences; //map hwId to GeofenceObject
-    GeofenceIdMap mGeofenceIds; //map of GeofenceKey to hwId
+    GeofencesMap mGeofences;     // map hwId to GeofenceObject
+    GeofenceIdMap mGeofenceIds;  // map of GeofenceKey to hwId
 
-protected:
-
+  protected:
     /* ==== CLIENT ========================================================================= */
     virtual void updateClientsEventMask();
-    virtual void stopClientSessions(LocationAPI* client);
+    virtual void stopClientSessions(LocationAPI *client);
 
-public:
-
+  public:
     GeofenceAdapter();
     virtual ~GeofenceAdapter() {}
 
@@ -99,36 +96,33 @@ public:
 
     /* ==== GEOFENCES ====================================================================== */
     /* ======== COMMANDS ====(Called from Client Thread)==================================== */
-    uint32_t* addGeofencesCommand(LocationAPI* client, size_t count,
-                                  GeofenceOption* options, GeofenceInfo* info);
-    void removeGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids);
-    void pauseGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids);
-    void resumeGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids);
-    void modifyGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids,
-                                GeofenceOption* options);
+    uint32_t *addGeofencesCommand(LocationAPI *client, size_t count, GeofenceOption *options,
+                                  GeofenceInfo *info);
+    void removeGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids);
+    void pauseGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids);
+    void resumeGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids);
+    void modifyGeofencesCommand(LocationAPI *client, size_t count, uint32_t *ids,
+                                GeofenceOption *options);
     /* ======== RESPONSES ================================================================== */
-    void reportResponse(LocationAPI* client, size_t count, LocationError* errs, uint32_t* ids);
+    void reportResponse(LocationAPI *client, size_t count, LocationError *errs, uint32_t *ids);
     /* ======== UTILITIES ================================================================== */
-    void saveGeofenceItem(LocationAPI* client,
-                          uint32_t clientId,
-                          uint32_t hwId,
-                          const GeofenceOption& options,
-                          const GeofenceInfo& info);
+    void saveGeofenceItem(LocationAPI *client, uint32_t clientId, uint32_t hwId,
+                          const GeofenceOption &options, const GeofenceInfo &info);
     void removeGeofenceItem(uint32_t hwId);
     void pauseGeofenceItem(uint32_t hwId);
     void resumeGeofenceItem(uint32_t hwId);
-    void modifyGeofenceItem(uint32_t hwId, const GeofenceOption& options);
-    LocationError getHwIdFromClient(LocationAPI* client, uint32_t clientId, uint32_t& hwId);
-    LocationError getGeofenceKeyFromHwId(uint32_t hwId, GeofenceKey& key);
+    void modifyGeofenceItem(uint32_t hwId, const GeofenceOption &options);
+    LocationError getHwIdFromClient(LocationAPI *client, uint32_t clientId, uint32_t &hwId);
+    LocationError getGeofenceKeyFromHwId(uint32_t hwId, GeofenceKey &key);
     void dump();
 
     /* ==== REPORTS ======================================================================== */
     /* ======== EVENTS ====(Called from QMI Thread)========================================= */
-    void geofenceBreachEvent(size_t count, uint32_t* hwIds, Location& location,
+    void geofenceBreachEvent(size_t count, uint32_t *hwIds, Location &location,
                              GeofenceBreachType breachType, uint64_t timestamp);
     void geofenceStatusEvent(GeofenceStatusAvailable available);
     /* ======== UTILITIES ================================================================== */
-    void geofenceBreach(size_t count, uint32_t* hwIds, const Location& location,
+    void geofenceBreach(size_t count, uint32_t *hwIds, const Location &location,
                         GeofenceBreachType breachType, uint64_t timestamp);
     void geofenceStatus(GeofenceStatusAvailable available);
 };

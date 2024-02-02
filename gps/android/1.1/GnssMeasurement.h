@@ -31,13 +31,13 @@ namespace gnss {
 namespace V1_1 {
 namespace implementation {
 
-using ::android::hardware::gnss::V1_1::IGnssMeasurement;
-using ::android::hardware::gnss::V1_1::IGnssMeasurementCallback;
+using ::android::sp;
+using ::android::hardware::hidl_string;
+using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::hidl_string;
-using ::android::sp;
+using ::android::hardware::gnss::V1_1::IGnssMeasurement;
+using ::android::hardware::gnss::V1_1::IGnssMeasurementCallback;
 
 class MeasurementAPIClient;
 struct GnssMeasurement : public IGnssMeasurement {
@@ -49,29 +49,27 @@ struct GnssMeasurement : public IGnssMeasurement {
      * These declarations were generated from IGnssMeasurement.hal.
      */
     Return<GnssMeasurement::GnssMeasurementStatus> setCallback(
-        const sp<V1_0::IGnssMeasurementCallback>& callback) override;
+            const sp<V1_0::IGnssMeasurementCallback> &callback) override;
     Return<void> close() override;
 
     // Methods from ::android::hardware::gnss::V1_1::IGnssMeasurement follow.
     Return<GnssMeasurement::GnssMeasurementStatus> setCallback_1_1(
-            const sp<IGnssMeasurementCallback>& callback,
-            bool enableFullTracking) override;
+            const sp<IGnssMeasurementCallback> &callback, bool enableFullTracking) override;
 
- private:
+  private:
     struct GnssMeasurementDeathRecipient : hidl_death_recipient {
-        GnssMeasurementDeathRecipient(sp<GnssMeasurement> gnssMeasurement) :
-            mGnssMeasurement(gnssMeasurement) {
-        }
+        GnssMeasurementDeathRecipient(sp<GnssMeasurement> gnssMeasurement)
+            : mGnssMeasurement(gnssMeasurement) {}
         ~GnssMeasurementDeathRecipient() = default;
-        virtual void serviceDied(uint64_t cookie, const wp<IBase>& who) override;
+        virtual void serviceDied(uint64_t cookie, const wp<IBase> &who) override;
         sp<GnssMeasurement> mGnssMeasurement;
     };
 
- private:
+  private:
     sp<GnssMeasurementDeathRecipient> mGnssMeasurementDeathRecipient = nullptr;
     sp<V1_0::IGnssMeasurementCallback> mGnssMeasurementCbIface = nullptr;
     sp<IGnssMeasurementCallback> mGnssMeasurementCbIface_1_1 = nullptr;
-    MeasurementAPIClient* mApi;
+    MeasurementAPIClient *mApi;
 };
 
 }  // namespace implementation

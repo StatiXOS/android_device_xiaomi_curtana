@@ -20,9 +20,11 @@
 
 #define LOG_TAG "LocSvc_AGnssInterface"
 
-#include <log_util.h>
-#include "Gnss.h"
 #include "AGnss.h"
+
+#include <log_util.h>
+
+#include "Gnss.h"
 
 namespace android {
 namespace hardware {
@@ -30,9 +32,9 @@ namespace gnss {
 namespace V2_1 {
 namespace implementation {
 
-static AGnss* spAGnss = nullptr;
+static AGnss *spAGnss = nullptr;
 
-AGnss::AGnss(Gnss* gnss) : mGnss(gnss), mType(LOC_AGPS_TYPE_INVALID) {
+AGnss::AGnss(Gnss *gnss) : mGnss(gnss), mType(LOC_AGPS_TYPE_INVALID) {
     spAGnss = this;
 }
 
@@ -47,44 +49,43 @@ void AGnss::agnssStatusIpV4Cb(AGnssExtStatusIpV4 status) {
 }
 
 void AGnss::statusCb(AGpsExtType type, LocAGpsStatusValue status) {
-
-    V2_0::IAGnssCallback::AGnssType  aType;
+    V2_0::IAGnssCallback::AGnssType aType;
     IAGnssCallback::AGnssStatusValue aStatus;
 
     // cache the AGps Type
     mType = type;
 
     switch (type) {
-    case LOC_AGPS_TYPE_SUPL:
-        aType = IAGnssCallback::AGnssType::SUPL;
-        break;
-    case LOC_AGPS_TYPE_SUPL_ES:
-        aType = IAGnssCallback::AGnssType::SUPL_EIMS;
-        break;
-    default:
-        LOC_LOGE("invalid type: %d", type);
-        return;
+        case LOC_AGPS_TYPE_SUPL:
+            aType = IAGnssCallback::AGnssType::SUPL;
+            break;
+        case LOC_AGPS_TYPE_SUPL_ES:
+            aType = IAGnssCallback::AGnssType::SUPL_EIMS;
+            break;
+        default:
+            LOC_LOGE("invalid type: %d", type);
+            return;
     }
 
     switch (status) {
-    case LOC_GPS_REQUEST_AGPS_DATA_CONN:
-        aStatus = IAGnssCallback::AGnssStatusValue::REQUEST_AGNSS_DATA_CONN;
-        break;
-    case LOC_GPS_RELEASE_AGPS_DATA_CONN:
-        aStatus = IAGnssCallback::AGnssStatusValue::RELEASE_AGNSS_DATA_CONN;
-        break;
-    case LOC_GPS_AGPS_DATA_CONNECTED:
-        aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONNECTED;
-        break;
-    case LOC_GPS_AGPS_DATA_CONN_DONE:
-        aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONN_DONE;
-        break;
-    case LOC_GPS_AGPS_DATA_CONN_FAILED:
-        aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONN_FAILED;
-        break;
-    default:
-        LOC_LOGE("invalid status: %d", status);
-        return;
+        case LOC_GPS_REQUEST_AGPS_DATA_CONN:
+            aStatus = IAGnssCallback::AGnssStatusValue::REQUEST_AGNSS_DATA_CONN;
+            break;
+        case LOC_GPS_RELEASE_AGPS_DATA_CONN:
+            aStatus = IAGnssCallback::AGnssStatusValue::RELEASE_AGNSS_DATA_CONN;
+            break;
+        case LOC_GPS_AGPS_DATA_CONNECTED:
+            aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONNECTED;
+            break;
+        case LOC_GPS_AGPS_DATA_CONN_DONE:
+            aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONN_DONE;
+            break;
+        case LOC_GPS_AGPS_DATA_CONN_FAILED:
+            aStatus = IAGnssCallback::AGnssStatusValue::AGNSS_DATA_CONN_FAILED;
+            break;
+        default:
+            LOC_LOGE("invalid status: %d", status);
+            return;
     }
 
     if (mAGnssCbIface != nullptr) {
@@ -92,15 +93,13 @@ void AGnss::statusCb(AGpsExtType type, LocAGpsStatusValue status) {
         if (!r.isOk()) {
             LOC_LOGw("Error invoking AGNSS status cb %s", r.description().c_str());
         }
-    }
-    else {
+    } else {
         LOC_LOGw("setCallback has not been called yet");
     }
 }
 
-Return<void> AGnss::setCallback(const sp<V2_0::IAGnssCallback>& callback) {
-
-    if(mGnss == nullptr || mGnss->getGnssInterface() == nullptr){
+Return<void> AGnss::setCallback(const sp<V2_0::IAGnssCallback> &callback) {
+    if (mGnss == nullptr || mGnss->getGnssInterface() == nullptr) {
         LOC_LOGE("Null GNSS interface");
         return Void();
     }
@@ -109,7 +108,7 @@ Return<void> AGnss::setCallback(const sp<V2_0::IAGnssCallback>& callback) {
     mAGnssCbIface = callback;
 
     AgpsCbInfo cbInfo = {};
-    cbInfo.statusV4Cb = (void*)agnssStatusIpV4Cb;
+    cbInfo.statusV4Cb = (void *)agnssStatusIpV4Cb;
     cbInfo.atlType = AGPS_ATL_TYPE_SUPL | AGPS_ATL_TYPE_SUPL_ES;
 
     mGnss->getGnssInterface()->agpsInit(cbInfo);
@@ -117,8 +116,7 @@ Return<void> AGnss::setCallback(const sp<V2_0::IAGnssCallback>& callback) {
 }
 
 Return<bool> AGnss::dataConnClosed() {
-
-    if(mGnss == nullptr || mGnss->getGnssInterface() == nullptr){
+    if (mGnss == nullptr || mGnss->getGnssInterface() == nullptr) {
         LOC_LOGE("Null GNSS interface");
         return false;
     }
@@ -128,8 +126,7 @@ Return<bool> AGnss::dataConnClosed() {
 }
 
 Return<bool> AGnss::dataConnFailed() {
-
-    if(mGnss == nullptr || mGnss->getGnssInterface() == nullptr){
+    if (mGnss == nullptr || mGnss->getGnssInterface() == nullptr) {
         LOC_LOGE("Null GNSS interface");
         return false;
     }
@@ -138,10 +135,9 @@ Return<bool> AGnss::dataConnFailed() {
     return true;
 }
 
-Return<bool> AGnss::dataConnOpen(uint64_t /*networkHandle*/, const hidl_string& apn,
-        V2_0::IAGnss::ApnIpType apnIpType) {
-
-    if (mGnss == nullptr || mGnss->getGnssInterface() == nullptr){
+Return<bool> AGnss::dataConnOpen(uint64_t /*networkHandle*/, const hidl_string &apn,
+                                 V2_0::IAGnss::ApnIpType apnIpType) {
+    if (mGnss == nullptr || mGnss->getGnssInterface() == nullptr) {
         LOC_LOGE("Null GNSS interface");
         return false;
     }
@@ -158,27 +154,26 @@ Return<bool> AGnss::dataConnOpen(uint64_t /*networkHandle*/, const hidl_string& 
 
     AGpsBearerType bearerType;
     switch (apnIpType) {
-    case IAGnss::ApnIpType::IPV4:
-        bearerType = AGPS_APN_BEARER_IPV4;
-        break;
-    case IAGnss::ApnIpType::IPV6:
-        bearerType = AGPS_APN_BEARER_IPV6;
-        break;
-    case IAGnss::ApnIpType::IPV4V6:
-        bearerType = AGPS_APN_BEARER_IPV4V6;
-        break;
-    default:
-        bearerType = AGPS_APN_BEARER_IPV4;
-        break;
+        case IAGnss::ApnIpType::IPV4:
+            bearerType = AGPS_APN_BEARER_IPV4;
+            break;
+        case IAGnss::ApnIpType::IPV6:
+            bearerType = AGPS_APN_BEARER_IPV6;
+            break;
+        case IAGnss::ApnIpType::IPV4V6:
+            bearerType = AGPS_APN_BEARER_IPV4V6;
+            break;
+        default:
+            bearerType = AGPS_APN_BEARER_IPV4;
+            break;
     }
 
-    mGnss->getGnssInterface()->agpsDataConnOpen(
-        LOC_AGPS_TYPE_SUPL, apnString.c_str(), apnString.size(), (int)bearerType);
+    mGnss->getGnssInterface()->agpsDataConnOpen(LOC_AGPS_TYPE_SUPL, apnString.c_str(),
+                                                apnString.size(), (int)bearerType);
     return true;
 }
 
-Return<bool> AGnss::setServer(V2_0::IAGnssCallback::AGnssType type,
-                              const hidl_string& hostname,
+Return<bool> AGnss::setServer(V2_0::IAGnssCallback::AGnssType type, const hidl_string &hostname,
                               int32_t port) {
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);

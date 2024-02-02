@@ -29,9 +29,10 @@
 #ifndef _LOC_MISC_UTILS_H_
 #define _LOC_MISC_UTILS_H_
 #include <stdint.h>
+
 #include <ios>
-#include <string>
 #include <sstream>
+#include <string>
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,7 +80,7 @@ EXAMPLE
 
 ===========================================================================*/
 int loc_util_split_string(char *raw_string, char **split_strings_ptr, int max_num_substrings,
-                     char delimiter);
+                          char delimiter);
 
 /*===========================================================================
 FUNCTION trim_space
@@ -123,7 +124,7 @@ RETURN VALUE
 SIDE EFFECTS
    N/A
 ===========================================================================*/
-void* dlGetSymFromLib(void*& libHandle, const char* libName, const char* symName);
+void *dlGetSymFromLib(void *&libHandle, const char *libName, const char *symName);
 
 /*===========================================================================
 FUNCTION getQTimerTickCount
@@ -247,7 +248,7 @@ SIDE EFFECTS
    N/A
 ===========================================================================*/
 template <typename T>
-static string loc_prim_arr_to_string(T* arr, uint32_t size, bool decIfTrue = true) {
+static string loc_prim_arr_to_string(T *arr, uint32_t size, bool decIfTrue = true) {
     stringstream ss;
     for (uint32_t i = 0; i < size; i++) {
         ss << (decIfTrue ? to_string(arr[i]) : to_string_hex(arr[i]));
@@ -295,8 +296,7 @@ RETURN VALUE
 SIDE EFFECTS
    N/A
 ===========================================================================*/
-void loc_convert_lla_gnss_to_vrp(double lla[3], float rollPitchYaw[3],
-                                 float leverArm[3]);
+void loc_convert_lla_gnss_to_vrp(double lla[3], float rollPitchYaw[3], float leverArm[3]);
 
 /*===========================================================================
 FUNCTION loc_convert_velocity_gnss_to_vrp
@@ -318,4 +318,4 @@ SIDE EFFECTS
 void loc_convert_velocity_gnss_to_vrp(float enuVelocity[3], float rollPitchYaw[3],
                                       float rollPitchYawRate[3], float leverArm[3]);
 
-#endif //_LOC_MISC_UTILS_H_
+#endif  //_LOC_MISC_UTILS_H_

@@ -29,8 +29,9 @@
 
 #define LOG_TAG "LocSvc_MeasurementCorrectionsInterface"
 
-#include <log_util.h>
 #include "MeasurementCorrections.h"
+
+#include <log_util.h>
 
 namespace android {
 namespace hardware {
@@ -39,29 +40,27 @@ namespace measurement_corrections {
 namespace V1_0 {
 namespace implementation {
 
+using ::android::sp;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
 using ::android::hardware::gnss::V1_0::GnssLocation;
 
-MeasurementCorrections::MeasurementCorrections() {
-}
+MeasurementCorrections::MeasurementCorrections() {}
 
-MeasurementCorrections::~MeasurementCorrections() {
-}
+MeasurementCorrections::~MeasurementCorrections() {}
 
 Return<bool> MeasurementCorrections::setCorrections(
-        const ::android::hardware::gnss::measurement_corrections::
-                V1_0::MeasurementCorrections& /*corrections*/) {
+        const ::android::hardware::gnss::measurement_corrections::V1_0::MeasurementCorrections
+                & /*corrections*/) {
     return true;
 }
 
 Return<bool> MeasurementCorrections::setCallback(
-        const sp<V1_0::IMeasurementCorrectionsCallback>& /*callback*/) {
+        const sp<V1_0::IMeasurementCorrectionsCallback> & /*callback*/) {
     return true;
 }
 

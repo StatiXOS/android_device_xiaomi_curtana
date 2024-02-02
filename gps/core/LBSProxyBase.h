@@ -38,33 +38,27 @@ class ContextBase;
 
 class LBSProxyBase {
     friend class ContextBase;
-    inline virtual LocApiBase*
-        getLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask,
-                  ContextBase* context) const {
-
+    inline virtual LocApiBase *getLocApi(LOC_API_ADAPTER_EVENT_MASK_T exMask,
+                                         ContextBase *context) const {
         (void)exMask;
         (void)context;
         return NULL;
     }
-protected:
+
+  protected:
     inline LBSProxyBase() {}
-public:
+
+  public:
     inline virtual ~LBSProxyBase() {}
     inline virtual bool hasAgpsExtendedCapabilities() const { return false; }
-    inline virtual void modemPowerVote(bool power) const {
-
-        (void)power;
-    }
-    virtual void injectFeatureConfig(ContextBase* context) const {
-
-        (void)context;
-    }
+    inline virtual void modemPowerVote(bool power) const { (void)power; }
+    virtual void injectFeatureConfig(ContextBase *context) const { (void)context; }
     inline virtual bool hasNativeXtraClient() const { return false; }
     inline virtual IzatDevId_t getIzatDevId() const { return 0; }
 };
 
-typedef LBSProxyBase* (getLBSProxy_t)();
+typedef LBSProxyBase *(getLBSProxy_t)();
 
-} // namespace loc_core
+}  // namespace loc_core
 
-#endif // IZAT_PROXY_BASE_H
+#endif  // IZAT_PROXY_BASE_H

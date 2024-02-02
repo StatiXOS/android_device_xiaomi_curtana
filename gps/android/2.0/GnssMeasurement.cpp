@@ -20,8 +20,10 @@
 
 #define LOG_TAG "LocSvc_GnssMeasurementInterface"
 
-#include <log_util.h>
 #include "GnssMeasurement.h"
+
+#include <log_util.h>
+
 #include "MeasurementAPIClient.h"
 
 namespace android {
@@ -30,10 +32,10 @@ namespace gnss {
 namespace V2_0 {
 namespace implementation {
 
-void GnssMeasurement::GnssMeasurementDeathRecipient::serviceDied(
-        uint64_t cookie, const wp<IBase>& who) {
-    LOC_LOGE("%s] service died. cookie: %llu, who: %p",
-            __FUNCTION__, static_cast<unsigned long long>(cookie), &who);
+void GnssMeasurement::GnssMeasurementDeathRecipient::serviceDied(uint64_t cookie,
+                                                                 const wp<IBase> &who) {
+    LOC_LOGE("%s] service died. cookie: %llu, who: %p", __FUNCTION__,
+             static_cast<unsigned long long>(cookie), &who);
     if (mGnssMeasurement != nullptr) {
         mGnssMeasurement->close();
     }
@@ -53,10 +55,9 @@ GnssMeasurement::~GnssMeasurement() {
 
 // Methods from ::android::hardware::gnss::V1_0::IGnssMeasurement follow.
 Return<GnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback(
-        const sp<V1_0::IGnssMeasurementCallback>& callback)  {
-
+        const sp<V1_0::IGnssMeasurementCallback> &callback) {
     Return<GnssMeasurement::GnssMeasurementStatus> ret =
-        IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
+            IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
     if (mGnssMeasurementCbIface != nullptr) {
         LOC_LOGE("%s]: GnssMeasurementCallback is already set", __FUNCTION__);
         return IGnssMeasurement::GnssMeasurementStatus::ERROR_ALREADY_INIT;
@@ -94,7 +95,7 @@ void GnssMeasurement::clearInterfaces() {
     }
 }
 
-Return<void> GnssMeasurement::close()  {
+Return<void> GnssMeasurement::close() {
     if (mApi == nullptr) {
         LOC_LOGE("%s]: mApi is nullptr", __FUNCTION__);
         return Void();
@@ -108,10 +109,9 @@ Return<void> GnssMeasurement::close()  {
 
 // Methods from ::android::hardware::gnss::V1_1::IGnssMeasurement follow.
 Return<GnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback_1_1(
-        const sp<V1_1::IGnssMeasurementCallback>& callback, bool enableFullTracking) {
-
+        const sp<V1_1::IGnssMeasurementCallback> &callback, bool enableFullTracking) {
     Return<GnssMeasurement::GnssMeasurementStatus> ret =
-        IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
+            IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
     if (mGnssMeasurementCbIface_1_1 != nullptr) {
         LOC_LOGE("%s]: GnssMeasurementCallback is already set", __FUNCTION__);
         return IGnssMeasurement::GnssMeasurementStatus::ERROR_ALREADY_INIT;
@@ -131,18 +131,15 @@ Return<GnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback_1_1(
     mGnssMeasurementCbIface_1_1 = callback;
     mGnssMeasurementCbIface_1_1->linkToDeath(mGnssMeasurementDeathRecipient, 0);
 
-    GnssPowerMode powerMode = enableFullTracking?
-            GNSS_POWER_MODE_M1 : GNSS_POWER_MODE_M2;
+    GnssPowerMode powerMode = enableFullTracking ? GNSS_POWER_MODE_M1 : GNSS_POWER_MODE_M2;
 
     return mApi->measurementSetCallback_1_1(callback, powerMode);
 }
 // Methods from ::android::hardware::gnss::V2_0::IGnssMeasurement follow.
 Return<V1_0::IGnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback_2_0(
-        const sp<V2_0::IGnssMeasurementCallback>& callback,
-        bool enableFullTracking) {
-
+        const sp<V2_0::IGnssMeasurementCallback> &callback, bool enableFullTracking) {
     Return<GnssMeasurement::GnssMeasurementStatus> ret =
-        IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
+            IGnssMeasurement::GnssMeasurementStatus::ERROR_GENERIC;
     if (mGnssMeasurementCbIface_2_0 != nullptr) {
         LOC_LOGE("%s]: GnssMeasurementCallback is already set", __FUNCTION__);
         return IGnssMeasurement::GnssMeasurementStatus::ERROR_ALREADY_INIT;
@@ -162,8 +159,7 @@ Return<V1_0::IGnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallba
     mGnssMeasurementCbIface_2_0 = callback;
     mGnssMeasurementCbIface_2_0->linkToDeath(mGnssMeasurementDeathRecipient, 0);
 
-    GnssPowerMode powerMode = enableFullTracking ?
-        GNSS_POWER_MODE_M1 : GNSS_POWER_MODE_M2;
+    GnssPowerMode powerMode = enableFullTracking ? GNSS_POWER_MODE_M1 : GNSS_POWER_MODE_M2;
 
     return mApi->measurementSetCallback_2_0(callback, powerMode);
 }

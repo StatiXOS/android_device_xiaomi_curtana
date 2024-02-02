@@ -20,9 +20,10 @@
 
 #define LOG_TAG "LocSvc_GnssBatchingInterface"
 
-#include <log_util.h>
-#include <BatchingAPIClient.h>
 #include "GnssBatching.h"
+
+#include <BatchingAPIClient.h>
+#include <log_util.h>
 
 namespace android {
 namespace hardware {
@@ -30,10 +31,9 @@ namespace gnss {
 namespace V1_1 {
 namespace implementation {
 
-void GnssBatching::GnssBatchingDeathRecipient::serviceDied(
-        uint64_t cookie, const wp<IBase>& who) {
-    LOC_LOGE("%s] service died. cookie: %llu, who: %p",
-            __FUNCTION__, static_cast<unsigned long long>(cookie), &who);
+void GnssBatching::GnssBatchingDeathRecipient::serviceDied(uint64_t cookie, const wp<IBase> &who) {
+    LOC_LOGE("%s] service died. cookie: %llu, who: %p", __FUNCTION__,
+             static_cast<unsigned long long>(cookie), &who);
     if (mGnssBatching != nullptr) {
         mGnssBatching->stop();
         mGnssBatching->cleanup();
@@ -51,9 +51,8 @@ GnssBatching::~GnssBatching() {
     }
 }
 
-
 // Methods from ::android::hardware::gnss::V1_0::IGnssBatching follow.
-Return<bool> GnssBatching::init(const sp<IGnssBatchingCallback>& callback) {
+Return<bool> GnssBatching::init(const sp<IGnssBatchingCallback> &callback) {
     if (mApi != nullptr) {
         LOC_LOGD("%s]: mApi is NOT nullptr, delete it first", __FUNCTION__);
         mApi->destroy();
@@ -87,7 +86,7 @@ Return<uint16_t> GnssBatching::getBatchSize() {
     return ret;
 }
 
-Return<bool> GnssBatching::start(const IGnssBatching::Options& options) {
+Return<bool> GnssBatching::start(const IGnssBatching::Options &options) {
     bool ret = false;
     if (mApi == nullptr) {
         LOC_LOGE("%s]: mApi is nullptr", __FUNCTION__);

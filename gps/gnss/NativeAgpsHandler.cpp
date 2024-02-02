@@ -28,49 +28,48 @@
  */
 #define LOG_TAG "LocSvc_NativeAgpsHandler"
 
-#include <LocAdapterBase.h>
-#include <SystemStatus.h>
+#include <DataItemConcreteTypesBase.h>
 #include <DataItemId.h>
 #include <DataItemsFactoryProxy.h>
-#include <DataItemConcreteTypesBase.h>
-#include <loc_log.h>
-#include <NativeAgpsHandler.h>
 #include <GnssAdapter.h>
+#include <LocAdapterBase.h>
+#include <NativeAgpsHandler.h>
+#include <SystemStatus.h>
+#include <loc_log.h>
 
 using namespace loc_core;
 
 // IDataItemObserver overrides
-void NativeAgpsHandler::getName(string& name) {
+void NativeAgpsHandler::getName(string &name) {
     name = "NativeAgpsHandler";
 }
 
-void NativeAgpsHandler::notify(const list<IDataItemCore*>& dlist) {
+void NativeAgpsHandler::notify(const list<IDataItemCore *> &dlist) {
     for (auto each : dlist) {
         switch (each->getId()) {
             case NETWORKINFO_DATA_ITEM_ID: {
-                    NetworkInfoDataItemBase* networkInfo =
-                        static_cast<NetworkInfoDataItemBase*>(each);
-                    uint64_t mobileBit = (uint64_t )1 << loc_core::TYPE_MOBILE;
-                    uint64_t allTypes = networkInfo->mAllTypes;
-                    mConnected = ((networkInfo->mAllTypes & mobileBit) == mobileBit);
-                    /**
-                     * mApn Telephony preferred Access Point Name to use for
-                     * carrier data connection when connected to a cellular network.
-                     * Empty string, otherwise.
-                     */
-                    mApn = networkInfo->mApn;
-                    LOC_LOGd("updated mConnected:%d, mApn: %s", mConnected, mApn.c_str());
-                    break;
+                NetworkInfoDataItemBase *networkInfo = static_cast<NetworkInfoDataItemBase *>(each);
+                uint64_t mobileBit = (uint64_t)1 << loc_core::TYPE_MOBILE;
+                uint64_t allTypes = networkInfo->mAllTypes;
+                mConnected = ((networkInfo->mAllTypes & mobileBit) == mobileBit);
+                /**
+                 * mApn Telephony preferred Access Point Name to use for
+                 * carrier data connection when connected to a cellular network.
+                 * Empty string, otherwise.
+                 */
+                mApn = networkInfo->mApn;
+                LOC_LOGd("updated mConnected:%d, mApn: %s", mConnected, mApn.c_str());
+                break;
             }
             default:
-                    break;
+                break;
         }
     }
 }
 
-NativeAgpsHandler* NativeAgpsHandler::sLocalHandle = nullptr;
-NativeAgpsHandler::NativeAgpsHandler(IOsObserver* sysStatObs, GnssAdapter& adapter) :
-        mSystemStatusObsrvr(sysStatObs), mConnected(false), mAdapter(adapter) {
+NativeAgpsHandler *NativeAgpsHandler::sLocalHandle = nullptr;
+NativeAgpsHandler::NativeAgpsHandler(IOsObserver *sysStatObs, GnssAdapter &adapter)
+    : mSystemStatusObsrvr(sysStatObs), mConnected(false), mAdapter(adapter) {
     sLocalHandle = this;
     list<DataItemId> subItemIdList = {NETWORKINFO_DATA_ITEM_ID};
     mSystemStatusObsrvr->subscribe(subItemIdList, this);
@@ -86,10 +85,9 @@ NativeAgpsHandler::~NativeAgpsHandler() {
     mSystemStatusObsrvr = nullptr;
 }
 
-
 AgpsCbInfo NativeAgpsHandler::getAgpsCbInfo() {
     AgpsCbInfo nativeCbInfo = {};
-    nativeCbInfo.statusV4Cb = (void*)agnssStatusIpV4Cb;
+    nativeCbInfo.statusV4Cb = (void *)agnssStatusIpV4Cb;
     nativeCbInfo.atlType = AGPS_ATL_TYPE_WWAN;
     return nativeCbInfo;
 }
@@ -107,19 +105,19 @@ void NativeAgpsHandler::processATLRequestRelease(AGnssExtStatusIpV4 statusInfo) 
         LOC_LOGd("status.type = %d status.apnTypeMask = 0x%X", statusInfo.type,
                  statusInfo.apnTypeMask);
         switch (statusInfo.status) {
-        case LOC_GPS_REQUEST_AGPS_DATA_CONN:
-            if (mConnected) {
-                mAdapter.dataConnOpenCommand(LOC_AGPS_TYPE_WWAN_ANY, mApn.c_str(), mApn.size(),
-                    AGPS_APN_BEARER_IPV4);
-            } else {
-                mAdapter.dataConnFailedCommand(LOC_AGPS_TYPE_WWAN_ANY);
-            }
-            break;
-        case LOC_GPS_RELEASE_AGPS_DATA_CONN:
-            mAdapter.dataConnClosedCommand(LOC_AGPS_TYPE_WWAN_ANY);
-            break;
-        default:
-            LOC_LOGe("Invalid Request: %d", statusInfo.status);
+            case LOC_GPS_REQUEST_AGPS_DATA_CONN:
+                if (mConnected) {
+                    mAdapter.dataConnOpenCommand(LOC_AGPS_TYPE_WWAN_ANY, mApn.c_str(), mApn.size(),
+                                                 AGPS_APN_BEARER_IPV4);
+                } else {
+                    mAdapter.dataConnFailedCommand(LOC_AGPS_TYPE_WWAN_ANY);
+                }
+                break;
+            case LOC_GPS_RELEASE_AGPS_DATA_CONN:
+                mAdapter.dataConnClosedCommand(LOC_AGPS_TYPE_WWAN_ANY);
+                break;
+            default:
+                LOC_LOGe("Invalid Request: %d", statusInfo.status);
         }
     } else {
         LOC_LOGe("mAgpsManger is null or invalid request type!");

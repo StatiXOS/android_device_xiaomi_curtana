@@ -39,12 +39,12 @@
 
 namespace loc_util {
 
-LogBuffer* LogBuffer::mInstance;
+LogBuffer *LogBuffer::mInstance;
 struct sigaction LogBuffer::mOriSigAction[NSIG];
 struct sigaction LogBuffer::mNewSigAction;
 mutex LogBuffer::sLock;
 
-LogBuffer* LogBuffer::getInstance() {
+LogBuffer *LogBuffer::getInstance() {
     if (mInstance == nullptr) {
         lock_guard<mutex> guard(sLock);
         if (mInstance == nullptr) {
@@ -54,42 +54,42 @@ LogBuffer* LogBuffer::getInstance() {
     return mInstance;
 }
 
-LogBuffer::LogBuffer(): mLogList(TOTAL_LOG_LEVELS),
-        mConfigVec(TOTAL_LOG_LEVELS, ConfigsInLevel(TIME_DEPTH_THRESHOLD_MINIMAL_IN_SEC,
-                    MAXIMUM_NUM_IN_LIST, 0)) {
-    loc_param_s_type log_buff_config_table[] =
-    {
-        {"E_LEVEL_TIME_DEPTH",      &mConfigVec[0].mTimeDepthThres,  NULL, 'n'},
-        {"E_LEVEL_MAX_CAPACITY",    &mConfigVec[0].mMaxNumThres,     NULL, 'n'},
-        {"W_LEVEL_TIME_DEPTH",      &mConfigVec[1].mTimeDepthThres,  NULL, 'n'},
-        {"W_LEVEL_MAX_CAPACITY",    &mConfigVec[1].mMaxNumThres,     NULL, 'n'},
-        {"I_LEVEL_TIME_DEPTH",      &mConfigVec[2].mTimeDepthThres,  NULL, 'n'},
-        {"I_LEVEL_MAX_CAPACITY",    &mConfigVec[2].mMaxNumThres,     NULL, 'n'},
-        {"D_LEVEL_TIME_DEPTH",      &mConfigVec[3].mTimeDepthThres,  NULL, 'n'},
-        {"D_LEVEL_MAX_CAPACITY",    &mConfigVec[3].mMaxNumThres,     NULL, 'n'},
-        {"V_LEVEL_TIME_DEPTH",      &mConfigVec[4].mTimeDepthThres,  NULL, 'n'},
-        {"V_LEVEL_MAX_CAPACITY",    &mConfigVec[4].mMaxNumThres,     NULL, 'n'},
+LogBuffer::LogBuffer()
+    : mLogList(TOTAL_LOG_LEVELS),
+      mConfigVec(TOTAL_LOG_LEVELS,
+                 ConfigsInLevel(TIME_DEPTH_THRESHOLD_MINIMAL_IN_SEC, MAXIMUM_NUM_IN_LIST, 0)) {
+    loc_param_s_type log_buff_config_table[] = {
+            {"E_LEVEL_TIME_DEPTH", &mConfigVec[0].mTimeDepthThres, NULL, 'n'},
+            {"E_LEVEL_MAX_CAPACITY", &mConfigVec[0].mMaxNumThres, NULL, 'n'},
+            {"W_LEVEL_TIME_DEPTH", &mConfigVec[1].mTimeDepthThres, NULL, 'n'},
+            {"W_LEVEL_MAX_CAPACITY", &mConfigVec[1].mMaxNumThres, NULL, 'n'},
+            {"I_LEVEL_TIME_DEPTH", &mConfigVec[2].mTimeDepthThres, NULL, 'n'},
+            {"I_LEVEL_MAX_CAPACITY", &mConfigVec[2].mMaxNumThres, NULL, 'n'},
+            {"D_LEVEL_TIME_DEPTH", &mConfigVec[3].mTimeDepthThres, NULL, 'n'},
+            {"D_LEVEL_MAX_CAPACITY", &mConfigVec[3].mMaxNumThres, NULL, 'n'},
+            {"V_LEVEL_TIME_DEPTH", &mConfigVec[4].mTimeDepthThres, NULL, 'n'},
+            {"V_LEVEL_MAX_CAPACITY", &mConfigVec[4].mMaxNumThres, NULL, 'n'},
     };
     loc_read_conf(LOC_PATH_GPS_CONF_STR, log_buff_config_table,
-            sizeof(log_buff_config_table)/sizeof(log_buff_config_table[0]));
+                  sizeof(log_buff_config_table) / sizeof(log_buff_config_table[0]));
     registerSignalHandler();
 }
 
-void LogBuffer::append(string& data, int level, uint64_t timestamp) {
+void LogBuffer::append(string &data, int level, uint64_t timestamp) {
     lock_guard<mutex> guard(mLock);
     pair<uint64_t, string> item(timestamp, data);
     mLogList.append(item, level);
     mConfigVec[level].mCurrentSize++;
 
     while ((timestamp - mLogList.front(level).first) > mConfigVec[level].mTimeDepthThres ||
-            mConfigVec[level].mCurrentSize > mConfigVec[level].mMaxNumThres) {
+           mConfigVec[level].mCurrentSize > mConfigVec[level].mMaxNumThres) {
         mLogList.pop(level);
         mConfigVec[level].mCurrentSize--;
     }
 }
 
-//Dump the log buffer of specific level, level = -1 to dump all the levels in log buffer.
-void LogBuffer::dump(std::function<void(stringstream&)> log, int level) {
+// Dump the log buffer of specific level, level = -1 to dump all the levels in log buffer.
+void LogBuffer::dump(std::function<void(stringstream &)> log, int level) {
     lock_guard<mutex> guard(mLock);
     list<pair<pair<uint64_t, string>, int>> li;
     if (-1 == level) {
@@ -99,11 +99,12 @@ void LogBuffer::dump(std::function<void(stringstream&)> log, int level) {
     }
     ALOGE("Begining of dump, buffer size: %d", (int)li.size());
     stringstream ln;
-    ln << "dump log buffer, level[" << level << "]" << ", buffer size: " << li.size() << endl;
+    ln << "dump log buffer, level[" << level << "]"
+       << ", buffer size: " << li.size() << endl;
     log(ln);
-    for_each (li.begin(), li.end(), [&, this](const pair<pair<uint64_t, string>, int> &item){
+    for_each(li.begin(), li.end(), [&, this](const pair<pair<uint64_t, string>, int> &item) {
         stringstream line;
-        line << "["<<item.first.first << "] ";
+        line << "[" << item.first.first << "] ";
         line << "Level " << mLevelMap[item.second] << ": ";
         line << item.first.second << endl;
         if (log != nullptr) {
@@ -114,18 +115,14 @@ void LogBuffer::dump(std::function<void(stringstream&)> log, int level) {
 }
 
 void LogBuffer::dumpToAdbLogcat() {
-    dump([](stringstream& line){
-        ALOGE("%s", line.str().c_str());
-    });
+    dump([](stringstream &line) { ALOGE("%s", line.str().c_str()); });
 }
 
 void LogBuffer::dumpToLogFile(string filePath) {
     ALOGE("Dump GPS log buffer to file: %s", filePath.c_str());
     fstream s;
     s.open(filePath, std::fstream::out | std::fstream::app);
-    dump([&s](stringstream& line){
-        s << line.str();
-    });
+    dump([&s](stringstream &line) { s << line.str(); });
     s.close();
 }
 
@@ -155,35 +152,35 @@ void LogBuffer::signalHandler(const int code, siginfo_t *const si, void *const s
     void *buffer[100];
     char **strings;
 
-    nptrs = backtrace(buffer, sizeof(buffer)/sizeof(*buffer));
+    nptrs = backtrace(buffer, sizeof(buffer) / sizeof(*buffer));
     strings = backtrace_symbols(buffer, nptrs);
     if (strings != NULL) {
         timespec tv;
         clock_gettime(CLOCK_BOOTTIME, &tv);
-        uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec/1000000000;
+        uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec / 1000000000;
         for (int i = 0; i < nptrs; i++) {
             string s(strings[i]);
             mInstance->append(s, 0, elapsedTime);
         }
     }
 #endif
-    //Dump the log buffer to adb logcat
+    // Dump the log buffer to adb logcat
     mInstance->dumpToAdbLogcat();
 
-    //Dump the log buffer to file
+    // Dump the log buffer to file
     time_t now = time(NULL);
     struct tm *curr_time = localtime(&now);
     char path[50];
-    snprintf(path, 50, LOG_BUFFER_FILE_PATH "gpslog_%d%d%d-%d%d%d.log",
-            (1900 + curr_time->tm_year), ( 1 + curr_time->tm_mon), curr_time->tm_mday,
-            curr_time->tm_hour, curr_time->tm_min, curr_time->tm_sec);
+    snprintf(path, 50, LOG_BUFFER_FILE_PATH "gpslog_%d%d%d-%d%d%d.log", (1900 + curr_time->tm_year),
+             (1 + curr_time->tm_mon), curr_time->tm_mday, curr_time->tm_hour, curr_time->tm_min,
+             curr_time->tm_sec);
 
     mInstance->dumpToLogFile(path);
 
-    //Process won't be terminated if SIGUSR1 is recieved
+    // Process won't be terminated if SIGUSR1 is recieved
     if (code != SIGUSR1) {
         mOriSigAction[code].sa_sigaction(code, si, sc);
     }
 }
 
-}
+}  // namespace loc_util

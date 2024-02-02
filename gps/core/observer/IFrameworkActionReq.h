@@ -30,13 +30,13 @@
 #ifndef __IFRAMEWORKACTIONREQ_H__
 #define __IFRAMEWORKACTIONREQ_H__
 
+#include <DataItemId.h>
+
 #include <string>
-#include  <DataItemId.h>
 
 using namespace std;
 
-namespace loc_core
-{
+namespace loc_core {
 
 /**
  * @brief IFrameworkActionReq interface
@@ -48,8 +48,7 @@ namespace loc_core
  *
  */
 class IFrameworkActionReq {
-
-public:
+  public:
     /**
      * @brief Turn on the framework module described by the data item.
      * @details  Turn on the framework module described by the data item;
@@ -60,7 +59,7 @@ public:
      * @param dit DataItemId
      * @param timeout Timeout after which to turn off the framework module.
      */
-    virtual void turnOn (DataItemId dit, int timeOut = 0) = 0;
+    virtual void turnOn(DataItemId dit, int timeOut = 0) = 0;
 
     /**
      * @brief Turn off the framework module described by the data item.
@@ -71,7 +70,7 @@ public:
      *
      * @param dit DataItemId
      */
-    virtual void turnOff (DataItemId dit) = 0;
+    virtual void turnOff(DataItemId dit) = 0;
 
 #ifdef USE_GLIB
     /**
@@ -80,7 +79,7 @@ public:
      *
      * @param None
      */
-    virtual bool connectBackhaul(const string& clientName) = 0;
+    virtual bool connectBackhaul(const string &clientName) = 0;
 
     /**
      * @brief Disconnects the WWANbackhaul
@@ -88,17 +87,16 @@ public:
      *
      * @param None
      */
-    virtual bool disconnectBackhaul(const string& clientName) = 0;
+    virtual bool disconnectBackhaul(const string &clientName) = 0;
 #endif
 
     /**
      * @brief Destructor
      * @details Destructor
      */
-    virtual ~IFrameworkActionReq () {}
+    virtual ~IFrameworkActionReq() {}
 };
 
-} // namespace loc_core
+}  // namespace loc_core
 
-#endif // #ifndef __IFRAMEWORKACTIONREQ_H__
-
+#endif  // #ifndef __IFRAMEWORKACTIONREQ_H__

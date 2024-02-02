@@ -20,18 +20,21 @@
 
 #define LOG_TAG "LocSvc__AGnssRilInterface"
 
-#include <log_util.h>
+#include "AGnssRil.h"
+
+#include <DataItemConcreteTypesBase.h>
 #include <dlfcn.h>
-#include <sys/types.h>
+#include <log_util.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <sys/un.h>
+
 #include <sstream>
 #include <string>
-#include "Gnss.h"
-#include "AGnssRil.h"
-#include <DataItemConcreteTypesBase.h>
 
-typedef void* (getLocationInterface)();
+#include "Gnss.h"
+
+typedef void *(getLocationInterface)();
 
 namespace android {
 namespace hardware {
@@ -39,8 +42,7 @@ namespace gnss {
 namespace V1_1 {
 namespace implementation {
 
-
-AGnssRil::AGnssRil(Gnss* gnss) : mGnss(gnss) {
+AGnssRil::AGnssRil(Gnss *gnss) : mGnss(gnss) {
     ENTRY_LOG_CALLFLOW();
 }
 
@@ -57,10 +59,9 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
     std::string apn("");
 
     // for XTRA
-    if (nullptr != mGnss && ( nullptr != mGnss->getGnssInterface() )) {
+    if (nullptr != mGnss && (nullptr != mGnss->getGnssInterface())) {
         int8_t typeout = loc_core::NetworkInfoDataItemBase::TYPE_UNKNOWN;
-        switch(type)
-        {
+        switch (type) {
             case IAGnssRil::NetworkType::MOBILE:
                 typeout = loc_core::NetworkInfoDataItemBase::TYPE_MOBILE;
                 break;
@@ -82,26 +83,23 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
             case IAGnssRil::NetworkType::WIMAX:
                 typeout = loc_core::NetworkInfoDataItemBase::TYPE_WIMAX;
                 break;
-            default:
-                {
-                    int networkType = (int) type;
-                    // Handling network types not available in IAgnssRil
-                    switch(networkType)
-                    {
-                        case NetworkType_BLUETOOTH:
-                            typeout = loc_core::NetworkInfoDataItemBase::TYPE_BLUETOOTH;
-                            break;
-                        case NetworkType_ETHERNET:
-                            typeout = loc_core::NetworkInfoDataItemBase::TYPE_ETHERNET;
-                            break;
-                        case NetworkType_PROXY:
-                            typeout = loc_core::NetworkInfoDataItemBase::TYPE_PROXY;
-                            break;
-                        default:
-                            typeout = loc_core::NetworkInfoDataItemBase::TYPE_UNKNOWN;
-                    }
+            default: {
+                int networkType = (int)type;
+                // Handling network types not available in IAgnssRil
+                switch (networkType) {
+                    case NetworkType_BLUETOOTH:
+                        typeout = loc_core::NetworkInfoDataItemBase::TYPE_BLUETOOTH;
+                        break;
+                    case NetworkType_ETHERNET:
+                        typeout = loc_core::NetworkInfoDataItemBase::TYPE_ETHERNET;
+                        break;
+                    case NetworkType_PROXY:
+                        typeout = loc_core::NetworkInfoDataItemBase::TYPE_PROXY;
+                        break;
+                    default:
+                        typeout = loc_core::NetworkInfoDataItemBase::TYPE_UNKNOWN;
                 }
-                break;
+            } break;
         }
         mGnss->getGnssInterface()->updateConnectionStatus(connected, typeout, false, 0, apn);
     }

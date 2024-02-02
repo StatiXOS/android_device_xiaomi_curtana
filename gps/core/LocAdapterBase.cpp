@@ -29,11 +29,11 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "LocSvc_LocAdapterBase"
 
-#include <dlfcn.h>
 #include <LocAdapterBase.h>
+#include <LocAdapterProxyBase.h>
+#include <dlfcn.h>
 #include <loc_target.h>
 #include <log_util.h>
-#include <LocAdapterProxyBase.h>
 
 namespace loc_core {
 
@@ -41,15 +41,16 @@ namespace loc_core {
 // always gets called. Here we prepare for the default.
 // But if getLocApi(targetEnumType target) is overriden,
 // the right locApi should get created.
-LocAdapterBase::LocAdapterBase(const LOC_API_ADAPTER_EVENT_MASK_T mask,
-                               ContextBase* context, bool isMaster,
-                               LocAdapterProxyBase *adapterProxyBase,
-                               bool waitForDoneInit) :
-    mIsMaster(isMaster),
-    mIsEngineCapabilitiesKnown(ContextBase::sIsEngineCapabilitiesKnown),
-    mEvtMask(mask), mContext(context), mLocApi(context->getLocApi()),
-    mLocAdapterProxyBase(adapterProxyBase), mMsgTask(context->getMsgTask())
-{
+LocAdapterBase::LocAdapterBase(const LOC_API_ADAPTER_EVENT_MASK_T mask, ContextBase *context,
+                               bool isMaster, LocAdapterProxyBase *adapterProxyBase,
+                               bool waitForDoneInit)
+    : mIsMaster(isMaster),
+      mIsEngineCapabilitiesKnown(ContextBase::sIsEngineCapabilitiesKnown),
+      mEvtMask(mask),
+      mContext(context),
+      mLocApi(context->getLocApi()),
+      mLocAdapterProxyBase(adapterProxyBase),
+      mMsgTask(context->getMsgTask()) {
     LOC_LOGd("waitForDoneInit: %d", waitForDoneInit);
     if (!waitForDoneInit) {
         mLocApi->addAdapter(this);
@@ -61,197 +62,203 @@ LocAdapterBase::LocAdapterBase(const LOC_API_ADAPTER_EVENT_MASK_T mask,
 
 uint32_t LocAdapterBase::mSessionIdCounter(1);
 
-uint32_t LocAdapterBase::generateSessionId()
-{
+uint32_t LocAdapterBase::generateSessionId() {
     if (++mSessionIdCounter == 0xFFFFFFFF)
         mSessionIdCounter = 1;
 
-     return mSessionIdCounter;
+    return mSessionIdCounter;
 }
 
-void LocAdapterBase::handleEngineUpEvent()
-{
+void LocAdapterBase::handleEngineUpEvent() {
     if (mLocAdapterProxyBase) {
         mLocAdapterProxyBase->handleEngineUpEvent();
     }
 }
 
-void LocAdapterBase::handleEngineDownEvent()
-{
+void LocAdapterBase::handleEngineDownEvent() {
     if (mLocAdapterProxyBase) {
         mLocAdapterProxyBase->handleEngineDownEvent();
     }
 }
 
-void LocAdapterBase::
-    reportPositionEvent(const UlpLocation& location,
-                        const GpsLocationExtended& locationExtended,
-                        enum loc_sess_status status,
-                        LocPosTechMask loc_technology_mask,
-                        GnssDataNotification* pDataNotify __unused,
-                        int msInWeek __unused)
-{
+void LocAdapterBase::reportPositionEvent(const UlpLocation &location,
+                                         const GpsLocationExtended &locationExtended,
+                                         enum loc_sess_status status,
+                                         LocPosTechMask loc_technology_mask,
+                                         GnssDataNotification *pDataNotify __unused,
+                                         int msInWeek __unused) {
     if (mLocAdapterProxyBase != NULL) {
-        mLocAdapterProxyBase->reportPositionEvent((UlpLocation&)location,
-                                                   (GpsLocationExtended&)locationExtended,
-                                                   status,
-                                                   loc_technology_mask);
+        mLocAdapterProxyBase->reportPositionEvent((UlpLocation &)location,
+                                                  (GpsLocationExtended &)locationExtended, status,
+                                                  loc_technology_mask);
     } else {
         DEFAULT_IMPL()
     }
 }
 
-void LocAdapterBase::
-    reportSvEvent(const GnssSvNotification& /*svNotify*/,
-                  bool /*fromEngineHub*/)
-DEFAULT_IMPL()
+void LocAdapterBase::reportSvEvent(const GnssSvNotification & /*svNotify*/,
+                                   bool /*fromEngineHub*/) DEFAULT_IMPL()
 
-void LocAdapterBase::
-    reportSvPolynomialEvent(GnssSvPolynomial &/*svPolynomial*/)
-DEFAULT_IMPL()
+        void LocAdapterBase::reportSvPolynomialEvent(
+                GnssSvPolynomial & /*svPolynomial*/) DEFAULT_IMPL()
 
-void LocAdapterBase::
-    reportSvEphemerisEvent(GnssSvEphemerisReport &/*svEphemeris*/)
-DEFAULT_IMPL()
+                void LocAdapterBase::reportSvEphemerisEvent(
+                        GnssSvEphemerisReport & /*svEphemeris*/) DEFAULT_IMPL()
 
+                        void LocAdapterBase::reportStatus(LocGpsStatusValue /*status*/)
+                                DEFAULT_IMPL()
 
-void LocAdapterBase::
-    reportStatus(LocGpsStatusValue /*status*/)
-DEFAULT_IMPL()
+                                        void LocAdapterBase::reportNmeaEvent(const char * /*nmea*/,
+                                                                             size_t /*length*/)
+                                                DEFAULT_IMPL()
 
+                                                        void LocAdapterBase::reportDataEvent(
+                                                                const GnssDataNotification
+                                                                        & /*dataNotify*/,
+                                                                int /*msInWeek*/)
+                                                                DEFAULT_IMPL()
 
-void LocAdapterBase::
-    reportNmeaEvent(const char* /*nmea*/, size_t /*length*/)
-DEFAULT_IMPL()
+                                                                        bool LocAdapterBase::
+                                                                                reportXtraServer(
+                                                                                        const char
+                                                                                                * /*url1*/
+                                                                                        ,
+                                                                                        const char
+                                                                                                * /*url2*/
+                                                                                        ,
+                                                                                        const char
+                                                                                                * /*url3*/
+                                                                                        ,
+                                                                                        const int /*maxlength*/)
+                                                                                        DEFAULT_IMPL(
+                                                                                                false)
 
-void LocAdapterBase::
-    reportDataEvent(const GnssDataNotification& /*dataNotify*/,
-                    int /*msInWeek*/)
-DEFAULT_IMPL()
+                                                                                                void LocAdapterBase::
+                                                                                                        reportLocationSystemInfoEvent(
+                                                                                                                const LocationSystemInfo
+                                                                                                                        & /*locationSystemInfo*/)
+                                                                                                                DEFAULT_IMPL()
 
-bool LocAdapterBase::
-    reportXtraServer(const char* /*url1*/, const char* /*url2*/,
-                     const char* /*url3*/, const int /*maxlength*/)
-DEFAULT_IMPL(false)
+                                                                                                                        bool LocAdapterBase::
+                                                                                                                                requestXtraData()
+                                                                                                                                        DEFAULT_IMPL(
+                                                                                                                                                false)
 
-void LocAdapterBase::
-    reportLocationSystemInfoEvent(const LocationSystemInfo& /*locationSystemInfo*/)
-DEFAULT_IMPL()
+                                                                                                                                                bool LocAdapterBase::
+                                                                                                                                                        requestTime()
+                                                                                                                                                                DEFAULT_IMPL(
+                                                                                                                                                                        false)
 
-bool LocAdapterBase::
-    requestXtraData()
-DEFAULT_IMPL(false)
+                                                                                                                                                                        bool LocAdapterBase::
+                                                                                                                                                                                requestLocation()
+                                                                                                                                                                                        DEFAULT_IMPL(
+                                                                                                                                                                                                false)
 
-bool LocAdapterBase::
-    requestTime()
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                bool LocAdapterBase::
+                                                                                                                                                                                                        requestATL(int /*connHandle*/, LocAGpsType /*agps_type*/, LocApnTypeMask /*apn_type_mask*/)
+                                                                                                                                                                                                                DEFAULT_IMPL(
+                                                                                                                                                                                                                        false)
 
-bool LocAdapterBase::
-    requestLocation()
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                        bool LocAdapterBase::releaseATL(
+                                                                                                                                                                                                                                int /*connHandle*/) DEFAULT_IMPL(false)
 
-bool LocAdapterBase::
-    requestATL(int /*connHandle*/, LocAGpsType /*agps_type*/,
-               LocApnTypeMask /*apn_type_mask*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                bool LocAdapterBase::requestNiNotifyEvent(
+                                                                                                                                                                                                                                        const GnssNiNotification & /*notify*/, const void * /*data*/
+                                                                                                                                                                                                                                        ,
+                                                                                                                                                                                                                                        const LocInEmergency /*emergencyState*/)
+                                                                                                                                                                                                                                        DEFAULT_IMPL(
+                                                                                                                                                                                                                                                false)
 
-bool LocAdapterBase::
-    releaseATL(int /*connHandle*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                void LocAdapterBase::
+                                                                                                                                                                                                                                                        reportGnssMeasurementsEvent(const GnssMeasurements & /*gnssMeasurements*/, int /*msInWeek*/) DEFAULT_IMPL()
 
-bool LocAdapterBase::
-    requestNiNotifyEvent(const GnssNiNotification &/*notify*/,
-                         const void* /*data*/,
-                         const LocInEmergency /*emergencyState*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                bool LocAdapterBase::reportWwanZppFix(
+                                                                                                                                                                                                                                                                        LocGpsLocation
+                                                                                                                                                                                                                                                                                & /*zppLoc*/)
+                                                                                                                                                                                                                                                                        DEFAULT_IMPL(
+                                                                                                                                                                                                                                                                                false)
 
-void LocAdapterBase::
-reportGnssMeasurementsEvent(const GnssMeasurements& /*gnssMeasurements*/,
-                                   int /*msInWeek*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                bool LocAdapterBase::
+                                                                                                                                                                                                                                                                                        reportZppBestAvailableFix(LocGpsLocation
+                                                                                                                                                                                                                                                                                                                          & /*zppLoc*/
+                                                                                                                                                                                                                                                                                                                  ,
+                                                                                                                                                                                                                                                                                                                  GpsLocationExtended
+                                                                                                                                                                                                                                                                                                                          & /*location_extended*/
+                                                                                                                                                                                                                                                                                                                  ,
+                                                                                                                                                                                                                                                                                                                  LocPosTechMask /*tech_mask*/) DEFAULT_IMPL(false)
 
-bool LocAdapterBase::
-    reportWwanZppFix(LocGpsLocation &/*zppLoc*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                void LocAdapterBase::reportGnssSvIdConfigEvent(const GnssSvIdConfig
+                                                                                                                                                                                                                                                                                                                                                       & /*config*/)
+                                                                                                                                                                                                                                                                                                        DEFAULT_IMPL()
 
-bool LocAdapterBase::
-    reportZppBestAvailableFix(LocGpsLocation& /*zppLoc*/,
-            GpsLocationExtended& /*location_extended*/, LocPosTechMask /*tech_mask*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                        reportGnssSvTypeConfigEvent(
+                                                                                                                                                                                                                                                                                                                                const GnssSvTypeConfig & /*config*/) DEFAULT_IMPL()
 
-void LocAdapterBase::reportGnssSvIdConfigEvent(const GnssSvIdConfig& /*config*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                        reportGnssConfigEvent(
+                                                                                                                                                                                                                                                                                                                                                uint32_t, /* session id*/
+                                                                                                                                                                                                                                                                                                                                                const GnssConfig
+                                                                                                                                                                                                                                                                                                                                                        & /*gnssConfig*/) DEFAULT_IMPL()
 
-void LocAdapterBase::reportGnssSvTypeConfigEvent(const GnssSvTypeConfig& /*config*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                bool LocAdapterBase::requestOdcpiEvent(OdcpiRequestInfo & /*request*/) DEFAULT_IMPL(false)
 
-void LocAdapterBase::reportGnssConfigEvent(uint32_t,  /* session id*/
-            const GnssConfig& /*gnssConfig*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                        bool LocAdapterBase::reportGnssEngEnergyConsumedEvent(
+                                                                                                                                                                                                                                                                                                                                                                uint64_t /*energyConsumedSinceFirstBoot*/) DEFAULT_IMPL(false)
 
-bool LocAdapterBase::
-    requestOdcpiEvent(OdcpiRequestInfo& /*request*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                                                                bool LocAdapterBase::reportDeleteAidingDataEvent(
+                                                                                                                                                                                                                                                                                                                                                                        GnssAidingData
+                                                                                                                                                                                                                                                                                                                                                                                & /*aidingData*/)
+                                                                                                                                                                                                                                                                                                                                                                        DEFAULT_IMPL(
+                                                                                                                                                                                                                                                                                                                                                                                false)
 
-bool LocAdapterBase::
-    reportGnssEngEnergyConsumedEvent(uint64_t /*energyConsumedSinceFirstBoot*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                                                                                bool LocAdapterBase::reportKlobucharIonoModelEvent(
+                                                                                                                                                                                                                                                                                                                                                                                        GnssKlobucharIonoModel
+                                                                                                                                                                                                                                                                                                                                                                                                & /*ionoModel*/) DEFAULT_IMPL(false)
 
-bool LocAdapterBase::
-    reportDeleteAidingDataEvent(GnssAidingData & /*aidingData*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                                                                                        bool LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                reportGnssAdditionalSystemInfoEvent(
+                                                                                                                                                                                                                                                                                                                                                                                                        GnssAdditionalSystemInfo
+                                                                                                                                                                                                                                                                                                                                                                                                                & /*additionalSystemInfo*/) DEFAULT_IMPL(false)
 
-bool LocAdapterBase::
-    reportKlobucharIonoModelEvent(GnssKlobucharIonoModel& /*ionoModel*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                                                                                                        void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                reportNfwNotificationEvent(GnssNfwNotification
+                                                                                                                                                                                                                                                                                                                                                                                                                                                   & /*notification*/)
+                                                                                                                                                                                                                                                                                                                                                                                                                        DEFAULT_IMPL()
 
-bool LocAdapterBase::
-    reportGnssAdditionalSystemInfoEvent(GnssAdditionalSystemInfo& /*additionalSystemInfo*/)
-DEFAULT_IMPL(false)
+                                                                                                                                                                                                                                                                                                                                                                                                                                void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                        geofenceBreachEvent(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                size_t /*count*/, uint32_t * /*hwIds*/, Location & /*location*/, GeofenceBreachType /*breachType*/,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                uint64_t /*timestamp*/)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                DEFAULT_IMPL()
 
-void LocAdapterBase::
-    reportNfwNotificationEvent(GnssNfwNotification& /*notification*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                geofenceStatusEvent(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        GeofenceStatusAvailable /*available*/) DEFAULT_IMPL()
 
-void
-LocAdapterBase::geofenceBreachEvent(size_t /*count*/, uint32_t* /*hwIds*/, Location& /*location*/,
-                                    GeofenceBreachType /*breachType*/, uint64_t /*timestamp*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                reportLocationsEvent(const Location * /*locations*/, size_t /*count*/, BatchingMode /*batchingMode*/) DEFAULT_IMPL()
 
-void
-LocAdapterBase::geofenceStatusEvent(GeofenceStatusAvailable /*available*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                reportCompletedTripsEvent(uint32_t /*accumulated_distance*/) DEFAULT_IMPL()
 
-void
-LocAdapterBase::reportLocationsEvent(const Location* /*locations*/, size_t /*count*/,
-                                     BatchingMode /*batchingMode*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                reportBatchStatusChangeEvent(BatchingStatus /*batchStatus*/)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        DEFAULT_IMPL()
 
-void
-LocAdapterBase::reportCompletedTripsEvent(uint32_t /*accumulated_distance*/)
-DEFAULT_IMPL()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                void LocAdapterBase::
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        reportPositionEvent(UlpLocation & /*location*/, GpsLocationExtended & /*locationExtended*/,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            enum loc_sess_status /*status*/, LocPosTechMask /*loc_technology_mask*/) DEFAULT_IMPL()
 
-void
-LocAdapterBase::reportBatchStatusChangeEvent(BatchingStatus /*batchStatus*/)
-DEFAULT_IMPL()
-
-void
-LocAdapterBase::reportPositionEvent(UlpLocation& /*location*/,
-                                    GpsLocationExtended& /*locationExtended*/,
-                                    enum loc_sess_status /*status*/,
-                                    LocPosTechMask /*loc_technology_mask*/)
-DEFAULT_IMPL()
-
-void
-LocAdapterBase::saveClient(LocationAPI* client, const LocationCallbacks& callbacks)
-{
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                void LocAdapterBase::saveClient(LocationAPI
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *client,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const LocationCallbacks
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        &callbacks) {
     mClientData[client] = callbacks;
     updateClientsEventMask();
 }
 
-void
-LocAdapterBase::eraseClient(LocationAPI* client)
-{
+void LocAdapterBase::eraseClient(LocationAPI *client) {
     auto it = mClientData.find(client);
     if (it != mClientData.end()) {
         mClientData.erase(it);
@@ -259,9 +266,7 @@ LocAdapterBase::eraseClient(LocationAPI* client)
     updateClientsEventMask();
 }
 
-LocationCallbacks
-LocAdapterBase::getClientCallbacks(LocationAPI* client)
-{
+LocationCallbacks LocAdapterBase::getClientCallbacks(LocationAPI *client) {
     LocationCallbacks callbacks = {};
     auto it = mClientData.find(client);
     if (it != mClientData.end()) {
@@ -270,16 +275,14 @@ LocAdapterBase::getClientCallbacks(LocationAPI* client)
     return callbacks;
 }
 
-LocationCapabilitiesMask
-LocAdapterBase::getCapabilities()
-{
+LocationCapabilitiesMask LocAdapterBase::getCapabilities() {
     LocationCapabilitiesMask mask = 0;
 
     if (isEngineCapabilitiesKnown()) {
         // time based tracking always supported
         mask |= LOCATION_CAPABILITIES_TIME_BASED_TRACKING_BIT;
         if (ContextBase::isMessageSupported(
-                LOC_API_ADAPTER_MESSAGE_DISTANCE_BASE_LOCATION_BATCHING)){
+                    LOC_API_ADAPTER_MESSAGE_DISTANCE_BASE_LOCATION_BATCHING)) {
             mask |= LOCATION_CAPABILITIES_TIME_BASED_BATCHING_BIT |
                     LOCATION_CAPABILITIES_DISTANCE_BASED_BATCHING_BIT;
         }
@@ -329,9 +332,7 @@ LocAdapterBase::getCapabilities()
     return mask;
 }
 
-void
-LocAdapterBase::broadcastCapabilities(LocationCapabilitiesMask mask)
-{
+void LocAdapterBase::broadcastCapabilities(LocationCapabilitiesMask mask) {
     for (auto clientData : mClientData) {
         if (nullptr != clientData.second.capabilitiesCb) {
             clientData.second.capabilitiesCb(mask);
@@ -339,55 +340,38 @@ LocAdapterBase::broadcastCapabilities(LocationCapabilitiesMask mask)
     }
 }
 
-void
-LocAdapterBase::updateClientsEventMask()
-DEFAULT_IMPL()
+void LocAdapterBase::updateClientsEventMask() DEFAULT_IMPL()
 
-void
-LocAdapterBase::stopClientSessions(LocationAPI* /*client*/)
-DEFAULT_IMPL()
+        void LocAdapterBase::stopClientSessions(LocationAPI * /*client*/) DEFAULT_IMPL()
 
-void
-LocAdapterBase::addClientCommand(LocationAPI* client, const LocationCallbacks& callbacks)
-{
+                void LocAdapterBase::addClientCommand(LocationAPI *client,
+                                                      const LocationCallbacks &callbacks) {
     LOC_LOGD("%s]: client %p", __func__, client);
 
     struct MsgAddClient : public LocMsg {
-        LocAdapterBase& mAdapter;
-        LocationAPI* mClient;
+        LocAdapterBase &mAdapter;
+        LocationAPI *mClient;
         const LocationCallbacks mCallbacks;
-        inline MsgAddClient(LocAdapterBase& adapter,
-                            LocationAPI* client,
-                            const LocationCallbacks& callbacks) :
-            LocMsg(),
-            mAdapter(adapter),
-            mClient(client),
-            mCallbacks(callbacks) {}
-        inline virtual void proc() const {
-            mAdapter.saveClient(mClient, mCallbacks);
-        }
+        inline MsgAddClient(LocAdapterBase &adapter, LocationAPI *client,
+                            const LocationCallbacks &callbacks)
+            : LocMsg(), mAdapter(adapter), mClient(client), mCallbacks(callbacks) {}
+        inline virtual void proc() const { mAdapter.saveClient(mClient, mCallbacks); }
     };
 
     sendMsg(new MsgAddClient(*this, client, callbacks));
 }
 
-void
-LocAdapterBase::removeClientCommand(LocationAPI* client,
-                                removeClientCompleteCallback rmClientCb)
-{
+void LocAdapterBase::removeClientCommand(LocationAPI *client,
+                                         removeClientCompleteCallback rmClientCb) {
     LOC_LOGD("%s]: client %p", __func__, client);
 
     struct MsgRemoveClient : public LocMsg {
-        LocAdapterBase& mAdapter;
-        LocationAPI* mClient;
+        LocAdapterBase &mAdapter;
+        LocationAPI *mClient;
         removeClientCompleteCallback mRmClientCb;
-        inline MsgRemoveClient(LocAdapterBase& adapter,
-                               LocationAPI* client,
-                               removeClientCompleteCallback rmCb) :
-            LocMsg(),
-            mAdapter(adapter),
-            mClient(client),
-            mRmClientCb(rmCb){}
+        inline MsgRemoveClient(LocAdapterBase &adapter, LocationAPI *client,
+                               removeClientCompleteCallback rmCb)
+            : LocMsg(), mAdapter(adapter), mClient(client), mRmClientCb(rmCb) {}
         inline virtual void proc() const {
             mAdapter.stopClientSessions(mClient);
             mAdapter.eraseClient(mClient);
@@ -400,19 +384,14 @@ LocAdapterBase::removeClientCommand(LocationAPI* client,
     sendMsg(new MsgRemoveClient(*this, client, rmClientCb));
 }
 
-void
-LocAdapterBase::requestCapabilitiesCommand(LocationAPI* client)
-{
+void LocAdapterBase::requestCapabilitiesCommand(LocationAPI *client) {
     LOC_LOGD("%s]: ", __func__);
 
     struct MsgRequestCapabilities : public LocMsg {
-        LocAdapterBase& mAdapter;
-        LocationAPI* mClient;
-        inline MsgRequestCapabilities(LocAdapterBase& adapter,
-                                      LocationAPI* client) :
-            LocMsg(),
-            mAdapter(adapter),
-            mClient(client) {}
+        LocAdapterBase &mAdapter;
+        LocationAPI *mClient;
+        inline MsgRequestCapabilities(LocAdapterBase &adapter, LocationAPI *client)
+            : LocMsg(), mAdapter(adapter), mClient(client) {}
         inline virtual void proc() const {
             if (!mAdapter.isEngineCapabilitiesKnown()) {
                 mAdapter.mPendingMsgs.push_back(new MsgRequestCapabilities(*this));
@@ -428,12 +407,11 @@ LocAdapterBase::requestCapabilitiesCommand(LocationAPI* client)
     sendMsg(new MsgRequestCapabilities(*this, client));
 }
 
-void
-LocAdapterBase::reportLatencyInfoEvent(const GnssLatencyInfo& /*gnssLatencyInfo*/)
-DEFAULT_IMPL()
+void LocAdapterBase::reportLatencyInfoEvent(const GnssLatencyInfo & /*gnssLatencyInfo*/)
+        DEFAULT_IMPL()
 
-bool LocAdapterBase::
-    reportQwesCapabilities(const std::unordered_map<LocationQwesFeatureType, bool> &/*featureMap*/)
-DEFAULT_IMPL(false)
+                bool LocAdapterBase::reportQwesCapabilities(
+                        const std::unordered_map<LocationQwesFeatureType, bool> & /*featureMap*/)
+                        DEFAULT_IMPL(false)
 
-} // namespace loc_core
+}  // namespace loc_core

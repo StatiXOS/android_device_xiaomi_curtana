@@ -29,33 +29,36 @@
 
 #define LOG_NDEBUG 0
 
+#include "loc_log.h"
+
+#include <loc_pla.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/time.h>
-#include "log_util.h"
-#include "loc_log.h"
-#include "msg_q.h"
-#include <loc_pla.h>
-#include "LogBuffer.h"
-#include <unordered_map>
-#include <fstream>
+#include <unistd.h>
+
 #include <algorithm>
-#include <string>
 #include <cctype>
-#define  BUFFER_SIZE  120
-#define  LOG_TAG_LEVEL_CONF_FILE_PATH "/data/vendor/location/gps.prop"
+#include <fstream>
+#include <string>
+#include <unordered_map>
+
+#include "LogBuffer.h"
+#include "log_util.h"
+#include "msg_q.h"
+#define BUFFER_SIZE 120
+#define LOG_TAG_LEVEL_CONF_FILE_PATH "/data/vendor/location/gps.prop"
 
 // Logging Improvements
-const char *loc_logger_boolStr[]={"False","True"};
-const char VOID_RET[]   = "None";
-const char FROM_AFW[]   = "===>";
-const char TO_MODEM[]   = "--->";
+const char *loc_logger_boolStr[] = {"False", "True"};
+const char VOID_RET[] = "None";
+const char FROM_AFW[] = "===>";
+const char TO_MODEM[] = "--->";
 const char FROM_MODEM[] = "<---";
-const char TO_AFW[]     = "<===";
-const char EXIT_TAG[]   = "Exiting";
-const char ENTRY_TAG[]  = "Entering";
-const char EXIT_ERROR_TAG[]  = "Exiting with error";
+const char TO_AFW[] = "<===";
+const char EXIT_TAG[] = "Exiting";
+const char ENTRY_TAG[] = "Entering";
+const char EXIT_ERROR_TAG[] = "Exiting with error";
 
 int build_type_prop = BUILD_TYPE_PROP_NA;
 
@@ -74,7 +77,7 @@ static bool tag_map_inited = false;
       clearTheBit - if true, mask gets modified upon return.
    returns 0 if mask is 0.
 */
-uint64_t loc_get_least_bit(uint64_t& mask, bool clearTheBit) {
+uint64_t loc_get_least_bit(uint64_t &mask, bool clearTheBit) {
     uint64_t bit = 0;
 
     if (mask > 0) {
@@ -88,7 +91,7 @@ uint64_t loc_get_least_bit(uint64_t& mask, bool clearTheBit) {
     return bit;
 }
 
-string loc_get_bit_defs(uint64_t mask, const NameValTbl& tbl) {
+string loc_get_bit_defs(uint64_t mask, const NameValTbl &tbl) {
     string out;
     while (mask > 0) {
         out += loc_get_name_from_tbl(tbl, loc_get_least_bit(mask));
@@ -99,32 +102,21 @@ string loc_get_bit_defs(uint64_t mask, const NameValTbl& tbl) {
     return out;
 }
 
-DECLARE_TBL(loc_msg_q_status) =
-{
-    NAME_VAL( eMSG_Q_SUCCESS ),
-    NAME_VAL( eMSG_Q_FAILURE_GENERAL ),
-    NAME_VAL( eMSG_Q_INVALID_PARAMETER ),
-    NAME_VAL( eMSG_Q_INVALID_HANDLE ),
-    NAME_VAL( eMSG_Q_UNAVAILABLE_RESOURCE ),
-    NAME_VAL( eMSG_Q_INSUFFICIENT_BUFFER )
-};
+DECLARE_TBL(loc_msg_q_status) = {NAME_VAL(eMSG_Q_SUCCESS),
+                                 NAME_VAL(eMSG_Q_FAILURE_GENERAL),
+                                 NAME_VAL(eMSG_Q_INVALID_PARAMETER),
+                                 NAME_VAL(eMSG_Q_INVALID_HANDLE),
+                                 NAME_VAL(eMSG_Q_UNAVAILABLE_RESOURCE),
+                                 NAME_VAL(eMSG_Q_INSUFFICIENT_BUFFER)};
 
 /* Find msg_q status name */
-const char* loc_get_msg_q_status(int status)
-{
-   return loc_get_name_from_val(loc_msg_q_status_tbl, (int64_t) status);
+const char *loc_get_msg_q_status(int status) {
+    return loc_get_name_from_val(loc_msg_q_status_tbl, (int64_t)status);
 }
 
-//Target names
-DECLARE_TBL(target_name) =
-{
-    NAME_VAL(GNSS_NONE),
-    NAME_VAL(GNSS_MSM),
-    NAME_VAL(GNSS_GSS),
-    NAME_VAL(GNSS_MDM),
-    NAME_VAL(GNSS_AUTO),
-    NAME_VAL(GNSS_UNKNOWN)
-};
+// Target names
+DECLARE_TBL(target_name) = {NAME_VAL(GNSS_NONE), NAME_VAL(GNSS_MSM),  NAME_VAL(GNSS_GSS),
+                            NAME_VAL(GNSS_MDM),  NAME_VAL(GNSS_AUTO), NAME_VAL(GNSS_UNKNOWN)};
 
 /*===========================================================================
 
@@ -139,8 +131,7 @@ RETURN VALUE
    The target name string
 
 ===========================================================================*/
-const char *loc_get_target_name(unsigned int target)
-{
+const char *loc_get_target_name(unsigned int target) {
     int64_t index = 0;
     static char ret[BUFFER_SIZE];
 
@@ -150,7 +141,6 @@ const char *loc_get_target_name(unsigned int target)
 
     return ret;
 }
-
 
 /*===========================================================================
 
@@ -166,19 +156,18 @@ RETURN VALUE
    The time string
 
 ===========================================================================*/
-char *loc_get_time(char *time_string, size_t buf_size)
-{
-   struct timeval now;     /* sec and usec     */
-   struct tm now_tm;       /* broken-down time */
-   char hms_string[80];    /* HH:MM:SS         */
+char *loc_get_time(char *time_string, size_t buf_size) {
+    struct timeval now;  /* sec and usec     */
+    struct tm now_tm;    /* broken-down time */
+    char hms_string[80]; /* HH:MM:SS         */
 
-   gettimeofday(&now, NULL);
-   localtime_r(&now.tv_sec, &now_tm);
+    gettimeofday(&now, NULL);
+    localtime_r(&now.tv_sec, &now_tm);
 
-   strftime(hms_string, sizeof hms_string, "%H:%M:%S", &now_tm);
-   snprintf(time_string, buf_size, "%s.%03d", hms_string, (int) (now.tv_usec / 1000));
+    strftime(hms_string, sizeof hms_string, "%H:%M:%S", &now_tm);
+    snprintf(time_string, buf_size, "%s.%03d", hms_string, (int)(now.tv_usec / 1000));
 
-   return time_string;
+    return time_string;
 }
 
 /*===========================================================================
@@ -196,17 +185,16 @@ RETURN VALUE
 SIDE EFFECTS
    N/A
 ===========================================================================*/
-char * get_timestamp(char *str, unsigned long buf_size)
-{
-  struct timeval tv;
-  struct timezone tz;
-  int hh, mm, ss;
-  gettimeofday(&tv, &tz);
-  hh = tv.tv_sec/3600%24;
-  mm = (tv.tv_sec%3600)/60;
-  ss = tv.tv_sec%60;
-  snprintf(str, buf_size, "%02d:%02d:%02d.%06ld", hh, mm, ss, tv.tv_usec);
-  return str;
+char *get_timestamp(char *str, unsigned long buf_size) {
+    struct timeval tv;
+    struct timezone tz;
+    int hh, mm, ss;
+    gettimeofday(&tv, &tz);
+    hh = tv.tv_sec / 3600 % 24;
+    mm = (tv.tv_sec % 3600) / 60;
+    ss = tv.tv_sec % 60;
+    snprintf(str, buf_size, "%02d:%02d:%02d.%06ld", hh, mm, ss, tv.tv_usec);
+    return str;
 }
 
 /*===========================================================================
@@ -220,17 +208,15 @@ RETURN VALUE
    N/A
 
 ===========================================================================*/
-void log_buffer_insert(char *str, unsigned long buf_size __unused, int level)
-{
+void log_buffer_insert(char *str, unsigned long buf_size __unused, int level) {
     timespec tv;
     clock_gettime(CLOCK_BOOTTIME, &tv);
-    uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec/1000000000;
+    uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec / 1000000000;
     string ss = str;
     loc_util::LogBuffer::getInstance()->append(ss, level, elapsedTime);
 }
 
-void log_tag_level_map_init()
-{
+void log_tag_level_map_init() {
     if (tag_map_inited) {
         return;
     }
@@ -250,7 +236,7 @@ void log_tag_level_map_init()
                 continue;
             }
             std::string tag = line.substr(0, pos);
-            std::string level = line.substr(pos+1, 1);
+            std::string level = line.substr(pos + 1, 1);
             if (!std::isdigit(*(level.begin()))) {
                 ALOGE("wrong format in gps.prop");
                 continue;
@@ -261,8 +247,7 @@ void log_tag_level_map_init()
     tag_map_inited = true;
 }
 
-int get_tag_log_level(const char* tag)
-{
+int get_tag_log_level(const char *tag) {
     if (!tag_map_inited) {
         return -1;
     }

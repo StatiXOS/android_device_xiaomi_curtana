@@ -20,10 +20,12 @@
 
 #define LOG_TAG "LocSvc_GnssConfigurationInterface"
 
-#include <log_util.h>
-#include "Gnss.h"
 #include "GnssConfiguration.h"
+
 #include <android/hardware/gnss/1.0/types.h>
+#include <log_util.h>
+
+#include "Gnss.h"
 
 namespace android {
 namespace hardware {
@@ -33,11 +35,10 @@ namespace implementation {
 
 using ::android::hardware::gnss::V1_0::GnssConstellationType;
 
-GnssConfiguration::GnssConfiguration(Gnss* gnss) : mGnss(gnss) {
-}
+GnssConfiguration::GnssConfiguration(Gnss *gnss) : mGnss(gnss) {}
 
 // Methods from ::android::hardware::gps::V1_0::IGnssConfiguration follow.
-Return<bool> GnssConfiguration::setSuplEs(bool enabled)  {
+Return<bool> GnssConfiguration::setSuplEs(bool enabled) {
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);
         return false;
@@ -47,14 +48,13 @@ Return<bool> GnssConfiguration::setSuplEs(bool enabled)  {
     memset(&config, 0, sizeof(GnssConfig));
     config.size = sizeof(GnssConfig);
     config.flags = GNSS_CONFIG_FLAGS_SUPL_EM_SERVICES_BIT;
-    config.suplEmergencyServices = (enabled ?
-            GNSS_CONFIG_SUPL_EMERGENCY_SERVICES_YES :
-            GNSS_CONFIG_SUPL_EMERGENCY_SERVICES_NO);
+    config.suplEmergencyServices = (enabled ? GNSS_CONFIG_SUPL_EMERGENCY_SERVICES_YES
+                                            : GNSS_CONFIG_SUPL_EMERGENCY_SERVICES_NO);
 
     return mGnss->updateConfiguration(config);
 }
 
-Return<bool> GnssConfiguration::setSuplVersion(uint32_t version)  {
+Return<bool> GnssConfiguration::setSuplVersion(uint32_t version) {
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);
         return false;
@@ -85,7 +85,7 @@ Return<bool> GnssConfiguration::setSuplVersion(uint32_t version)  {
     return mGnss->updateConfiguration(config);
 }
 
-Return<bool> GnssConfiguration::setSuplMode(uint8_t mode)  {
+Return<bool> GnssConfiguration::setSuplMode(uint8_t mode) {
     if (mGnss == nullptr) {
         LOC_LOGE("%s]: mGnss is nullptr", __FUNCTION__);
         return false;
@@ -97,7 +97,7 @@ Return<bool> GnssConfiguration::setSuplMode(uint8_t mode)  {
     config.flags = GNSS_CONFIG_FLAGS_SUPL_MODE_BIT;
     switch (mode) {
         case 0:
-            config.suplModeMask = 0; // STANDALONE ONLY
+            config.suplModeMask = 0;  // STANDALONE ONLY
             break;
         case 1:
             config.suplModeMask = GNSS_CONFIG_SUPL_MODE_MSB_BIT;
@@ -125,18 +125,18 @@ Return<bool> GnssConfiguration::setLppProfile(uint8_t lppProfileMask) {
     GnssConfig config = {};
     config.size = sizeof(GnssConfig);
     config.flags = GNSS_CONFIG_FLAGS_LPP_PROFILE_VALID_BIT;
-    config.lppProfileMask = GNSS_CONFIG_LPP_PROFILE_RRLP_ON_LTE; //default
+    config.lppProfileMask = GNSS_CONFIG_LPP_PROFILE_RRLP_ON_LTE;  // default
 
-    if (lppProfileMask & (1<<0)) {
+    if (lppProfileMask & (1 << 0)) {
         config.lppProfileMask |= GNSS_CONFIG_LPP_PROFILE_USER_PLANE_BIT;
     }
-    if (lppProfileMask & (1<<1)) {
+    if (lppProfileMask & (1 << 1)) {
         config.lppProfileMask |= GNSS_CONFIG_LPP_PROFILE_CONTROL_PLANE_BIT;
     }
-    if (lppProfileMask & (1<<2)) {
+    if (lppProfileMask & (1 << 2)) {
         config.lppProfileMask |= GNSS_CONFIG_LPP_PROFILE_USER_PLANE_OVER_NR5G_SA_BIT;
     }
-    if (lppProfileMask & (1<<3)) {
+    if (lppProfileMask & (1 << 3)) {
         config.lppProfileMask |= GNSS_CONFIG_LPP_PROFILE_CONTROL_PLANE_OVER_NR5G_SA_BIT;
     }
 
@@ -154,16 +154,16 @@ Return<bool> GnssConfiguration::setGlonassPositioningProtocol(uint8_t protocol) 
     config.size = sizeof(GnssConfig);
 
     config.flags = GNSS_CONFIG_FLAGS_AGLONASS_POSITION_PROTOCOL_VALID_BIT;
-    if (protocol & (1<<0)) {
+    if (protocol & (1 << 0)) {
         config.aGlonassPositionProtocolMask |= GNSS_CONFIG_RRC_CONTROL_PLANE_BIT;
     }
-    if (protocol & (1<<1)) {
+    if (protocol & (1 << 1)) {
         config.aGlonassPositionProtocolMask |= GNSS_CONFIG_RRLP_USER_PLANE_BIT;
     }
-    if (protocol & (1<<2)) {
+    if (protocol & (1 << 2)) {
         config.aGlonassPositionProtocolMask |= GNSS_CONFIG_LLP_USER_PLANE_BIT;
     }
-    if (protocol & (1<<3)) {
+    if (protocol & (1 << 3)) {
         config.aGlonassPositionProtocolMask |= GNSS_CONFIG_LLP_CONTROL_PLANE_BIT;
     }
 
@@ -211,9 +211,9 @@ Return<bool> GnssConfiguration::setEmergencySuplPdn(bool enabled) {
     memset(&config, 0, sizeof(GnssConfig));
     config.size = sizeof(GnssConfig);
     config.flags = GNSS_CONFIG_FLAGS_EM_PDN_FOR_EM_SUPL_VALID_BIT;
-    config.emergencyPdnForEmergencySupl = (enabled ?
-            GNSS_CONFIG_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_YES :
-            GNSS_CONFIG_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_NO);
+    config.emergencyPdnForEmergencySupl =
+            (enabled ? GNSS_CONFIG_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_YES
+                     : GNSS_CONFIG_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_NO);
 
     return mGnss->updateConfiguration(config);
 }

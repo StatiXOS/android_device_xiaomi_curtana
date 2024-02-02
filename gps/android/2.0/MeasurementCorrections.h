@@ -34,7 +34,6 @@
 #include <android/hardware/gnss/measurement_corrections/1.0/IMeasurementCorrectionsCallback.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
-
 #include <location_interface.h>
 
 namespace android {
@@ -44,28 +43,28 @@ namespace measurement_corrections {
 namespace V1_0 {
 namespace implementation {
 
+using ::android::sp;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
-using ::android::hardware::gnss::V1_0::GnssLocation;
 using ::android::hardware::gnss::measurement_corrections::V1_0::IMeasurementCorrectionsCallback;
+using ::android::hardware::gnss::V1_0::GnssLocation;
 
 struct MeasurementCorrections : public IMeasurementCorrections {
     MeasurementCorrections();
     ~MeasurementCorrections();
 
-// Methods from ::android::hardware::gnss::measurement_corrections::V1_0::IMeasurementCorrections follow.
-Return<bool> setCorrections(
-        const ::android::hardware::gnss::measurement_corrections::
-                V1_0::MeasurementCorrections& corrections) override;
+    // Methods from
+    // ::android::hardware::gnss::measurement_corrections::V1_0::IMeasurementCorrections follow.
+    Return<bool> setCorrections(
+            const ::android::hardware::gnss::measurement_corrections::V1_0::MeasurementCorrections
+                    &corrections) override;
 
-Return<bool> setCallback(const sp<IMeasurementCorrectionsCallback>& callback) override;
+    Return<bool> setCallback(const sp<IMeasurementCorrectionsCallback> &callback) override;
 };
-
 
 }  // namespace implementation
 }  // namespace V1_0

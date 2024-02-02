@@ -27,20 +27,20 @@
  *
  */
 
-#include <unistd.h>
+#include <LocHeap.h>
+#include <LocSharedLock.h>
+#include <LocThread.h>
+#include <LocTimer.h>
+#include <MsgTask.h>
+#include <errno.h>
+#include <loc_timer.h>
+#include <log_util.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <errno.h>
-#include <sys/timerfd.h>
 #include <sys/epoll.h>
-#include <log_util.h>
-#include <loc_timer.h>
-#include <LocTimer.h>
-#include <LocHeap.h>
-#include <LocThread.h>
-#include <LocSharedLock.h>
-#include <MsgTask.h>
+#include <sys/timerfd.h>
+#include <time.h>
+#include <unistd.h>
 
 #ifdef __HOST_UNIT_TEST__
 #define EPOLLWAKEUP 0
@@ -97,43 +97,44 @@ class LocTimerContainer : public LocHeap {
     // mutex to synchronize getters of static members
     static pthread_mutex_t mMutex;
     // Container of timers
-    static LocTimerContainer* mSwTimers;
+    static LocTimerContainer *mSwTimers;
     // Container of alarms
-    static LocTimerContainer* mHwTimers;
+    static LocTimerContainer *mHwTimers;
     // Msg task to provider msg Q, sender and reader.
-    static MsgTask* mMsgTask;
+    static MsgTask *mMsgTask;
     // Poll task to provide epoll call and threading to poll.
-    static LocTimerPollTask* mPollTask;
+    static LocTimerPollTask *mPollTask;
     // timer / alarm fd
     int mDevFd;
     // ctor
     LocTimerContainer(bool wakeOnExpire);
     // dtor
     ~LocTimerContainer();
-    static MsgTask* getMsgTaskLocked();
-    static LocTimerPollTask* getPollTaskLocked();
+    static MsgTask *getMsgTaskLocked();
+    static LocTimerPollTask *getPollTaskLocked();
     // extend LocHeap and pop if the top outRanks input
-    LocTimerDelegate* popIfOutRanks(LocTimerDelegate& timer);
+    LocTimerDelegate *popIfOutRanks(LocTimerDelegate &timer);
     // update the timer POSIX calls with updated soonest timer spec
-    void updateSoonestTime(LocTimerDelegate* priorTop);
+    void updateSoonestTime(LocTimerDelegate *priorTop);
 
-public:
+  public:
     // factory method to control the creation of mSwTimers / mHwTimers
-    static LocTimerContainer* get(bool wakeOnExpire);
+    static LocTimerContainer *get(bool wakeOnExpire);
 
-    LocTimerDelegate* getSoonestTimer();
+    LocTimerDelegate *getSoonestTimer();
     int getTimerFd();
     // add a timer / alarm obj into the container
-    void add(LocTimerDelegate& timer);
+    void add(LocTimerDelegate &timer);
     // remove a timer / alarm obj from the container
-    void remove(LocTimerDelegate& timer);
+    void remove(LocTimerDelegate &timer);
     // handling of timer / alarm expiration
     void expire();
 };
 
 class TimerRunnable : public LocRunnable {
     const int mFd;
-public:
+
+  public:
     inline TimerRunnable(const int fd) : mFd(fd) {}
     // The method to be implemented by thread clients
     // and be scheduled by LocThread
@@ -163,7 +164,8 @@ class LocTimerPollTask {
     // the thread that calls TimerRunnable::run() method, where
     // epoll_wait() is blocking and waiting for events..
     LocThread mThread;
-public:
+
+  public:
     // ctor
     LocTimerPollTask();
     // dtor
@@ -175,10 +177,10 @@ public:
     // this method does is to add the fd of the input container to the poll
     // and also add the pointer of the container to the event data ptr, such
     // when poll_wait wakes up on events, we know who is the owner of the fd.
-    void addPoll(LocTimerContainer& timerContainer);
+    void addPoll(LocTimerContainer &timerContainer);
     // remove a fd that is assciated with a container. The expectation is that
     // the atual timer would have been removed from the container.
-    void removePoll(LocTimerContainer& timerContainer);
+    void removePoll(LocTimerContainer &timerContainer);
 };
 
 // Internal class of timer obj. It gets born when client calls LocTimer::start();
@@ -188,19 +190,25 @@ public:
 class LocTimerDelegate : public LocRankable {
     friend class LocTimerContainer;
     friend class LocTimer;
-    LocTimer* mClient;
-    LocSharedLock* mLock;
+    LocTimer *mClient;
+    LocSharedLock *mLock;
     struct timespec mFutureTime;
-    LocTimerContainer* mContainer;
+    LocTimerContainer *mContainer;
     // not a complete obj, just ctor for LocRankable comparisons
-    inline LocTimerDelegate(struct timespec& delay)
+    inline LocTimerDelegate(struct timespec &delay)
         : mClient(NULL), mLock(NULL), mFutureTime(delay), mContainer(NULL) {}
-    inline ~LocTimerDelegate() { if (mLock) { mLock->drop(); mLock = NULL; } }
-public:
-    LocTimerDelegate(LocTimer& client, struct timespec& futureTime, LocTimerContainer* container);
+    inline ~LocTimerDelegate() {
+        if (mLock) {
+            mLock->drop();
+            mLock = NULL;
+        }
+    }
+
+  public:
+    LocTimerDelegate(LocTimer &client, struct timespec &futureTime, LocTimerContainer *container);
     void destroyLocked();
     // LocRankable virtual method
-    virtual int ranks(LocRankable& rankable);
+    virtual int ranks(LocRankable &rankable);
     void expire();
     inline struct timespec getFutureTime() { return mFutureTime; }
 };
@@ -213,20 +221,19 @@ public:
 // For those processes that do use timer, it will likely also need to every
 // once in a while. It might be cheaper keeping them around.
 pthread_mutex_t LocTimerContainer::mMutex = PTHREAD_MUTEX_INITIALIZER;
-LocTimerContainer* LocTimerContainer::mSwTimers = NULL;
-LocTimerContainer* LocTimerContainer::mHwTimers = NULL;
-MsgTask* LocTimerContainer::mMsgTask = NULL;
-LocTimerPollTask* LocTimerContainer::mPollTask = NULL;
+LocTimerContainer *LocTimerContainer::mSwTimers = NULL;
+LocTimerContainer *LocTimerContainer::mHwTimers = NULL;
+MsgTask *LocTimerContainer::mMsgTask = NULL;
+LocTimerPollTask *LocTimerContainer::mPollTask = NULL;
 
 // ctor - initialize timer heaps
 // A container for swTimer (timer) is created, when wakeOnExpire is true; or
 // HwTimer (alarm), when wakeOnExpire is false.
-LocTimerContainer::LocTimerContainer(bool wakeOnExpire) :
-    mDevFd(timerfd_create(wakeOnExpire ? CLOCK_BOOTTIME_ALARM : CLOCK_BOOTTIME, 0)) {
-
+LocTimerContainer::LocTimerContainer(bool wakeOnExpire)
+    : mDevFd(timerfd_create(wakeOnExpire ? CLOCK_BOOTTIME_ALARM : CLOCK_BOOTTIME, 0)) {
     if ((-1 == mDevFd) && (errno == EINVAL)) {
-        LOC_LOGW("%s: timerfd_create failure, fallback to CLOCK_MONOTONIC - %s",
-            __FUNCTION__, strerror(errno));
+        LOC_LOGW("%s: timerfd_create failure, fallback to CLOCK_MONOTONIC - %s", __FUNCTION__,
+                 strerror(errno));
         mDevFd = timerfd_create(CLOCK_MONOTONIC, 0);
     }
 
@@ -241,14 +248,13 @@ LocTimerContainer::LocTimerContainer(bool wakeOnExpire) :
 
 // dtor
 // we do not ever destroy the static resources.
-inline
-LocTimerContainer::~LocTimerContainer() {
+inline LocTimerContainer::~LocTimerContainer() {
     close(mDevFd);
 }
 
-LocTimerContainer* LocTimerContainer::get(bool wakeOnExpire) {
+LocTimerContainer *LocTimerContainer::get(bool wakeOnExpire) {
     // get the reference of either mHwTimer or mSwTimers per wakeOnExpire
-    LocTimerContainer*& container = wakeOnExpire ? mHwTimers : mSwTimers;
+    LocTimerContainer *&container = wakeOnExpire ? mHwTimers : mSwTimers;
     // it is cheap to check pointer first than locking mutext unconditionally
     if (!container) {
         pthread_mutex_lock(&mMutex);
@@ -266,7 +272,7 @@ LocTimerContainer* LocTimerContainer::get(bool wakeOnExpire) {
     return container;
 }
 
-MsgTask* LocTimerContainer::getMsgTaskLocked() {
+MsgTask *LocTimerContainer::getMsgTaskLocked() {
     // it is cheap to check pointer first than locking mutext unconditionally
     if (!mMsgTask) {
         mMsgTask = new MsgTask("LocTimerMsgTask");
@@ -274,7 +280,7 @@ MsgTask* LocTimerContainer::getMsgTaskLocked() {
     return mMsgTask;
 }
 
-LocTimerPollTask* LocTimerContainer::getPollTaskLocked() {
+LocTimerPollTask *LocTimerContainer::getPollTaskLocked() {
     // it is cheap to check pointer first than locking mutext unconditionally
     if (!mPollTask) {
         mPollTask = new LocTimerPollTask();
@@ -282,18 +288,16 @@ LocTimerPollTask* LocTimerContainer::getPollTaskLocked() {
     return mPollTask;
 }
 
-inline
-LocTimerDelegate* LocTimerContainer::getSoonestTimer() {
-    return (LocTimerDelegate*)(peek());
+inline LocTimerDelegate *LocTimerContainer::getSoonestTimer() {
+    return (LocTimerDelegate *)(peek());
 }
 
-inline
-int LocTimerContainer::getTimerFd() {
+inline int LocTimerContainer::getTimerFd() {
     return mDevFd;
 }
 
-void LocTimerContainer::updateSoonestTime(LocTimerDelegate* priorTop) {
-    LocTimerDelegate* curTop = getSoonestTimer();
+void LocTimerContainer::updateSoonestTime(LocTimerDelegate *priorTop) {
+    LocTimerDelegate *curTop = getSoonestTimer();
 
     // check if top has changed
     if (curTop != priorTop) {
@@ -321,16 +325,15 @@ void LocTimerContainer::updateSoonestTime(LocTimerDelegate* priorTop) {
 }
 
 // all the heap management is done in the MsgTask context.
-inline
-void LocTimerContainer::add(LocTimerDelegate& timer) {
+inline void LocTimerContainer::add(LocTimerDelegate &timer) {
     struct MsgTimerPush : public LocMsg {
-        LocTimerContainer* mTimerContainer;
-        LocTimerDelegate* mTimer;
-        inline MsgTimerPush(LocTimerContainer& container, LocTimerDelegate& timer) :
-            LocMsg(), mTimerContainer(&container), mTimer(&timer) {}
+        LocTimerContainer *mTimerContainer;
+        LocTimerDelegate *mTimer;
+        inline MsgTimerPush(LocTimerContainer &container, LocTimerDelegate &timer)
+            : LocMsg(), mTimerContainer(&container), mTimer(&timer) {}
         inline virtual void proc() const {
-            LocTimerDelegate* priorTop = mTimerContainer->getSoonestTimer();
-            mTimerContainer->push((LocRankable&)(*mTimer));
+            LocTimerDelegate *priorTop = mTimerContainer->getSoonestTimer();
+            mTimerContainer->push((LocRankable &)(*mTimer));
             mTimerContainer->updateSoonestTime(priorTop);
         }
     };
@@ -339,18 +342,18 @@ void LocTimerContainer::add(LocTimerDelegate& timer) {
 }
 
 // all the heap management is done in the MsgTask context.
-void LocTimerContainer::remove(LocTimerDelegate& timer) {
+void LocTimerContainer::remove(LocTimerDelegate &timer) {
     struct MsgTimerRemove : public LocMsg {
-        LocTimerContainer* mTimerContainer;
-        LocTimerDelegate* mTimer;
-        inline MsgTimerRemove(LocTimerContainer& container, LocTimerDelegate& timer) :
-            LocMsg(), mTimerContainer(&container), mTimer(&timer) {}
+        LocTimerContainer *mTimerContainer;
+        LocTimerDelegate *mTimer;
+        inline MsgTimerRemove(LocTimerContainer &container, LocTimerDelegate &timer)
+            : LocMsg(), mTimerContainer(&container), mTimer(&timer) {}
         inline virtual void proc() const {
-            LocTimerDelegate* priorTop = mTimerContainer->getSoonestTimer();
+            LocTimerDelegate *priorTop = mTimerContainer->getSoonestTimer();
 
             // update soonest timer only if mTimer is actually removed from
             // mTimerContainer AND mTimer is not priorTop.
-            if (priorTop == ((LocHeap*)mTimerContainer)->remove((LocRankable&)*mTimer)) {
+            if (priorTop == ((LocHeap *)mTimerContainer)->remove((LocRankable &)*mTimer)) {
                 // if passing in NULL, we tell updateSoonestTime to update
                 // kernel with the current top timer interval.
                 mTimerContainer->updateSoonestTime(NULL);
@@ -368,9 +371,9 @@ void LocTimerContainer::remove(LocTimerDelegate& timer) {
 // the top node's timeout is in the future.
 void LocTimerContainer::expire() {
     struct MsgTimerExpire : public LocMsg {
-        LocTimerContainer* mTimerContainer;
-        inline MsgTimerExpire(LocTimerContainer& container) :
-            LocMsg(), mTimerContainer(&container) {}
+        LocTimerContainer *mTimerContainer;
+        inline MsgTimerExpire(LocTimerContainer &container)
+            : LocMsg(), mTimerContainer(&container) {}
         inline virtual void proc() const {
             struct timespec now;
             // get time spec of now
@@ -378,9 +381,8 @@ void LocTimerContainer::expire() {
             LocTimerDelegate timerOfNow(now);
             // pop everything in the heap that outRanks now, i.e. has time older than now
             // and then call expire() on that timer.
-            for (LocTimerDelegate* timer = (LocTimerDelegate*)mTimerContainer->pop();
-                 NULL != timer;
-                 timer = mTimerContainer->popIfOutRanks(timerOfNow)) {
+            for (LocTimerDelegate *timer = (LocTimerDelegate *)mTimerContainer->pop();
+                 NULL != timer; timer = mTimerContainer->popIfOutRanks(timerOfNow)) {
                 // the timer delegate obj will be deleted before the return of this call
                 timer->expire();
             }
@@ -395,21 +397,18 @@ void LocTimerContainer::expire() {
     mMsgTask->sendMsg(new MsgTimerExpire(*this));
 }
 
-LocTimerDelegate* LocTimerContainer::popIfOutRanks(LocTimerDelegate& timer) {
-    LocTimerDelegate* poppedNode = NULL;
+LocTimerDelegate *LocTimerContainer::popIfOutRanks(LocTimerDelegate &timer) {
+    LocTimerDelegate *poppedNode = NULL;
     if (mTree && !timer.outRanks(*peek())) {
-        poppedNode = (LocTimerDelegate*)(pop());
+        poppedNode = (LocTimerDelegate *)(pop());
     }
 
     return poppedNode;
 }
 
-
 /***************************LocTimerPollTask methods***************************/
 
-inline
-LocTimerPollTask::LocTimerPollTask()
-    : mFd(epoll_create(2)), mThread() {
+inline LocTimerPollTask::LocTimerPollTask() : mFd(epoll_create(2)), mThread() {
     // before a next call returens, a thread will be created. The run() method
     // could already be running in parallel. Also, since each of the objs
     // creates a thread, the container will make sure that there will be only
@@ -417,7 +416,7 @@ LocTimerPollTask::LocTimerPollTask()
     mThread.start("LocTimerPollTask", std::make_shared<TimerRunnable>(mFd));
 }
 
-void LocTimerPollTask::addPoll(LocTimerContainer& timerContainer) {
+void LocTimerPollTask::addPoll(LocTimerContainer &timerContainer) {
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
 
@@ -431,8 +430,7 @@ void LocTimerPollTask::addPoll(LocTimerContainer& timerContainer) {
     epoll_ctl(mFd, EPOLL_CTL_ADD, timerContainer.getTimerFd(), &ev);
 }
 
-inline
-void LocTimerPollTask::removePoll(LocTimerContainer& timerContainer) {
+inline void LocTimerPollTask::removePoll(LocTimerContainer &timerContainer) {
     epoll_ctl(mFd, EPOLL_CTL_DEL, timerContainer.getTimerFd(), NULL);
 }
 
@@ -451,7 +449,7 @@ bool TimerRunnable::run() {
         // we may have 2 events
         for (int i = 0; i < fds; i++) {
             // each fd has a context pointer associated with the right timer container
-            LocTimerContainer* container = (LocTimerContainer*)(ev[i].data.ptr);
+            LocTimerContainer *container = (LocTimerContainer *)(ev[i].data.ptr);
             if (container) {
                 container->expire();
             } else {
@@ -466,10 +464,8 @@ bool TimerRunnable::run() {
 
 /***************************LocTimerDelegate methods***************************/
 
-inline
-LocTimerDelegate::LocTimerDelegate(LocTimer& client,
-                                   struct timespec& futureTime,
-                                   LocTimerContainer* container)
+inline LocTimerDelegate::LocTimerDelegate(LocTimer &client, struct timespec &futureTime,
+                                          LocTimerContainer *container)
     : mClient(&client),
       mLock(mClient->mLock->share()),
       mFutureTime(futureTime),
@@ -478,47 +474,44 @@ LocTimerDelegate::LocTimerDelegate(LocTimer& client,
     mContainer->add(*this);
 }
 
-inline
-void LocTimerDelegate::destroyLocked() {
+inline void LocTimerDelegate::destroyLocked() {
     // client handle will likely be deleted soon after this
     // method returns. Nulling this handle so that expire()
     // won't call the callback on the dead handle any more.
     mClient = NULL;
 
     if (mContainer) {
-        LocTimerContainer* container = mContainer;
+        LocTimerContainer *container = mContainer;
         mContainer = NULL;
         if (container) {
             container->remove(*this);
         }
-    } // else we do not do anything. No such *this* can be
-      // created and reached here with mContainer ever been
-      // a non NULL. So *this* must have reached the if clause
-      // once, and we want it reach there only once.
+    }  // else we do not do anything. No such *this* can be
+       // created and reached here with mContainer ever been
+       // a non NULL. So *this* must have reached the if clause
+       // once, and we want it reach there only once.
 }
 
-int LocTimerDelegate::ranks(LocRankable& rankable) {
+int LocTimerDelegate::ranks(LocRankable &rankable) {
     int rank = -1;
-    LocTimerDelegate* timer = (LocTimerDelegate*)(&rankable);
+    LocTimerDelegate *timer = (LocTimerDelegate *)(&rankable);
     if (timer) {
         // larger time ranks lower!!!
         // IOW, if input obj has bigger tv_sec/tv_nsec, this obj outRanks higher
         rank = timer->mFutureTime.tv_sec - mFutureTime.tv_sec;
-        if(0 == rank)
-        {
-            //rank against tv_nsec for msec accuracy
+        if (0 == rank) {
+            // rank against tv_nsec for msec accuracy
             rank = (int)(timer->mFutureTime.tv_nsec - mFutureTime.tv_nsec);
         }
     }
     return rank;
 }
 
-inline
-void LocTimerDelegate::expire() {
+inline void LocTimerDelegate::expire() {
     // keeping a copy of client pointer to be safe
     // when timeOutCallback() is called at the end of this
     // method, *this* obj may be already deleted.
-    LocTimer* client = mClient;
+    LocTimer *client = mClient;
     // force a stop, which will lead to delete of this obj
     if (client && client->stop()) {
         // calling client callback with a pointer save on the stack
@@ -528,10 +521,8 @@ void LocTimerDelegate::expire() {
     }
 }
 
-
 /***************************LocTimer methods***************************/
-LocTimer::LocTimer() : mTimer(NULL), mLock(new LocSharedLock()) {
-}
+LocTimer::LocTimer() : mTimer(NULL), mLock(new LocSharedLock()) {}
 
 LocTimer::~LocTimer() {
     stop();
@@ -554,7 +545,7 @@ bool LocTimer::start(unsigned int timeOutInMs, bool wakeOnExpire) {
             futureTime.tv_nsec %= 1000000000;
         }
 
-        LocTimerContainer* container;
+        LocTimerContainer *container;
         container = LocTimerContainer::get(wakeOnExpire);
         if (NULL != container) {
             mTimer = new LocTimerDelegate(*this, futureTime, container);
@@ -570,7 +561,7 @@ bool LocTimer::stop() {
     bool success = false;
     mLock->lock();
     if (mTimer) {
-        LocTimerDelegate* timer = mTimer;
+        LocTimerDelegate *timer = mTimer;
         mTimer = NULL;
         if (timer) {
             timer->destroyLocked();
@@ -587,14 +578,17 @@ bool LocTimer::stop() {
 //////////////////////////////////////////////////////////////////////////
 class LocTimerWrapper : public LocTimer {
     loc_timer_callback mCb;
-    void* mCallerData;
-    LocTimerWrapper* mMe;
+    void *mCallerData;
+    LocTimerWrapper *mMe;
     static pthread_mutex_t mMutex;
-    inline ~LocTimerWrapper() { mCb = NULL; mMe = NULL; }
-public:
-    inline LocTimerWrapper(loc_timer_callback cb, void* callerData) :
-        mCb(cb), mCallerData(callerData), mMe(this) {
+    inline ~LocTimerWrapper() {
+        mCb = NULL;
+        mMe = NULL;
     }
+
+  public:
+    inline LocTimerWrapper(loc_timer_callback cb, void *callerData)
+        : mCb(cb), mCallerData(callerData), mMe(this) {}
     void destroy() {
         pthread_mutex_lock(&mMutex);
         if (NULL != mCb && this == mMe) {
@@ -604,7 +598,7 @@ public:
     }
     virtual void timeOutCallback() {
         loc_timer_callback cb = mCb;
-        void* callerData = mCallerData;
+        void *callerData = mCallerData;
         if (cb) {
             cb(callerData, 0);
         }
@@ -612,7 +606,7 @@ public:
     }
 };
 
-} // namespace loc_util
+}  // namespace loc_util
 
 //////////////////////////////////////////////////////////////////////////
 // This section below wraps for the C style APIs
@@ -622,10 +616,9 @@ using loc_util::LocTimerWrapper;
 
 pthread_mutex_t LocTimerWrapper::mMutex = PTHREAD_MUTEX_INITIALIZER;
 
-void* loc_timer_start(uint64_t msec, loc_timer_callback cb_func,
-                      void *caller_data, bool wake_on_expire)
-{
-    LocTimerWrapper* locTimerWrapper = NULL;
+void *loc_timer_start(uint64_t msec, loc_timer_callback cb_func, void *caller_data,
+                      bool wake_on_expire) {
+    LocTimerWrapper *locTimerWrapper = NULL;
 
     if (cb_func) {
         locTimerWrapper = new LocTimerWrapper(cb_func, caller_data);
@@ -638,10 +631,9 @@ void* loc_timer_start(uint64_t msec, loc_timer_callback cb_func,
     return locTimerWrapper;
 }
 
-void loc_timer_stop(void*&  handle)
-{
+void loc_timer_stop(void *&handle) {
     if (handle) {
-        LocTimerWrapper* locTimerWrapper = (LocTimerWrapper*)(handle);
+        LocTimerWrapper *locTimerWrapper = (LocTimerWrapper *)(handle);
         locTimerWrapper->destroy();
         handle = NULL;
     }

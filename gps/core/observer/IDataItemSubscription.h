@@ -30,11 +30,11 @@
 #ifndef __IDATAITEMSUBSCRIPTION_H__
 #define __IDATAITEMSUBSCRIPTION_H__
 
-#include  <list>
-#include  <DataItemId.h>
+#include <DataItemId.h>
 
-namespace loc_core
-{
+#include <list>
+
+namespace loc_core {
 class IDataItemObserver;
 
 /**
@@ -45,8 +45,7 @@ class IDataItemObserver;
  *          Must be implemented by OS dependent code.
  */
 class IDataItemSubscription {
-
-public:
+  public:
     /**
      * @brief Subscribe for data items by their IDs
      * @details Subscribe for data items by their IDs;
@@ -61,7 +60,7 @@ public:
      * @param l List of DataItemId
      * @param o Pointer to an instance of IDataItemObserver
      */
-    virtual void subscribe (const std :: list <DataItemId> & l, IDataItemObserver * o = NULL) = 0;
+    virtual void subscribe(const std ::list<DataItemId> &l, IDataItemObserver *o = NULL) = 0;
 
     /**
      * @brief Update subscription for Data items
@@ -78,7 +77,8 @@ public:
      * @param l List of DataItemId
      * @param o Pointer to an instance of IDataItemObserver
      */
-    virtual void updateSubscription (const std :: list <DataItemId> & l, IDataItemObserver * o = NULL) = 0;
+    virtual void updateSubscription(const std ::list<DataItemId> &l,
+                                    IDataItemObserver *o = NULL) = 0;
 
     /**
      * @brief Request Data
@@ -87,7 +87,7 @@ public:
      * @param l List of DataItemId
      * @param o Pointer to an instance of IDataItemObserver
      */
-    virtual void requestData (const std :: list <DataItemId> & l, IDataItemObserver * o = NULL) = 0;
+    virtual void requestData(const std ::list<DataItemId> &l, IDataItemObserver *o = NULL) = 0;
 
     /**
      * @brief Unsubscribe Data items
@@ -106,7 +106,7 @@ public:
      * @param l List of DataItemId
      * @param o Pointer to an instance of IDataItemObserver
      */
-    virtual void unsubscribe (const std :: list <DataItemId> & l, IDataItemObserver * o = NULL) = 0;
+    virtual void unsubscribe(const std ::list<DataItemId> &l, IDataItemObserver *o = NULL) = 0;
 
     /**
      * @brief Unsubscribe all data items
@@ -114,16 +114,15 @@ public:
      *
      * @param o Pointer to an instance of IDataItemObserver
      */
-    virtual void unsubscribeAll (IDataItemObserver * o = NULL) = 0;
+    virtual void unsubscribeAll(IDataItemObserver *o = NULL) = 0;
 
     /**
      * @brief Destructor
      * @details Destructor
      */
-    virtual ~IDataItemSubscription () {}
+    virtual ~IDataItemSubscription() {}
 };
 
-} // namespace loc_core
+}  // namespace loc_core
 
-#endif // #ifndef __IDATAITEMSUBSCRIPTION_H__
-
+#endif  // #ifndef __IDATAITEMSUBSCRIPTION_H__
