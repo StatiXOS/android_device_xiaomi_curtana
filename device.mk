@@ -492,8 +492,7 @@ PRODUCT_BOOT_JARS += \
     telephony-ext
 
 # Thermal
-PRODUCT_PACKAGES += \
-    android.hardware.thermal-service.pixel
+include hardware/google/pixel/thermal/device.mk
 
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/thermal/,$(TARGET_COPY_OUT_VENDOR)/etc)
