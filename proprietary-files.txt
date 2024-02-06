@@ -1,4 +1,10 @@
-# All unpinned blobs below are extracted from curtana_global-user 12 RKQ1.211019.001 V14.0.4.0.SJWMIXM release-keys
+# All blobs below are extracted from the following sources:
+# curtana (unpinned): RKQ1.211019.001/V14.0.4.0.SJWMIXM
+# excalibur: RKQ1.211019.001/V14.0.2.0.SJXINXM
+# husky: UQ1A.240205.004/11269751
+# joyeuse: RKQ1.211019.001/V14.0.3.0.SJZMIXM
+# sunfish: TQ3A.230805.001/10316531
+# vayu: RKQ1.200826.002/V14.0.3.0.TJUMIXM
 
 # ACDB
 vendor/etc/acdbdata/IDP/IDP_Bluetooth_cal.acdb
@@ -331,7 +337,7 @@ vendor/lib64/camera/fdconfigpreviewlite.bin
 vendor/lib64/camera/fdconfigvideo.bin
 vendor/lib64/camera/fdconfigvideolite.bin
 
-# Camera sensors - from joyeuse - RKQ1.211019.001/V14.0.3.0.SJZMIXM
+# Camera sensors - from joyeuse
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgw1.bin|d7d7d51d436d46da23bb985982151cc3595e0634
 vendor/lib64/camera/com.qti.sensormodule.ofilm_s5kgw1_mirrorflip.bin|5f980c2f9520998ac0b53c938d4ce2c952c4c80b
 vendor/lib64/camera/com.qti.sensormodule.sunny_hi556.bin|699854c027d805565ca93fc5f0f9161e83bd7c63
@@ -342,7 +348,7 @@ vendor/lib64/camera/com.qti.tuned.sunny_gc02m1.bin|6da95663bb077bde61ff4f6d71459
 vendor/lib64/camera/com.qti.tuned.sunny_hi556.bin|afb36797ed415f294adf859332a5f1c600df86fb
 vendor/lib64/camera/com.qti.tuned.sunny_s5kgw1.bin|bf89cf6c63d33370f1762bd3a55365a3750055ac
 
-# Camera sensors - from excalibur - RKQ1.211019.001/V14.0.2.0.SJXINXM
+# Camera sensors - from excalibur
 vendor/lib64/camera/com.qti.sensormodule.sunny_ov32a1q.bin|a6f8e2da547f15d315412f81c58d4ba6888641d5
 vendor/lib64/camera/com.qti.tuned.sunny_ov32a1q.bin|832fb5849953dd173de82589fbadddeb0eae6e7a
 
@@ -369,7 +375,7 @@ vendor/lib64/libcamxstatscore.so
 vendor/lib64/libcamxswprocessalgo.so
 vendor/lib64/libcamxtintlessalgo.so
 
-# CarrierSettings - from husky - UQ1A.240105.004/11206848
+# CarrierSettings - from husky
 product/etc/CarrierSettings/1and1_de.pb|c5e3792d194f122f9946a433c7c71de6b1ee3000
 product/etc/CarrierSettings/2degrees_nz.pb|ab002ec9fa69ab10d364d0095f3e45d2fe80d693
 product/etc/CarrierSettings/a1_at.pb|be1acd32ec9eef328addf30cff8d5f26240ccaff
@@ -384,18 +390,18 @@ product/etc/CarrierSettings/apt_tw.pb|66dfda499aaaec1ecd30fed1b0e06fdb786acae6
 product/etc/CarrierSettings/asda_gb.pb|981c4bc860b8eb2f85860dd03ee25445b344e3cf
 product/etc/CarrierSettings/assurance_us.pb|27401d83d00a0940eed7f0ed0755bc146e094d56
 product/etc/CarrierSettings/astca_as.pb|d5f0982e210893a0db7b748d14feecfcfc4d8670
-product/etc/CarrierSettings/att5gsa_us.pb|c27f081ee5822e4e5f9583befbce00cfb7ac9849
 product/etc/CarrierSettings/att5g_us.pb|0003e6d59890b8a0f75e15552487268a708c3cd4
-product/etc/CarrierSettings/attmvnos_us.pb|3908bdbd7ca9bc1b9eee527b38e3774686e935f1
+product/etc/CarrierSettings/att5gsa_us.pb|c27f081ee5822e4e5f9583befbce00cfb7ac9849
 product/etc/CarrierSettings/att_us.pb|3f792de723a24f12f9bce43cfda4c2d52e9e0557
+product/etc/CarrierSettings/attmvnos_us.pb|3908bdbd7ca9bc1b9eee527b38e3774686e935f1
 product/etc/CarrierSettings/base_be.pb|4ebdf13d22a81a7f59da54df3a8013d6b1cee516
 product/etc/CarrierSettings/batelco_bh.pb|e29ff8cda0764fd643e0e144e0af3be6c106f3c6
 product/etc/CarrierSettings/bell_ca.pb|1088904dd0a9a119dc3884dd1862999e1e1a7fa7
 product/etc/CarrierSettings/bite_lt.pb|0855c61893ec93fada419debd179cce1d99eab93
 product/etc/CarrierSettings/bite_lv.pb|090e8de0813f1648d92903b1ffccb723303c5724
 product/etc/CarrierSettings/bluegrass_us.pb|6f3e98477b5e13d2d8894a13e9cbddd2a62e68e2
-product/etc/CarrierSettings/boosttmo_us.pb|baa02fec5af73722d35d76e708ddbfa8fd5cf9ce
 product/etc/CarrierSettings/boost_us.pb|3edc19c72787ee489b4bf504ed2de0dc850f9453
+product/etc/CarrierSettings/boosttmo_us.pb|baa02fec5af73722d35d76e708ddbfa8fd5cf9ce
 product/etc/CarrierSettings/bouygues_fr.pb|89247ba8a1d729bb3f253f2cb5589269d092de0f
 product/etc/CarrierSettings/bsnl_in.pb|23656c37af0395b942a51c17e36f0f11ecc41004
 product/etc/CarrierSettings/btb_gb.pb|55bda8e469ecd36b2834dac98701f96e6deb04dc
@@ -404,8 +410,8 @@ product/etc/CarrierSettings/carolinawest_us.pb|5eb61e839b4de38c85fcb5e380b08f2b6
 product/etc/CarrierSettings/carrier_list.pb|2aedc45bedaf7678c417c8a35e0ba53323b5ae2b
 product/etc/CarrierSettings/celcom_my.pb|d29696c1344fc4a15f6658b427cf3b2152f0e5e3
 product/etc/CarrierSettings/cellcom_il.pb|d18732842dec5a6c1c2a333dbf0ff4b79e1cba74
-product/etc/CarrierSettings/cellcommno_us.pb|ce45bfc39d789a75f64fcca94197ef78218fd323
 product/etc/CarrierSettings/cellcom_us.pb|6c12f4d094cbbf3c16cfb5f8cc22ee116e610c9b
+product/etc/CarrierSettings/cellcommno_us.pb|ce45bfc39d789a75f64fcca94197ef78218fd323
 product/etc/CarrierSettings/celluarone_us.pb|5e5583ec4f3d869540283f65859d922b9d4a80ba
 product/etc/CarrierSettings/chatr_ca.pb|b189e9ae230fb2a71dc24bf8dba4078d9cf87dcf
 product/etc/CarrierSettings/chinamobile_hk.pb|d6e6cb6bf03130ae73c43a3d729640f91cb1be46
@@ -448,25 +454,25 @@ product/etc/CarrierSettings/evolve_us.pb|fdd60aded2f0664592b1216b53771e38d9c7b79
 product/etc/CarrierSettings/fastweb_it.pb|5269fd76b874916f79be577a9224fa1dd2161372
 product/etc/CarrierSettings/fet_tw.pb|3a4115e76fd95b2b90496251e41268e783fe13c2
 product/etc/CarrierSettings/fi_at.pb|469c0a5e89272af6606e8ed9aa730ea082972db3
+product/etc/CarrierSettings/fi_us.pb|3642f676738650dcb61d440fe124fe4058a5cea0
 product/etc/CarrierSettings/fido_ca.pb|2899307ec6595933049867340f5fd92a16d25b72
+product/etc/CarrierSettings/firstnet_us.pb|5a574832b1fb31f963c6974f9a3598f62140d6f3
 product/etc/CarrierSettings/firstnetpacific2_us.pb|14f6c6b7491fa5112b949ec5ff84bfc0f3ba96b3
 product/etc/CarrierSettings/firstnetpacific_us.pb|eb74854b62bc272050132e6a93823ae15ae11c88
-product/etc/CarrierSettings/firstnet_us.pb|5a574832b1fb31f963c6974f9a3598f62140d6f3
-product/etc/CarrierSettings/fi_us.pb|3642f676738650dcb61d440fe124fe4058a5cea0
 product/etc/CarrierSettings/fizz_ca.pb|318b514d9239d885fe481ab9981bb366493b3baf
 product/etc/CarrierSettings/fl1_li.pb|aa64fe1cb6db8278b16fcee3b4f1adbfcddf9b67
-product/etc/CarrierSettings/freedommobile_ca.pb|9b645f4e1353cdbae23958f585817fef7cc869c8
 product/etc/CarrierSettings/free_fr.pb|17072dc70ba92e9bf19598ea8ac6fa551d312e75
+product/etc/CarrierSettings/freedommobile_ca.pb|9b645f4e1353cdbae23958f585817fef7cc869c8
 product/etc/CarrierSettings/gamma_gb.pb|bdfd206357be20b210ad8f70c5c23979764ba400
 product/etc/CarrierSettings/gci_us.pb|7528e25664a26199a268ef9dbdca97463aa5001a
 product/etc/CarrierSettings/gibtel_gi.pb|ca30ef268b7ed92911343102c9c077a423564fe1
 product/etc/CarrierSettings/giga_sg.pb|cd07e8616cb71fd7ec91f1aaca1f7e124be47767
 product/etc/CarrierSettings/globe_ph.pb|b6fbd9bc2b5ecc01f2d8ac81432d864b58360fa1
 product/etc/CarrierSettings/h3_at.pb|d64e95fc4c27d921db9e7d7371a9f61d9e0a5bc2
-product/etc/CarrierSettings/h3g27202_ie.pb|17cf9185f1231c19d8e5f324da4da0218e1f7816
 product/etc/CarrierSettings/h3_gb.pb|9f0e3a6604253d41c862f0a09637839a0c15bf2c
 product/etc/CarrierSettings/h3_ie.pb|c37b005b3f85c52313b609e81cdd53034364da9f
 product/etc/CarrierSettings/h3_se.pb|f238fb1fab0c35108a0338bbe6fc842b63e69b7e
+product/etc/CarrierSettings/h3g27202_ie.pb|17cf9185f1231c19d8e5f324da4da0218e1f7816
 product/etc/CarrierSettings/halebop_se.pb|c2a5c7f91ab71f45b273e8f92dafcf484c3d7f6a
 product/etc/CarrierSettings/homobile_it.pb|29838864197a9a29ae9d575c18a04f3e6e35b739
 product/etc/CarrierSettings/hotmobile_il.pb|5c83cf7ebaf796e5ba87fdc9f27897531d77c4d4
@@ -496,10 +502,10 @@ product/etc/CarrierSettings/nextech_us.pb|c5c7874fa45783c579e1ef1ff8b7ef7532a18f
 product/etc/CarrierSettings/nos_pt.pb|ecf3cad38348ee9cb7bcda7956000609d1ac6cb4
 product/etc/CarrierSettings/o2_cz.pb|492a67ebb57d99457d099b0a717cb3d9dd39dd18
 product/etc/CarrierSettings/o2_de.pb|452600e5e9d9caa0ea4a7371a652e73f0a519725
+product/etc/CarrierSettings/o2_sk.pb|574e40ad33c4dbf240b5b57b5be56a742ac59502
 product/etc/CarrierSettings/o2postpaid_gb.pb|34d005e60a9fb15075b905eeda73859ee1a934f2
 product/etc/CarrierSettings/o2prepaid_de.pb|b4ef6d531b4e2478fce2f74ff84f3259ee8b7206
 product/etc/CarrierSettings/o2prepaid_gb.pb|bb77de1ae920f5d9fc7001591d86a20a1bff19ac
-product/etc/CarrierSettings/o2_sk.pb|574e40ad33c4dbf240b5b57b5be56a742ac59502
 product/etc/CarrierSettings/omantel_om.pb|94c2e1b8045e535f050466ddde357f80eba7e503
 product/etc/CarrierSettings/onecall_no.pb|1e73e159641ef30b594b06dc6bd3783f7c08ce49
 product/etc/CarrierSettings/ooredoo_kw.pb|ce2fff80932fd4f8a1b4a0eff16b591cec9a62ea
@@ -552,8 +558,8 @@ product/etc/CarrierSettings/solomobile_ca.pb|2d511e9760340f7980a2c6188e107fdc77b
 product/etc/CarrierSettings/spark_nz.pb|abf59b5870465359a53058c0274ced5ae4d4b210
 product/etc/CarrierSettings/spectrum_us.pb|9375d0f16741a1dd2f8c7d94999a4f80662fba17
 product/etc/CarrierSettings/spmtelecom_pm.pb|883232c7c42789fe91b58e0fda9ab92b915947be
-product/etc/CarrierSettings/sprintprepaid_us.pb|2013955a1fa1ff2cf43ba8ea617892b1dc7f3025
 product/etc/CarrierSettings/sprint_us.pb|84e3ef43b3dd44aa9debf646eecfd13f493df2b2
+product/etc/CarrierSettings/sprintprepaid_us.pb|2013955a1fa1ff2cf43ba8ea617892b1dc7f3025
 product/etc/CarrierSettings/sprintwholesale_us.pb|c71185b47b4511d21b43de40caf9f413b1c11b14
 product/etc/CarrierSettings/starhub_sg.pb|9e625ea6a4afab53713ccdac6dab1ca96284df4c
 product/etc/CarrierSettings/stc_bh.pb|1121d1e8df11d817d7770aa788e8d558b568ab25
@@ -609,9 +615,9 @@ product/etc/CarrierSettings/truemove_th.pb|bc42724d72159c919a854188014419465a906
 product/etc/CarrierSettings/tstar_tw.pb|74c3c0f81e82e0fccf653c4a8615f9fded99abc9
 product/etc/CarrierSettings/twm_tw.pb|30e06317c09cc69b4e420b9cc286c6af8eed8c6e
 product/etc/CarrierSettings/u264a_ca.pb|cee442af7b891e2915b5903a6442f113d275a18b
+product/etc/CarrierSettings/u264a_us.pb|164dbfd561b241c01693abaffbaff56d6a2140e8
 product/etc/CarrierSettings/u264ao_at.pb|de3eecc92e0035c1e2abfa316285a02b57b2d918
 product/etc/CarrierSettings/u264ap_at.pb|3ee174162791b66fd84e62f108805f3619d10431
-product/etc/CarrierSettings/u264a_us.pb|164dbfd561b241c01693abaffbaff56d6a2140e8
 product/etc/CarrierSettings/ultra_us.pb|732d5bf23b36392e893ba10a5b83887effb0e6ba
 product/etc/CarrierSettings/umobile_my.pb|a1493442d3fb8a4af47f225142b8137a072b875a
 product/etc/CarrierSettings/unifi_my.pb|d9d5beafe33e514f2445b658fa288398a83d72d1
@@ -655,7 +661,7 @@ product/etc/CarrierSettings/zain_bh.pb|c3655cd37c17af2bc1e97fe3e16615e8797579fe
 product/etc/CarrierSettings/zain_kw.pb|c74763ddc80edf8b1ca151c04a1a03a129383ea8
 product/etc/CarrierSettings/zain_sa.pb|c9e9f58b011f32dd5b662c425c5108f6e70b9a8b
 product/etc/CarrierSettings/zeop_re.pb|e4339c613f47dc95bb71c8783d650138604c6669
-product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|eaac01ea3c270a94ee667ef385f1f20564586fdb
+product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|f2cb89f0d5ab6d54a44942c9e85e48410b057ccb
 
 # CDSP
 vendor/bin/cdsprpcd
@@ -744,7 +750,7 @@ vendor/lib64/libcvp_common.so
 vendor/lib64/libcvp_stub.so
 vendor/lib64/vendor.qti.hardware.cvp@1.0.so
 
-# DPM - from vayu - RKQ1.200826.002/V14.0.3.0.TJUMIXM
+# DPM - from vayu
 system_ext/bin/dpmd|097a21f71912ba9a2e0d37d5ee0e62469addd0ec
 system_ext/etc/dpm/dpm.conf|95e27da8c989e96c6faea6f0697bce11955b62a5
 system_ext/etc/init/dpmd.rc|738b638ff04cda368e22c03e16baf90ba157a6fc
@@ -816,7 +822,7 @@ vendor/bin/hw/android.hardware.gatekeeper@1.0-service-qti
 vendor/etc/init/android.hardware.gatekeeper@1.0-service-qti.rc
 vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl-qti.so
 
-# Graphics (Adreno) - from vayu - RKQ1.200826.002/V14.0.3.0.TJUMIXM
+# Graphics (Adreno) - from vayu
 vendor/lib/egl/eglSubDriverAndroid.so|be2f5c4b174bdfaabbe25adde568b72775ef4856
 vendor/lib/egl/libEGL_adreno.so|fb1d14334bf1730a9cffd76a7b22b45ceb0e67ce
 vendor/lib/egl/libGLESv1_CM_adreno.so|715f3463528f1e74ffa02627ee5916a09e0748f5
@@ -1091,7 +1097,7 @@ vendor/lib64/unnhal-acc-common.so
 vendor/lib64/unnhal-acc-hta.so
 vendor/lib64/unnhal-acc-hvx.so
 
-# NFC - from joyeuse - RKQ1.211019.001/V14.0.3.0.SJZMIXM
+# NFC - from joyeuse
 vendor/etc/libnfc-nci.conf|b6834fe0b8b96ddd28f1918f2c440114c4656ae9
 vendor/etc/libnfc-nxp.conf|cff1a68e333bd6c740de1165248c3ec4a41d1bde
 vendor/lib/libpn553_fw.so|a8e29cc3ebb2e0df0fb505fc2da9c69a015680fb
@@ -1381,7 +1387,7 @@ vendor/lib64/libsnsdiaglog.so
 vendor/lib64/libssc.so
 vendor/lib64/sensors.ssc.so
 
-# Thermal engine - from sunfish - TQ3A.230805.001/10316531
+# Thermal engine - from sunfish
 vendor/bin/thermal-engine|b96e997ab7c784b0529fa833a7ea33170d0bd066
 
 # ThermalClient
