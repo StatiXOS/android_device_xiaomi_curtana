@@ -324,6 +324,7 @@ PRODUCT_PACKAGES += \
     MiatollSettingsOverlay \
     MiatollSystemUIOverlay \
     MiatollTelephonyOverlay \
+    MiatollTelephonyProviderOverlay \
     MiatollWifiOverlay
 
 # Partitions
