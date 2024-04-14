@@ -1,6 +1,9 @@
 # Variant specific props
 import /product/etc/product.${ro.boot.hwname}.prop
 
+# FUSE
+persist.sys.fuse.passthrough.enable=true
+
 # RKPD
 remote_provisioning.enable_rkpd=true
 remote_provisioning.hostname=remoteprovisioning.googleapis.com
