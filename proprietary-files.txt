@@ -1,7 +1,7 @@
 # All blobs below are extracted from the following sources:
 # curtana (unpinned): RKQ1.211019.001/V14.0.4.0.SJWMIXM
 # excalibur: RKQ1.211019.001/V14.0.2.0.SJXINXM
-# husky: AP1A.240305.019.A1/11445699
+# husky: AP1A.240405.002/11480754
 # joyeuse: RKQ1.211019.001/V14.0.3.0.SJZMIXM
 # sunfish: TQ3A.230805.001.S1/10786265
 # vayu: RKQ1.200826.002/V14.0.3.0.TJUMIXM
@@ -546,7 +546,7 @@ product/etc/CarrierSettings/rakuten_jp.pb|296046ee0016bee9c038ba964d20f5b22f2366
 product/etc/CarrierSettings/reachmobileatt_us.pb|e8f29baafb0c440dcb06ce7cf4786e03d7c8edb0
 product/etc/CarrierSettings/redpocketatt_us.pb|d82d39e3d328f6546dece6ac0b3ccf11d169b975
 product/etc/CarrierSettings/redpockettmo_us.pb|ad58b016d55916b7fdcc3ae94c087d7c51ed7515
-product/etc/CarrierSettings/rjio_in.pb|5bc9ef3a8595fd0a0f76dc96c8240deb48f23166
+product/etc/CarrierSettings/rjio_in.pb|db52ad7131cda8938e72536379e92f6b930fb4fa
 product/etc/CarrierSettings/rogers5g_ca.pb|cbd5cae4ea761e89959a63c62ace66f104103495
 product/etc/CarrierSettings/rogers_ca.pb|f8a61bc7e22a36c33fe54b78ffdfef0b515b1340
 product/etc/CarrierSettings/rogerswpn_ca.pb|165e99aa77ca00e13ef00bc123672138fb5e1937
@@ -568,7 +568,7 @@ product/etc/CarrierSettings/smarty_gb.pb|778847f6ea08447c4047bf7d902e13588567856
 product/etc/CarrierSettings/softbank_jp.pb|397f2b1379de4236873baedd11402da928592de3
 product/etc/CarrierSettings/solomobile_ca.pb|fa586e1070dd76c2228a2a1a6652fb76df5528df
 product/etc/CarrierSettings/spark_nz.pb|410ad740d94f3530428fd92482310248f36b6e30
-product/etc/CarrierSettings/spectrum_us.pb|a8610ee4f77c438969ff1b65dd8a3557e607923f
+product/etc/CarrierSettings/spectrum_us.pb|f21ba41e183f1b339e9487347d0fd8edf3a72f33
 product/etc/CarrierSettings/spmtelecom_pm.pb|f494168d7fe0920e2d9c0b97de2a55fab2995100
 product/etc/CarrierSettings/sprintprepaid_us.pb|8b76cbfaeeb5c2b8656ab1983dc30879c1bbace6
 product/etc/CarrierSettings/sprint_us.pb|f4796be130b99e63a1e4d52607e20ca1890acefb
@@ -678,7 +678,7 @@ product/etc/CarrierSettings/zain_bh.pb|b4359900d7b266111db25e81626b632bc1f1e127
 product/etc/CarrierSettings/zain_kw.pb|43b7c65559517bbee1a3b0dbb2947f0cc5faaf7e
 product/etc/CarrierSettings/zain_sa.pb|d8fb723b1e774231b527d668354e456992b15732
 product/etc/CarrierSettings/zeop_re.pb|e8a959716783d47b4208244534a2cb73b7cb0bce
-product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|f4952ea650113629790dd4c4f035b4451fcf79ad
+product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|dac2c8c8232a02af96ca002e8f373d29bdea5314
 
 # CDSP
 vendor/bin/cdsprpcd
