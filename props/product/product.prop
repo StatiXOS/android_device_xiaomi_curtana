@@ -2,7 +2,6 @@
 persist.sys.fuse.passthrough.enable=true
 
 # RKPD
-remote_provisioning.enable_rkpd=true
 remote_provisioning.hostname=remoteprovisioning.googleapis.com
 
 # Variant specific props
