@@ -80,6 +80,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     libcamera2ndk_vendor \
+    libcamera_provider_shim \
     libdng_sdk.vendor \
     libgui_vendor \
     libmegface \
