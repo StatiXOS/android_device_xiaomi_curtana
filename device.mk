@@ -438,6 +438,7 @@ PRODUCT_COPY_FILES += \
 # Rootdir
 PRODUCT_PACKAGES += \
     init.qcom.early_boot.sh \
+    init.qcom.post_boot-atoll.sh \
     init.qcom.sh \
     init.qti.chg_policy.sh \
     init.sensors_fixup.sh
@@ -446,7 +447,6 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     init.device.rc \
     init.miatoll.perf.rc \
-    init.qcom.power.rc \
     init.qcom.rc \
     init.recovery.qcom.rc \
     init.target.rc \
