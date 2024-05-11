@@ -18,7 +18,7 @@ $(call inherit-product, vendor/statix/config/gsm.mk)
 PRODUCT_NAME := statix_miatoll
 PRODUCT_DEVICE := miatoll
 PRODUCT_BRAND := Redmi
-PRODUCT_MODEL := SM6250
+PRODUCT_MODEL := SM7125
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
