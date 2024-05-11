@@ -1,7 +1,7 @@
 # All blobs below are extracted from the following sources:
 # curtana (unpinned): RKQ1.211019.001/V14.0.4.0.SJWMIXM
 # excalibur: RKQ1.211019.001/V14.0.2.0.SJXINXM
-# husky: AP1A.240405.002/11480754
+# husky: AP1A.240505.005/11677807
 # joyeuse: RKQ1.211019.001/V14.0.3.0.SJZMIXM
 # moonstone: UKQ1.231003.002/V816.0.5.0.UMPMIXM
 # sunfish: TQ3A.230805.001.S1/10786265
@@ -674,7 +674,7 @@ product/etc/CarrierSettings/zain_bh.pb|b4359900d7b266111db25e81626b632bc1f1e127
 product/etc/CarrierSettings/zain_kw.pb|43b7c65559517bbee1a3b0dbb2947f0cc5faaf7e
 product/etc/CarrierSettings/zain_sa.pb|d8fb723b1e774231b527d668354e456992b15732
 product/etc/CarrierSettings/zeop_re.pb|e8a959716783d47b4208244534a2cb73b7cb0bce
-product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|dac2c8c8232a02af96ca002e8f373d29bdea5314
+product/priv-app/CarrierSettings/CarrierSettings.apk;PRESIGNED|90f9367776e666a24773e088717b9c49d93a6081
 
 # CDSP
 vendor/bin/cdsprpcd
