@@ -76,10 +76,6 @@ function blob_fixup() {
         vendor/lib64/hw/fingerprint.fpc.default.so)
             "${SIGSCAN}" -p "30 00 00 90 11 3a 42 f9" -P "30 00 00 90 1f 20 03 d5" -f "${2}"
             ;;
-        # Fix NFC storage path
-        vendor/etc/libnfc-nci.conf)
-            sed -i "s/\/data\/nfc/\/data\/vendor\/nfc/g" "${2}"
-            ;;
         # Patch camera provider to load the new symbols
         vendor/lib64/android.hardware.camera.provider@2.4-legacy.so)
             grep -q "libcamera_provider_shim.so" "${2}" || "${PATCHELF}" --add-needed "libcamera_provider_shim.so" "${2}"
