@@ -379,7 +379,8 @@ PRODUCT_BOARD_PLATFORM := atoll
 PRODUCT_USES_QCOM_HARDWARE := true
 
 # Power
-$(call inherit-product, vendor/hardware/xiaomi/aidl/power-libperfmgr/power_product.mk)
+PRODUCT_PACKAGES += \
+    android.hardware.power-service.statix-libperfmgr
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
@@ -466,6 +467,8 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/google/interfaces \
     hardware/google/pixel \
+    hardware/qcom-caf/common/libqti-perfd-client \
+    hardware/statix/interfaces/power-libperfmgr \
     vendor/hardware/xiaomi
 
 # Telephony
