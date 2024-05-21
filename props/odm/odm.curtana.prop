@@ -1,4 +1,3 @@
 # curtana props
-ro.product.odm.brand=Redmi
 ro.product.odm.device=curtana
 import /odm/etc/odm.curtana_${ro.boot.hwc}.prop

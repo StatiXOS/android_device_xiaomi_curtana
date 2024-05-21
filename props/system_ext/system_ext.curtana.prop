@@ -1,4 +1,3 @@
 # curtana props
-ro.product.system_ext.brand=Redmi
 ro.product.system_ext.device=curtana
 import /system_ext/etc/system_ext.curtana_${ro.boot.hwc}.prop

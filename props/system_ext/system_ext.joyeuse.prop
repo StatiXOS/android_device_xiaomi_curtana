@@ -1,5 +1,4 @@
 # joyeuse props
-ro.product.system_ext.brand=Redmi
 ro.product.system_ext.device=joyeuse
 ro.product.system_ext.model=Redmi Note 9 Pro
 ro.product.system_ext.name=joyeuse_global

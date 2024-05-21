@@ -1,5 +1,4 @@
 # excalibur props
-ro.product.system_ext.brand=Redmi
 ro.product.system_ext.device=excalibur
 ro.product.system_ext.model=Redmi Note 9 Pro Max
 ro.product.system_ext.name=excalibur_in
