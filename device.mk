@@ -85,6 +85,7 @@ PRODUCT_PACKAGES += \
     libgui_vendor \
     libmegface \
     libMegviiFacepp-0.5.2 \
+    libpng.vendor \
     libstdc++_vendor
 
 # DebugFS
@@ -409,6 +410,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     librmnetctl \
+    libsqlite.vendor \
     libwpa_client \
     libxml2
 
