@@ -13,6 +13,9 @@ else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
 
+# Add common definitions for Qualcomm
+$(call inherit-product, hardware/qcom-caf/common/common.mk)
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
