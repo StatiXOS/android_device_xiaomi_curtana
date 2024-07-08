@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ed089a_ad7ec112",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2024-07-08T15:12:15Z",
+      "side": 1,
+      "message": "You can replace the directory with \u0027PROD_CERTS\u0027",
+      "revId": "99395fc7a192fdb06988b313b562422b4c7d3711",
+      "serverId": "039621b9-0c7c-40f3-867c-684f4bc911d6"
+    }
+  ]
+}
