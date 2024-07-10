@@ -128,6 +128,8 @@ $(foreach p, $(call to-upper, $(ALL_PARTITIONS)), \
     $(eval BOARD_$(p)IMAGE_FILE_SYSTEM_TYPE := f2fs) \
     $(eval TARGET_COPY_OUT_$(p) := $(call to-lower, $(p))))
 
+BOARD_ODMIMAGE_EXTFS_INODE_COUNT := -1
+
 # Partitions - dynamic
 BOARD_SUPER_PARTITION_SIZE := 8589934592
 BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
