@@ -1,4 +1,5 @@
 # joyeuse props
+bluetooth.device.default_name=Redmi Note 9 Pro
 ro.bootimage.build.fingerprint=Redmi/joyeuse_global/joyeuse:12/RKQ1.211019.001/V14.0.3.0.SJZMIXM:user/release-keys
 ro.product.bootimage.device=joyeuse
 ro.product.bootimage.model=Redmi Note 9 Pro
@@ -9,3 +10,4 @@ ro.product.vendor.device=joyeuse
 ro.product.vendor.model=Redmi Note 9 Pro
 ro.product.vendor.name=joyeuse_global
 ro.vendor.build.fingerprint=Redmi/joyeuse_global/joyeuse:12/RKQ1.211019.001/V14.0.3.0.SJZMIXM:user/release-keys
+vendor.usb.product_string=Redmi Note 9 Pro

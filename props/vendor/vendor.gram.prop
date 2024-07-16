@@ -1,4 +1,5 @@
 # gram props
+bluetooth.device.default_name=POCO M2 Pro
 ro.bootimage.build.fingerprint=POCO/gram_in/gram:12/RKQ1.211019.001/V14.0.5.0.SJPINXM:user/release-keys
 ro.product.bootimage.brand=POCO
 ro.product.bootimage.device=gram
@@ -11,3 +12,4 @@ ro.product.vendor.device=gram
 ro.product.vendor.model=POCO M2 Pro
 ro.product.vendor.name=gram_in
 ro.vendor.build.fingerprint=POCO/gram_in/gram:12/RKQ1.211019.001/V14.0.5.0.SJPINXM:user/release-keys
+vendor.usb.product_string=POCO M2 Pro

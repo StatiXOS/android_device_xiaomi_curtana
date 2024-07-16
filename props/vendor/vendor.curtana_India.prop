@@ -1,6 +1,7 @@
 #
 # India variant specific props
 #
+bluetooth.device.default_name=Redmi Note 10 Lite
 ro.bootimage.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V14.0.6.0.SJWINRF:user/release-keys
 ro.product.bootimage.model=Redmi Note 10 Lite
 ro.product.bootimage.name=curtana_in1
@@ -9,3 +10,4 @@ ro.product.name=curtana_in1
 ro.product.vendor.model=Redmi Note 10 Lite
 ro.product.vendor.name=curtana_in1
 ro.vendor.build.fingerprint=Redmi/curtana_in1/curtana:12/RKQ1.211019.001/V14.0.6.0.SJWINRF:user/release-keys
+vendor.usb.product_string=Redmi Note 10 Lite

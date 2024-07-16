@@ -1,6 +1,7 @@
 #
 # Global variant specific props
 #
+bluetooth.device.default_name=Redmi Note 9S
 ro.bootimage.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.4.0.SJWMIXM:user/release-keys
 ro.product.bootimage.model=Redmi Note 9S
 ro.product.bootimage.name=curtana_global
@@ -9,3 +10,4 @@ ro.product.name=curtana_global
 ro.product.vendor.model=Redmi Note 9S
 ro.product.vendor.name=curtana_global
 ro.vendor.build.fingerprint=Redmi/curtana_global/curtana:12/RKQ1.211019.001/V14.0.4.0.SJWMIXM:user/release-keys
+vendor.usb.product_string=Redmi Note 9S
