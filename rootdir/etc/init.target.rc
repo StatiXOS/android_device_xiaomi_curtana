@@ -99,9 +99,6 @@ on boot
     chmod 0644 /dev/goodix_fp
     chown system system /dev/goodix_fp
 
-#USB controller configuration
-    setprop vendor.usb.controller a600000.dwc3
-
 service qcom-post-boot-atoll /vendor/bin/init.qcom.post_boot-atoll.sh
     class core
     user root
