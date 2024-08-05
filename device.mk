@@ -441,7 +441,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.device.rc \
+    init.miatoll.rc \
     init.qcom.rc \
     init.recovery.qcom.rc \
     init.target.rc \
