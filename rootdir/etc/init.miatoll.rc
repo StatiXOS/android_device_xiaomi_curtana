@@ -20,3 +20,7 @@ on init && property:ro.boot.product.hardware.sku=nfc
 on post-fs-data && property:ro.boot.product.hardware.sku=nfc
     mkdir /data/vendor/nfc 0770 nfc nfc
     mkdir /data/vendor/nfc/param 0770 nfc nfc
+
+# Hardware revision
+on property:ro.boot.hwlevel=*
+    setprop ro.boot.hardware.revision ${ro.boot.hwlevel}${ro.boot.hwversion}
