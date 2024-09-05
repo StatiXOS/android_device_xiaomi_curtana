@@ -444,12 +444,14 @@ PRODUCT_PACKAGES += \
     init.miatoll.rc \
     init.qcom.rc \
     init.recovery.qcom.rc \
+    init.revision.rc \
     init.target.rc \
     ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom \
-    $(LOCAL_PATH)/rootdir/etc/init.recovery.qcom.rc:recovery/root/init.recovery.qcom.rc
+    $(LOCAL_PATH)/rootdir/etc/init.recovery.qcom.rc:recovery/root/init.recovery.qcom.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.revision.rc:recovery/root/init.revision.rc
 
 # Sensors
 $(call inherit-product, vendor/hardware/xiaomi/aidl/sensors/sensors_product.mk)

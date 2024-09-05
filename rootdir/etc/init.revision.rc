@@ -1,0 +1,3 @@
+# Hardware revision
+on property:ro.boot.hwlevel=*
+    setprop ro.boot.hardware.revision ${ro.boot.hwlevel}${ro.boot.hwversion}
