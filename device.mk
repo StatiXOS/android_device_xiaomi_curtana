@@ -165,7 +165,10 @@ PRODUCT_PACKAGES += \
 
 # HIDL
 PRODUCT_PACKAGES += \
+    hwservicemanager \
     libhwbinder.vendor
+
+PRODUCT_HIDL_ENABLED := true
 
 # HotwordEnrollement
 PRODUCT_COPY_FILES += \
