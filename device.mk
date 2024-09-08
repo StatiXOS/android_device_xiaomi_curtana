@@ -7,6 +7,18 @@
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
+# GSI keys
+$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
+
+# Inherit non-ab devices
+$(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
+
+# Project ID Quota
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
+# Setup dalvik vm configs
+$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
@@ -146,9 +158,6 @@ PRODUCT_PACKAGES += \
     gnss@2.0-base.policy \
     gnss@2.0-xtra-daemon.policy
 
-# GSI keys
-$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
-
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
@@ -164,9 +173,6 @@ PRODUCT_HIDL_ENABLED := true
 # HotwordEnrollement
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
-
-# Inherit non-ab devices
-$(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
 
 # Input
 PRODUCT_COPY_FILES += \
@@ -373,9 +379,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
-# Project ID Quota
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
-
 # Protobuf
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-3.9.1-vendorcompat \
@@ -408,9 +411,6 @@ TARGET_SCREEN_WIDTH := 1080
 # Secure element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
-
-# Setup dalvik vm configs
-$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 
 # Shims
 PRODUCT_PACKAGES += \
